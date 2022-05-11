@@ -58,11 +58,10 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
 	}
 
 	@Override
-	public RegisteredUser register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
+	public RegisteredUser register(String firstName, String lastName, String username, String password, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
 		validateNewUsernameAndEmail(EMPTY, username, email);
 		RegisteredUser user = new RegisteredUser();
 		user.setUserId(generateUserId());
-		String password = generatePassword();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setUsername(username);
@@ -75,8 +74,6 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
 		user.setAuthorities(ROLE_USER.getAuthorities());
 		user.setProfileImgUrl(getTemporaryProfileImageUrl(username));
 		userRepo.save(user);
-//		log.info("New user password: " + password);
-		emailService.sendNewPasswordEmail(firstName, password, email);
 		return user;
 	}
 

@@ -73,7 +73,7 @@ public class RegisteredUserController extends ExceptionHandling {
     @PostMapping("/register")
     public ResponseEntity<RegisteredUser> register(@RequestBody RegisteredUser user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
-        RegisteredUser newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
+        RegisteredUser newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
         return new ResponseEntity<>(newUser, OK);
     }
 

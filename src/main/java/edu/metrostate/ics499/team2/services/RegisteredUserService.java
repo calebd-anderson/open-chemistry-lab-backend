@@ -9,10 +9,7 @@ import edu.metrostate.ics499.team2.model.RegisteredUser;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface RegisteredUserService {	
-	RegisteredUser register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException;
-//	Role saveRole(Role role);
-//	void addRoleToUser(String email, String name);
-//	RegisteredUser getUser(String email);
+	RegisteredUser register(String firstName, String lastName, String username, String password, String email) throws UserNotFoundException, UsernameExistException, EmailExistException;
 	List<RegisteredUser>getUsers();
 	RegisteredUser findUserByUsername(String username);
 	RegisteredUser addNewUser(String firstName, String lastName, String username, String email, String role,
@@ -28,7 +25,5 @@ public interface RegisteredUserService {
 	RegisteredUser updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
 	void saveLastLogin(Date date, String username);
-
-
 
 }
