@@ -1,18 +1,17 @@
 // the repository class implements CRUD actions
 package edu.metrostate.ics499.team2.repositories;
 
-import java.util.List;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import edu.metrostate.ics499.team2.exceptions.domain.FailedToLoadPTException;
+import edu.metrostate.ics499.team2.model.Element;
 import org.springframework.data.mongodb.repository.Query;
 
-import edu.metrostate.ics499.team2.model.Element;
+import java.util.List;
 
-// Domain class: Element, primary key type: String
-public interface ElementRepository extends MongoRepository<Element, String> {
+public interface ElementRepository {
+
+    List<Element> findAll() throws FailedToLoadPTException;
 
     @Query("{symbol:'?0'}")
     Element findElementBySymbol(String symbol);
-
-    Element getElementByAtomicNumber(String atomicNumber);
 
 }
