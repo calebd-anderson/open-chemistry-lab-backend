@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
+
 @RestController
 @RequestMapping("/compound")
+@CrossOrigin(origins = CORS_ORIGIN)
 public class CompoundController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -26,9 +29,9 @@ public class CompoundController {
         return compoundService.validateInput(compound);
     }
 
-	@GetMapping(value = "getByUserId")
-	public List<Compound> getByUserId(@RequestParam String userId) {
-		return compoundService.getCompoundsByUserId(userId);
-	}
+    @GetMapping(value = "getByUserId")
+    public List<Compound> getByUserId(@RequestParam String userId) {
+        return compoundService.getCompoundsByUserId(userId);
+    }
 
 }

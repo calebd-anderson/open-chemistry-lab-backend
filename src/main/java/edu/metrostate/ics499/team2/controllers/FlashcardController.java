@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
 import static org.springframework.http.HttpStatus.OK;
 
 @Controller
 @RequestMapping("/flashcards")
+@CrossOrigin(origins = CORS_ORIGIN)
 public class FlashcardController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
