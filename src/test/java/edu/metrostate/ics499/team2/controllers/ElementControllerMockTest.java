@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -70,7 +71,7 @@ class ElementControllerMockTest {
         mockMvc.perform(get("/elements/list")
                         .header("Authorization", "Bearer null")
                         .header("Access-Control-Request-Method", "GET")
-                        .header("Origin", "http://localhost:4200")
+                        .header("Origin", CORS_ORIGIN)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
