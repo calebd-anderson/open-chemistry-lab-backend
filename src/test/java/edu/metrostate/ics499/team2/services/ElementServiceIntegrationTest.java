@@ -51,11 +51,11 @@ class ElementServiceIntegrationTest {
 //		assertEquals(elm.getAtomicNumber(), "1");
 //	}
 
-    @Test
-    @DisplayName("should fail to find element by atomic number 0")
-    void testFailToFindByAtomicNumber() {
-        Element elm = elmService.getElementByAtomicNumber("0");
-        assertNull(elm);
-    }
+//    @Test
+//    @DisplayName("should fail to find element by atomic number 0")
+//    void testFailToFindByAtomicNumber() {
+//        Element elm = elmService.getElementByAtomicNumber("0");
+//        assertNull(elm);
+//    }
 
 }

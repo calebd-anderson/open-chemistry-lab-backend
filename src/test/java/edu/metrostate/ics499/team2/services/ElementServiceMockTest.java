@@ -65,15 +65,15 @@ class ElementServiceMockTest {
         verify(elmService).getElementBySymbol("H");
     }
 
-    @Test
-    @DisplayName("should find Element with atomic number of 1")
-    void testFindByAtomicNumber() {
-        Element testElm = new Element();
-        testElm.setAtomicNumber("1");
-        when(elmService.getElementByAtomicNumber("1")).thenReturn(testElm);
-        Element actualElm = elmService.getElementByAtomicNumber("1");
-        assertEquals(testElm.getAtomicNumber(), actualElm.getAtomicNumber());
-        verify(elmService).getElementByAtomicNumber("1");
-    }
+//    @Test
+//    @DisplayName("should find Element with atomic number of 1")
+//    void testFindByAtomicNumber() {
+//        Element testElm = new Element();
+//        testElm.setAtomicNumber("1");
+//        when(elmService.getElementByAtomicNumber("1")).thenReturn(testElm);
+//        Element actualElm = elmService.getElementByAtomicNumber("1");
+//        assertEquals(testElm.getAtomicNumber(), actualElm.getAtomicNumber());
+//        verify(elmService).getElementByAtomicNumber("1");
+//    }
 
 }
