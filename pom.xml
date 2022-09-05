@@ -14,9 +14,8 @@
   <version>0.0.1-SNAPSHOT</version>  
   <name>ics499.team2</name>  
   <description>Team 2 Project for ICS-499</description>  
-  <properties> 
-    <java.version>11</java.version>  
-    <jackson.version>2.12.4</jackson.version> 
+  <properties>
+    <jackson.version>2.12.4</jackson.version>
   </properties>  
   <dependencies> 
     <dependency> 
@@ -98,27 +97,7 @@
     </dependency> 
   </dependencies>  
   <build> 
-    <plugins> 
-      <plugin> 
-        <groupId>org.springframework.boot</groupId>  
-        <artifactId>spring-boot-maven-plugin</artifactId>  
-        <configuration> 
-          <excludes> 
-            <exclude> 
-              <groupId>org.projectlombok</groupId>  
-              <artifactId>lombok</artifactId> 
-            </exclude> 
-          </excludes> 
-        </configuration> 
-      </plugin>  
-      <plugin> 
-        <groupId>org.apache.maven.plugins</groupId>  
-        <artifactId>maven-compiler-plugin</artifactId>  
-        <configuration> 
-          <source>16</source>  
-          <target>16</target> 
-        </configuration> 
-      </plugin>  
+    <plugins>
       <plugin>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-webapp-maven-plugin</artifactId>

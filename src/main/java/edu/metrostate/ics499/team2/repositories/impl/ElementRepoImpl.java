@@ -21,7 +21,7 @@ public class ElementRepoImpl implements ElementRepository {
         ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            return mapper.readValue(pTableData, new TypeReference<>() {
+            return mapper.readValue(pTableData, new TypeReference<List<Element>>() {
             });
         } catch (IOException e) {
             throw new FailedToLoadPTException(PERIODIC_TABLE_PATH + " not found.");
@@ -33,7 +33,7 @@ public class ElementRepoImpl implements ElementRepository {
         ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            List<Element> pt = mapper.readValue(pTableData, new TypeReference<>() {
+            List<Element> pt = mapper.readValue(pTableData, new TypeReference<List<Element>>() {
             });
             // lame efficiency search
             for (Element element : pt) {
