@@ -7,17 +7,17 @@ import edu.metrostate.ics499.team2.services.ElementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
 
 // thymeleaf doesn't work with @RestController (see url below)
 // https://stackoverflow.com/questions/63965406/unable-to-render-thymleaf-page-from-spring-boot-controller-prints-only-the-retu
 @Controller
 @RequestMapping("/elements")
-@CrossOrigin(origins = CORS_ORIGIN)
 public class ElementController {
 
     private final ElementService elmService;

@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
-
 @RestController
 @RequestMapping("/compound")
-@CrossOrigin(origins = CORS_ORIGIN)
 public class CompoundController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 

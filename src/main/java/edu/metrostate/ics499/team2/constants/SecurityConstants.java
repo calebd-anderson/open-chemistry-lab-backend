@@ -1,5 +1,7 @@
 package edu.metrostate.ics499.team2.constants;
 
+import com.google.common.collect.ImmutableList;
+
 public class SecurityConstants {
 	public static final long EXPIRATION_TIME = 900_000; 						// 15 min
 	public static final String TOKEN_PREFIX = "Bearer ";
@@ -9,7 +11,7 @@ public class SecurityConstants {
 	public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
 	public static final String JWT_TOKEN_HEADER = "Jwt-Token";
 	public static final String TOKEN_CANNOT_BE_VERIFIED = "cannot be verified";
-	public static final String CORS_ORIGIN = "{\"https://chemlab-frontend.azurewebsites.net\", \"http://chemlab-frontend.azurewebsites.net\"}";
+	public static final ImmutableList<String> CORS_ORIGIN = ImmutableList.of("https://chemlab-frontend.azurewebsites.net", "http://chemlab-frontend.azurewebsites.net");
 //	public static final String CORS_ORIGIN = "http://localhost:4200";
 	// array of open/public routes
 	 public static final String[] PUBLIC_URLS = {"/", "/styles/**", "/elements/**", "/user/login", "/user/register", "/user/image/**", "/compound/validate/**"};

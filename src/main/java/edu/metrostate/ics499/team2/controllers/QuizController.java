@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
-
 @RestController
 @RequestMapping("/quiz")
-@CrossOrigin(origins = CORS_ORIGIN)
 public class QuizController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
