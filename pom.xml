@@ -96,7 +96,7 @@
       <scope>test</scope> 
     </dependency> 
   </dependencies>  
-  <build> 
+  <build>
     <plugins>
       <plugin>
         <groupId>com.microsoft.azure</groupId>
@@ -104,11 +104,10 @@
         <version>2.5.0</version>
         <configuration>
           <schemaVersion>v2</schemaVersion>
-          <subscriptionId>550649c4-41fd-4688-bc10-82b42c6f6761</subscriptionId>
+          <subscriptionId>00000000-0000-0000-0000-000000000000</subscriptionId>
           <resourceGroup>college-projects</resourceGroup>
           <appName>chemlab-backend</appName>
           <pricingTier>F1</pricingTier>
-          <region>centralus</region>
           <runtime>
             <os>Linux</os>
             <javaVersion>Java 17</javaVersion>
@@ -133,6 +132,10 @@
           <source>17</source>
           <target>17</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
