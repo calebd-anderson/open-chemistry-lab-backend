@@ -10,7 +10,7 @@
 - Create flash cards.
 - Test your knowledge with a quiz.
 ## Angular Front End
-- https://github.com/atvick21/ICS-499-front-end
+- https://github.com/calebTree/ics499-chem-frontend
 
 # Develop
 ## decrypt `application.enc.yml`
