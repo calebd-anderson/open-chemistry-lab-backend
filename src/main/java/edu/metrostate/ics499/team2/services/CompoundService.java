@@ -38,16 +38,23 @@ public class CompoundService {
      */
 
     public boolean doesValueExistInRepo(String formula) {
-        return compoundRepo.findCompoundByFormula(formula).size() > 0;
+        LOG.info("Checking if [{}] exists in db.", formula);
+        if (compoundRepo.findCompoundByFormula(formula).isEmpty()) {
+            LOG.info("[{}] found in db.", formula);
+            return true;
+        } else {
+            LOG.info("[{}] not found in db.", formula);
+            return false;
+        }
     }
 
     private Compound retrieveCompoundFromRepo(String formula) {
-        LOG.info("Value " + formula + " exists in repo, retrieving...");
+        LOG.info("Value [{}] exists in repo, retrieving...", formula);
         return compoundRepo.findCompoundByFormula(formula).get(0);
     }
 
     private Compound retrieveCompoundFromPugApi(String formula, Compound compound) throws PugApiException {
-        LOG.info("Calling PUG API with argument: " + formula);
+        LOG.info("Calling PUG API with argument: {}", formula);
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT;
         try {
 //            LOG.info("Sending PugAPI url in service: {}", pubChemUrl);
@@ -77,6 +84,7 @@ public class CompoundService {
 
     public Compound validateInput(Compound compound) throws PugApiException {
         String formula = compound.getFormula();
+        LOG.info("Validating: [{}]", formula);
         return doesValueExistInRepo(formula) ? retrieveCompoundFromRepo(formula) : retrieveCompoundFromPugApi(formula, compound);
     }
 }
