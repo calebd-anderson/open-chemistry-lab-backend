@@ -39,7 +39,7 @@ public class CompoundService {
 
     public boolean doesValueExistInRepo(String formula) {
         LOG.info("Checking if [{}] exists in db.", formula);
-        if (compoundRepo.findCompoundByFormula(formula).isEmpty()) {
+        if (!compoundRepo.findCompoundByFormula(formula).isEmpty()) {
             LOG.info("[{}] found in db.", formula);
             return true;
         } else {
