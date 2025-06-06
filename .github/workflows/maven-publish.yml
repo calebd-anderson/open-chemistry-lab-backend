@@ -27,7 +27,4 @@ jobs:
         # settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
-    - name: Deploy to Azure
-      run: mvn -DAZURE_SUB_ID=${{ secrets.AZURE_SUB_ID }} azure-webapp:deploy
+      run: mvn clean package -DAZURE_SUB_ID=${{ secrets.AZURE_SUB_ID }} azure-webapp:deploy
