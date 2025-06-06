@@ -31,4 +31,5 @@ $ sops -d application.enc.yml > application.yml
   $ mvn clean install
   $ mvn test
   $ mvn spring-boot:run
+  $ mvn clean package azure-webapp:deploy
 ```
