@@ -44,7 +44,12 @@ jobs:
         with:
           version: 3.7.3
 
+      - name: Setup age
+        uses: alessiodionisi/setup-age-action@v1.3.0
+
       - name: Run SOPS
+        env:
+          SOPS_AGE_KEY: ${{ secrets.AGE_SECRET_KEY }}
         run: sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
 
       - name: Set up Java version
