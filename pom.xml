@@ -104,7 +104,7 @@
         <version>2.5.0</version>
         <configuration>
           <schemaVersion>v2</schemaVersion>
-          <subscriptionId>00000000-0000-0000-0000-000000000000</subscriptionId>
+          <subscriptionId>${AZURE_SUB_ID}</subscriptionId>
           <resourceGroup>college-projects</resourceGroup>
           <appName>chemlab-backend</appName>
           <pricingTier>F1</pricingTier>
