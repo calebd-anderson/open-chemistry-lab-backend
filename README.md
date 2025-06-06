@@ -29,7 +29,7 @@ sops updatekeys src/main/resources/application.enc.yml
 ```
 ### encrypt secrets
 ```
-sops encrypt --age <age public key> src/main/resources/application.yml
+sops encrypt --age <> src/main/resources/application.yml
 ```
 ## Configure Local Instance of `MongoDB`
 - download/install
@@ -42,5 +42,4 @@ sops encrypt --age <age public key> src/main/resources/application.yml
   $ mvn clean install
   $ mvn test
   $ mvn spring-boot:run
-  $ mvn clean package azure-webapp:deploy
 ```
