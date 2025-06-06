@@ -39,6 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup SOPS
+        uses: nhedger/setup-sops@v2
+        with:
+          version: 3.7.3
+
+      - name: Run SOPS
+        run: sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
+
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
