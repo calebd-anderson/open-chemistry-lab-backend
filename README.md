@@ -17,8 +17,19 @@
 - download/install
   - [sops](https://github.com/getsops/sops?tab=readme-ov-file#22encrypting-using-age)
   - [age](https://github.com/FiloSottile/age)
+### decrypt secrets
 ```
 $ sops -d application.enc.yml > application.yml
+```
+### add recipient 
+1. add `age` public key to `.sops.yaml`
+2. run `updatekeys`
+```
+sops updatekeys src/main/resources/application.enc.yml
+```
+### encrypt secrets
+```
+sops encrypt --age <age public key> src/main/resources/application.yml
 ```
 ## Configure Local Instance of `MongoDB`
 - download/install
