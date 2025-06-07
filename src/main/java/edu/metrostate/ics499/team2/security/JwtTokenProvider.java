@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,17 +14,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.AUTHORITIES;
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.EXPIRATION_TIME;
-import static edu.metrostate.ics499.team2.constants.SecurityConstants.TOKEN_CANNOT_BE_VERIFIED;
-
+import static edu.metrostate.ics499.team2.constants.SecurityConstants.*;
 import static java.util.Arrays.stream;
 
 @Component
@@ -32,7 +29,7 @@ public class JwtTokenProvider {
     private String secret;
 
     // generate the token
-    public String generateJwtToken (RegisteredUserPrincipal userPrincipal, String issuer) {
+    public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
         String[] claims = getClaimsFromUser(userPrincipal);
         return JWT.create().withIssuer(issuer)
 //                .withAudience("administration")

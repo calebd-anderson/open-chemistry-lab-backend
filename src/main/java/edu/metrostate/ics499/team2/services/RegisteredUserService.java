@@ -1,29 +1,59 @@
 package edu.metrostate.ics499.team2.services;
 
+import edu.metrostate.ics499.team2.exceptions.domain.*;
+import edu.metrostate.ics499.team2.model.User;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import edu.metrostate.ics499.team2.exceptions.domain.*;
-import edu.metrostate.ics499.team2.model.RegisteredUser;
-import org.springframework.web.multipart.MultipartFile;
+public interface RegisteredUserService {
+    User register(String firstName,
+                  String lastName,
+                  String username,
+                  String password,
+                  String email) throws UserNotFoundException, UsernameExistException, EmailExistException;
 
-public interface RegisteredUserService {	
-	RegisteredUser register(String firstName, String lastName, String username, String password, String email) throws UserNotFoundException, UsernameExistException, EmailExistException;
-	List<RegisteredUser>getUsers();
-	RegisteredUser findUserByUsername(String username);
-	RegisteredUser addNewUser(String firstName, String lastName, String username, String email, String role,
-							  boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
-	RegisteredUser updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role,
-							boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+    List<User> getUsers();
 
-	RegisteredUser editUser(String userId, String newFirstName, String newLastName, String newUsername, String newEmail, String role,
-							  boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+    User findUserByUsername(String username);
 
-	void deleteUser(String id) throws IOException;
-	void resetPassword(String email) throws EmailNotFoundException;
-	RegisteredUser updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+    User addNewUser(String firstName,
+                    String lastName,
+                    String username,
+                    String email,
+                    String role,
+                    boolean isNonLocked,
+                    boolean isActive,
+                    MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
-	void saveLastLogin(Date date, String username);
+    User updateUser(String currentUsername,
+                    String newFirstName,
+                    String newLastName,
+                    String newUsername,
+                    String newEmail,
+                    String role,
+                    boolean isNonLocked,
+                    boolean isActive,
+                    MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
+    User editUser(String userId,
+                  String newFirstName,
+                  String newLastName,
+                  String newUsername,
+                  String newEmail,
+                  String role,
+                  boolean isNonLocked,
+                  boolean isActive,
+                  MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+
+    void deleteUser(String id) throws IOException;
+
+    void resetPassword(String email) throws EmailNotFoundException;
+
+    User updateProfileImage(String username,
+                            MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+
+    void saveLastLogin(Date date, String username);
 }

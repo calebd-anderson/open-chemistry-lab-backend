@@ -2,11 +2,12 @@ package edu.metrostate.ics499.team2.controllers;
 
 import edu.metrostate.ics499.team2.exceptions.ExceptionHandling;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
-import edu.metrostate.ics499.team2.model.RegisteredUser;
+import edu.metrostate.ics499.team2.model.User;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.RegisteredUserPrincipal;
 import edu.metrostate.ics499.team2.security.http.HttpResponse;
 import edu.metrostate.ics499.team2.services.RegisteredUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -53,11 +53,11 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RegisteredUser> login(@RequestBody RegisteredUser user, HttpServletRequest req) {
+    public ResponseEntity<User> login(@RequestBody User user, HttpServletRequest req) {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userService.saveLastLogin(new Date(), user.getUsername());
-            RegisteredUser loginUser = userService.findUserByUsername(user.getUsername());
+            User loginUser = userService.findUserByUsername(user.getUsername());
             RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser);
             String issuer = ServletUriComponentsBuilder.fromRequestUri(req)
                     .replacePath(null)
@@ -70,72 +70,72 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisteredUser> register(@RequestBody RegisteredUser user) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
-        RegisteredUser newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
+        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
         return new ResponseEntity<>(newUser, OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<RegisteredUser> addNewUser(@RequestParam("firstName") String firstName,
-                                                     @RequestParam("lastName") String lastName,
-                                                     @RequestParam("username") String username,
-                                                     @RequestParam("email") String email,
-                                                     @RequestParam("isActive") String isActive,          // boolean
-                                                     @RequestParam("isNonLocked") String isNonLocked,    // boolean
-                                                     @RequestParam("role") String role,
-                                                     @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        RegisteredUser newUser = userService.addNewUser(firstName, lastName, username, email, role,
+    public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
+                                           @RequestParam("lastName") String lastName,
+                                           @RequestParam("username") String username,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("isActive") String isActive,          // boolean
+                                           @RequestParam("isNonLocked") String isNonLocked,    // boolean
+                                           @RequestParam("role") String role,
+                                           @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        User newUser = userService.addNewUser(firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(newUser, OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<RegisteredUser> update(@RequestParam("currentUsername") String currentUsername,
-                                                 @RequestParam("firstName") String firstName,
-                                                 @RequestParam("lastName") String lastName,
-                                                 @RequestParam("username") String username,
-                                                 @RequestParam("email") String email,
-                                                 @RequestParam("role") String role,
-                                                 @RequestParam("isActive") String isActive,            // boolean
-                                                 @RequestParam("isNonLocked") String isNonLocked,    // boolean
-                                                 @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        RegisteredUser updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
+    public ResponseEntity<User> update(@RequestParam("currentUsername") String currentUsername,
+                                       @RequestParam("firstName") String firstName,
+                                       @RequestParam("lastName") String lastName,
+                                       @RequestParam("username") String username,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("role") String role,
+                                       @RequestParam("isActive") String isActive,            // boolean
+                                       @RequestParam("isNonLocked") String isNonLocked,    // boolean
+                                       @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<RegisteredUser> edit(@RequestParam("userId") String userId,
-                                               @RequestParam("firstName") String firstName,
-                                               @RequestParam("lastName") String lastName,
-                                               @RequestParam("username") String username,
-                                               @RequestParam("email") String email,
-                                               @RequestParam("role") String role,
-                                               @RequestParam("isActive") String isActive,               // boolean
-                                               @RequestParam("isNonLocked") String isNonLocked,         // boolean
-                                               @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        RegisteredUser updatedUser = userService.editUser(userId, firstName, lastName, username, email, role,
+    public ResponseEntity<User> edit(@RequestParam("userId") String userId,
+                                     @RequestParam("firstName") String firstName,
+                                     @RequestParam("lastName") String lastName,
+                                     @RequestParam("username") String username,
+                                     @RequestParam("email") String email,
+                                     @RequestParam("role") String role,
+                                     @RequestParam("isActive") String isActive,               // boolean
+                                     @RequestParam("isNonLocked") String isNonLocked,         // boolean
+                                     @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        User updatedUser = userService.editUser(userId, firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
     @PostMapping("/updateprofileimg")
-    public ResponseEntity<RegisteredUser> update(@RequestParam("username") String username, @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        RegisteredUser user = userService.updateProfileImage(username, profileImg);
+    public ResponseEntity<User> update(@RequestParam("username") String username, @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        User user = userService.updateProfileImage(username, profileImg);
         return new ResponseEntity<>(user, OK);
     }
 
     // validate
     @GetMapping("/find/{username}")
-    public ResponseEntity<RegisteredUser> getUser(@PathVariable("username") String username) {
-        RegisteredUser user = userService.findUserByUsername(username);
+    public ResponseEntity<User> getUser(@PathVariable("username") String username) {
+        User user = userService.findUserByUsername(username);
         return new ResponseEntity<>(user, OK);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<RegisteredUser>> getAllUsers() {
-        List<RegisteredUser> users = userService.getUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getUsers();
         return new ResponseEntity<>(users, OK);
 //		return ResponseEntity.ok().body(userService
 //				.getUsers()

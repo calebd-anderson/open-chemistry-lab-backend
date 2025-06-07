@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component @Slf4j
 public class Mapper {
-    public UserDAO toDao(RegisteredUser user) {
+    public UserDAO toDao(User user) {
     	log.info("converting user to DAO");
         try {
 //	        List<String> roles = user
@@ -21,7 +21,7 @@ public class Mapper {
         }        
     }
 
-    public RegisteredUser toUser(UserLoginDTO userDto) {
-        return new RegisteredUser(userDto);
+    public User toUser(UserLoginDTO userDto) {
+        return new User(userDto);
     }
 }

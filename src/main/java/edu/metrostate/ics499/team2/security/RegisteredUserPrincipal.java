@@ -1,12 +1,11 @@
 package edu.metrostate.ics499.team2.security;
 
-import java.util.Collection;
-
+import edu.metrostate.ics499.team2.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import edu.metrostate.ics499.team2.model.RegisteredUser;
+import java.util.Collection;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -14,11 +13,11 @@ import static java.util.stream.Collectors.toList;
 // implement UserDetails to be returned by UserDetailsService
 public class RegisteredUserPrincipal implements UserDetails {
     
-	private final RegisteredUser user;	// passing our user to spring security
+	private final User user;	// passing our user to spring security
 
-    public RegisteredUserPrincipal(RegisteredUser user) {
+    public RegisteredUserPrincipal(User user) {
         this.user = user;
-    }    
+    }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -46,5 +45,4 @@ public class RegisteredUserPrincipal implements UserDetails {
 
 	@Override
 	public boolean isEnabled() { return this.user.isActive(); }
-	
 }

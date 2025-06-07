@@ -1,7 +1,7 @@
 package edu.metrostate.ics499.team2.controllers;
 
 import edu.metrostate.ics499.team2.model.Mapper;
-import edu.metrostate.ics499.team2.model.RegisteredUser;
+import edu.metrostate.ics499.team2.model.User;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;
 import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
@@ -59,7 +59,7 @@ public class RegisteredUserControllerMockTest {
     @Test
     void shouldReturnAllUsers() throws Exception {
         when(registeredUserService.getUsers())
-                .thenReturn(List.of(new RegisteredUser("duke", "duke@spring.io")));
+                .thenReturn(List.of(new User("duke", "duke@spring.io")));
         this.mockMvc
                 .perform(get("/user/list")
                         .contentType(MediaType.APPLICATION_JSON)
