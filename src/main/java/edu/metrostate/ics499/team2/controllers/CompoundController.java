@@ -30,5 +30,4 @@ public class CompoundController {
     public List<Compound> getByUserId(@RequestParam String userId) {
         return compoundService.getCompoundsByUserId(userId);
     }
-
 }
