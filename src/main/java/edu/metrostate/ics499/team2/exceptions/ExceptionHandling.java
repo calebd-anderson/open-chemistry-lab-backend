@@ -1,10 +1,12 @@
 package edu.metrostate.ics499.team2.exceptions;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
 import edu.metrostate.ics499.team2.security.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.ServletException;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -47,6 +54,11 @@ public class ExceptionHandling implements ErrorController {
     public ResponseEntity<HttpResponse> accessDeniedException() {
         return createHttpResponse(FORBIDDEN, NOT_ENOUGH_PERMISSION);
     }
+
+//    @ExceptionHandler(ServletException.class)
+//    public ResponseEntity<HttpResponse> unauthorized(ServletException ex) {
+//        return createHttpResponse(UNAUTHORIZED, ex.getMessage());
+//    }
 
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<HttpResponse> lockedException() {
@@ -95,6 +107,34 @@ public class ExceptionHandling implements ErrorController {
     public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
         log.error(exception.getMessage());
         return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        Map<String, List<String>> body = new HashMap<>();
+
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+
+        ex.getConstraintViolations().forEach(cv -> errors.add(cv.getMessage()));
+
+        Map<String, List<String>> result = new HashMap<>();
+
+        result.put("errors", errors);
+
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotAnImageFileException.class)

@@ -1,8 +1,8 @@
 package edu.metrostate.ics499.team2.controllers;
 
-import edu.metrostate.ics499.team2.exceptions.ExceptionHandling;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
 import edu.metrostate.ics499.team2.model.RegisteredUser;
+import edu.metrostate.ics499.team2.model.dto.UserRegisterDto;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.RegisteredUserPrincipal;
 import edu.metrostate.ics499.team2.security.http.HttpResponse;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -36,8 +37,8 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
-@RequestMapping({"/", "/user"})
-public class RegisteredUserController extends ExceptionHandling {
+@RequestMapping("/user")
+public class RegisteredUserController {
 
     public static final String EMAIL_SENT = "Email with new password sent to: ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully.";
@@ -70,8 +71,7 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisteredUser> register(@RequestBody RegisteredUser user) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        // might want validation
+    public ResponseEntity<RegisteredUser> register(@Valid @RequestBody UserRegisterDto user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         RegisteredUser newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
         return new ResponseEntity<>(newUser, OK);
     }

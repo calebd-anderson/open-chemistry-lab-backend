@@ -60,6 +60,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
             } catch(Exception e) {
                 log.warn("Authorization: " + authorizationHeader + "; invalid.");
+                SecurityContextHolder.clearContext();
                 throw new ServletException(e);
             }
         }

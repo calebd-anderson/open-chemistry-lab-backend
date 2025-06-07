@@ -1,20 +1,18 @@
 package edu.metrostate.ics499.team2.security.http;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.metrostate.ics499.team2.constants.SecurityConstants;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @Component

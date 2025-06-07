@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/list").hasAnyAuthority("user:update")
                 .antMatchers(SecurityConstants.PUBLIC_URLS).permitAll()
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

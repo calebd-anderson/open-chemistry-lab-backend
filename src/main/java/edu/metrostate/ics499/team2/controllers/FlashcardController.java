@@ -14,22 +14,23 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@Controller
 @RequestMapping("/flashcards")
+@Controller
 public class FlashcardController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private FlashcardService flashcardService;
 
-    @GetMapping(value = "/all")
+    @GetMapping
     @ResponseBody
-    public List<Flashcard> list() {
+    public List<Flashcard> all() {
         LOG.info("Getting all flashcards.");
         return flashcardService.list();
     }
 
-    @GetMapping(value = "/{gameId}")
+    @GetMapping("/{gameId}")
+    @ResponseBody
     public Flashcard getFlashcardById(String id) {
         LOG.info("Return flashcard by id.");
         return this.flashcardService.getFlashcardById(id);
@@ -54,7 +55,7 @@ public class FlashcardController {
         return flashcardService.queryByAnswer(answer);
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping("/add")
     public ResponseEntity<String> create(@RequestBody final FlashcardDTO flashcardDto) {
         Flashcard flashcard = new Flashcard(flashcardDto.getUserId(), flashcardDto.getQuestion(), flashcardDto.getAnswer());
         return flashcardService.create(flashcard) != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/quiz")
+@RequestMapping("/quizzes")
 public class QuizController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -18,9 +18,9 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @GetMapping(value = "/all")
+    @GetMapping
     @ResponseBody
-    public List<Quiz> list() {
+    public List<Quiz> all() {
         return quizService.list();
     }
 
