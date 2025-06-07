@@ -8,12 +8,16 @@ import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
 import edu.metrostate.ics499.team2.services.RegisteredUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,25 +31,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@WebMvcTest(RegisteredUserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+//@WebMvcTest(RegisteredUserController.class)
+//@ExtendWith(SpringExtension.class)
 public class RegisteredUserControllerMockTest {
-//    @Autowired
+    //    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
-    @MockBean
+    @MockitoBean
     private RegisteredUserService registeredUserService;
-    @MockBean
+    @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
-    @MockBean
+    @MockitoBean
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    @MockBean
+    @MockitoBean
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    @MockBean
+    @MockitoBean
     private UserDetailsService userDetailsService;
-    @MockBean
+    @MockitoBean
     private Mapper mapper;
-    @MockBean
+    @MockitoBean
     RestTemplateBuilder restTemplateBuilder;
 
     @BeforeEach
@@ -64,12 +71,12 @@ public class RegisteredUserControllerMockTest {
                 .perform(get("/user/list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8"))
-                        .andExpect(MockMvcResultMatchers.status().isOk())
-                        .andExpect(content().contentType("application/json"))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$[0].username").value("duke"))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("duke@spring.io"))
-                        .andDo(print());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].username").value("duke"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("duke@spring.io"))
+                .andDo(print());
         verify(registeredUserService).getUsers();
     }
 }

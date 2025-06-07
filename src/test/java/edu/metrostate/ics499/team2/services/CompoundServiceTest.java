@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
@@ -33,12 +33,12 @@ class CompoundServiceTest {
     @Autowired
     private CompoundService compoundService;
 
-    @MockBean
+    @MockitoBean
     private RestTemplate restMock;
 
     private CompoundRepository repoMock;
 
-    @MockBean
+    @MockitoBean
     private QuizService quizMock;
 
     @LocalServerPort
