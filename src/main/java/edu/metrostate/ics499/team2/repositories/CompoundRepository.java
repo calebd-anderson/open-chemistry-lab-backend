@@ -1,12 +1,10 @@
 package edu.metrostate.ics499.team2.repositories;
 
-import java.util.HashMap;
-import java.util.List;
-
+import edu.metrostate.ics499.team2.model.Compound;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import edu.metrostate.ics499.team2.model.Compound;
+import java.util.List;
 
 public interface CompoundRepository extends MongoRepository<Compound, String> {
 	

@@ -1,0 +1,9 @@
+jwt:
+  secret: 0000000000
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/
+      database: chem-lab
+server:
+  port: 8080
