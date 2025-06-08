@@ -3,11 +3,13 @@ package edu.metrostate.ics499.team2.controllers;
 import edu.metrostate.ics499.team2.exceptions.ExceptionHandling;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
 import edu.metrostate.ics499.team2.model.User;
+import edu.metrostate.ics499.team2.model.dto.UserRegisterDto;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.RegisteredUserPrincipal;
 import edu.metrostate.ics499.team2.security.http.HttpResponse;
 import edu.metrostate.ics499.team2.services.RegisteredUserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +72,7 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterDto user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
         User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
         return new ResponseEntity<>(newUser, OK);
