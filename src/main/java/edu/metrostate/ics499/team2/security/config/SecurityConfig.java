@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .hasAnyAuthority("user:update")
                                 .requestMatchers(SecurityConstants.PUBLIC_URLS)
                                 .permitAll()
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler))

@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             res.setStatus(HttpStatus.OK.value());
         } else {
             String authorizationHeader = req.getHeader(HttpHeaders.AUTHORIZATION);
-            log.info("Authorization: " + authorizationHeader);
+            log.debug("Authorization: {}", authorizationHeader);
             // if null or not starts with "Bearer "
             if (authorizationHeader == null || authorizationHeader.equals("Bearer null") || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
                 chain.doFilter(req, res);
@@ -59,7 +59,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.clearContext();
                 }
             } catch (Exception e) {
-                log.warn("Authorization: " + authorizationHeader + "; invalid.");
+                log.debug("Authorization: {}; invalid.", authorizationHeader);
                 SecurityContextHolder.clearContext();
                 throw new ServletException(e);
             }

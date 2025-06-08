@@ -1,9 +1,9 @@
 package edu.metrostate.ics499.team2.exceptions;
 
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
 import edu.metrostate.ics499.team2.security.http.HttpResponse;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.servlet.ServletException;
-import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
