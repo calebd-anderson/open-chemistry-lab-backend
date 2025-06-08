@@ -3,6 +3,7 @@ package edu.metrostate.ics499.team2.controllers;
 import edu.metrostate.ics499.team2.exceptions.ExceptionHandling;
 import edu.metrostate.ics499.team2.exceptions.domain.*;
 import edu.metrostate.ics499.team2.model.User;
+import edu.metrostate.ics499.team2.model.dto.UserLoginDto;
 import edu.metrostate.ics499.team2.model.dto.UserRegisterDto;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.RegisteredUserPrincipal;
@@ -38,7 +39,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
-@RequestMapping({"/", "/user"})
+@RequestMapping("/user")
 public class RegisteredUserController extends ExceptionHandling {
 
     public static final String EMAIL_SENT = "Email with new password sent to: ";
@@ -55,7 +56,7 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user, HttpServletRequest req) {
+    public ResponseEntity<User> login(@Valid @RequestBody UserLoginDto user, HttpServletRequest req) {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userService.saveLastLogin(new Date(), user.getUsername());

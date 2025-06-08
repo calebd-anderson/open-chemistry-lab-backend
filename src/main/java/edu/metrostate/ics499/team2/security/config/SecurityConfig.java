@@ -44,9 +44,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // "/api/v1/auth/**"
                 .authorizeHttpRequests(request -> request.requestMatchers("/user/list")
-                                .hasAnyAuthority("user:update")
-                                .requestMatchers(SecurityConstants.PUBLIC_URLS)
-                                .permitAll()
+                        .hasAnyAuthority("user:update")
+                        .requestMatchers(SecurityConstants.PUBLIC_URLS)
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)

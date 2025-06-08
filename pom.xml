@@ -15,9 +15,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>ics499.team2</name>
     <description>Team 2 Project for ICS-499</description>
-<!--    <properties>-->
-<!--        <jackson.version>2.13.1</jackson.version>-->
-<!--    </properties>-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

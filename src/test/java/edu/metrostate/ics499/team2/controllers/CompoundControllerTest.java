@@ -1,25 +1,22 @@
 package edu.metrostate.ics499.team2.controllers;
 
+import edu.metrostate.ics499.team2.security.JwtTokenProvider;
+import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;
+import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
+import edu.metrostate.ics499.team2.services.CompoundService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import edu.metrostate.ics499.team2.security.JwtTokenProvider;
-import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;
-import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
-import edu.metrostate.ics499.team2.services.CompoundService;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 
 @ExtendWith(SpringExtension.class)
@@ -28,18 +25,18 @@ class CompoundControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 	
-	@MockBean
+	@MockitoBean
 	private CompoundService compoundServiceMock;
 	
-	@MockBean
+	@MockitoBean
 	private JwtTokenProvider jwtTokenProvider;
-	@MockBean
+	@MockitoBean
 	private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-	@MockBean
+	@MockitoBean
 	JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-	@MockBean
+	@MockitoBean
 	UserDetailsService userDetailsService;
-	@MockBean
+	@MockitoBean
 	RestTemplateBuilder restTemplateBuilder;
 	
 	private MockMvc mockMvc;
