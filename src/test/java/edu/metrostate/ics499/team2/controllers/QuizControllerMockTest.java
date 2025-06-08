@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -30,23 +30,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = QuizController.class)
+//@AutoConfigureMockMvc
+//@SpringBootTest
 public class QuizControllerMockTest {
 
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @MockBean
+    @MockitoBean
     private QuizService quizServiceMock;
-    @MockBean
+    @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
-    @MockBean
+    @MockitoBean
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    @MockBean
+    @MockitoBean
     JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    @MockBean
+    @MockitoBean
     UserDetailsService userDetailsService;
-    @MockBean
+    @MockitoBean
     RestTemplateBuilder restTemplateBuilder;
 
     @BeforeEach
@@ -60,8 +62,8 @@ public class QuizControllerMockTest {
                 .thenReturn(List.of(new Quiz("is this correct?", "no")));
         this.mockMvc
                 .perform(get("/quiz/all")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("utf-8"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1))

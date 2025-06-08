@@ -18,7 +18,7 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @GetMapping
+    @GetMapping("/all")
     @ResponseBody
     public List<Quiz> all() {
         return quizService.list();

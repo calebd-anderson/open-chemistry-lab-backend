@@ -14,17 +14,17 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@RequestMapping("/flashcards")
 @Controller
+@RequestMapping("/flashcards")
 public class FlashcardController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private FlashcardService flashcardService;
 
-    @GetMapping
+    @GetMapping(value = "/all")
     @ResponseBody
-    public List<Flashcard> all() {
+    public List<Flashcard> list() {
         LOG.info("Getting all flashcards.");
         return flashcardService.list();
     }
