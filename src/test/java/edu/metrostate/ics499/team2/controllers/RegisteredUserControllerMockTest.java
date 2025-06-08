@@ -22,21 +22,18 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@WebMvcTest(RegisteredUserController.class)
-//@ExtendWith(SpringExtension.class)
 public class RegisteredUserControllerMockTest {
-    //    @Autowired
-    private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
+
     @MockitoBean
     private RegisteredUserService registeredUserService;
     @MockitoBean
@@ -52,18 +49,20 @@ public class RegisteredUserControllerMockTest {
     @MockitoBean
     RestTemplateBuilder restTemplateBuilder;
 
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setup() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(this.context)
 //                .apply(springSecurity())
                 .build();
+        given(this.registeredUserService.getUsers()).willReturn(
+                List.of(new User("duke", "duke@spring.io")));
     }
 
     @Test
     void shouldReturnAllUsers() throws Exception {
-        when(registeredUserService.getUsers())
-                .thenReturn(List.of(new User("duke", "duke@spring.io")));
         this.mockMvc
                 .perform(get("/user/list")
                         .contentType(MediaType.APPLICATION_JSON)
