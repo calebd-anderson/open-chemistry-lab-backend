@@ -9,7 +9,7 @@
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
-    <groupId>edu.metrostate</groupId>
+    <groupId>chemlab</groupId>
     <artifactId>ics499.team2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ics499.team2</name>
