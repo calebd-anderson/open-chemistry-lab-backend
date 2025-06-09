@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +27,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class FlashcardControllerMockTest {
 
-    private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -52,15 +53,18 @@ class FlashcardControllerMockTest {
     @MockitoBean
     RestTemplateBuilder restTemplateBuilder;
 
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setup() {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(this.webApplicationContext)
-//                .apply(springSecurity())
+                .apply(springSecurity())
                 .build();
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     public void testList() throws Exception {
         assertNotNull(flashcardServiceMock);
         when(flashcardServiceMock.list())
@@ -77,5 +81,4 @@ class FlashcardControllerMockTest {
                 .andDo(print());
         verify(flashcardServiceMock).list();
     }
-
 }

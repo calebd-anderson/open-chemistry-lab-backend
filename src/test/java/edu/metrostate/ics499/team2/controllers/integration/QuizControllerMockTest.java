@@ -3,8 +3,6 @@ package edu.metrostate.ics499.team2.controllers.integration;
 import edu.metrostate.ics499.team2.controllers.QuizController;
 import edu.metrostate.ics499.team2.model.game.Quiz;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
-import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;
-import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
 import edu.metrostate.ics499.team2.services.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,11 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = QuizController.class)
-//@AutoConfigureMockMvc
-//@SpringBootTest
 public class QuizControllerMockTest {
 
-    private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -44,17 +38,13 @@ public class QuizControllerMockTest {
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
     @MockitoBean
-    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    @MockitoBean
-    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    @MockitoBean
-    UserDetailsService userDetailsService;
-    @MockitoBean
     RestTemplateBuilder restTemplateBuilder;
+
+    private MockMvc mockMvc;
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
     @Test
@@ -73,5 +63,4 @@ public class QuizControllerMockTest {
                 .andDo(print());
         verify(quizServiceMock).list();
     }
-
 }

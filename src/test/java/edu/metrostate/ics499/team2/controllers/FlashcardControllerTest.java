@@ -7,15 +7,12 @@ import edu.metrostate.ics499.team2.services.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -25,26 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 //@ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 //@AutoConfigureMockMvc
+//@WebMvcTest(FlashcardController.class)
 class FlashcardControllerTest {
-
-    private FlashcardRepository repoMock;
-
-    @Autowired
-    private FlashcardService flashcardService;
+//    @Autowired
+//    private WebApplicationContext webApplicationContext;
 
     @Autowired
     private FlashcardController flashcardController;
-
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private FlashcardService flashcardService;
+    // mocked in beforeeach
+    private FlashcardRepository repoMock;
 
     @Captor
     ArgumentCaptor<Flashcard> valueCaptor;
-
-    private MockMvc mockMvc;
 
     private final String question = "is this unique?";
     private final String answer = "yes";
@@ -53,6 +47,7 @@ class FlashcardControllerTest {
     @BeforeEach
     void setUp() {
         repoMock = mock(FlashcardRepository.class);
+        // manually inject flashcardService repo dependency -> repoMock
         ReflectionTestUtils.setField(flashcardService, "flashcardRepo", repoMock);
     }
 
@@ -67,14 +62,9 @@ class FlashcardControllerTest {
     void testCreateFail() {
         ArrayList<Flashcard> mockResult = new ArrayList<Flashcard>();
         mockResult.add(new Flashcard(question, answer));
-
-
         Mockito.doReturn(mockResult).when(repoMock).findAll();
-
         int beforeInsert = flashcardController.list().size();
-
         flashcardController.create(flashcardDto);
-
         assertEquals(beforeInsert, flashcardController.list().size());
     }
 
@@ -98,7 +88,6 @@ class FlashcardControllerTest {
     @DisplayName("It should request findByQuestion when queryQuestion called")
     void testQueryQuestion() {
         flashcardController.queryQuestions(question);
-
         verify(repoMock, times(1)).findByQuestion(question);
     }
 
@@ -106,7 +95,6 @@ class FlashcardControllerTest {
     @DisplayName("It should return a list of questions from the db")
     void testQueryAnswers() {
         flashcardController.queryAnswers(answer);
-
         verify(repoMock, times(1)).findByAnswer(answer);
     }
 }
