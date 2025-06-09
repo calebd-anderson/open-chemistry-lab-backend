@@ -1,6 +1,6 @@
 package edu.metrostate.ics499.team2.controllers.integration;
 
-import edu.metrostate.ics499.team2.controllers.FlashcardController;
+import edu.metrostate.ics499.team2.controllers.game.FlashcardController;
 import edu.metrostate.ics499.team2.model.game.Flashcard;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;

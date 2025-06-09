@@ -1,5 +1,6 @@
 package edu.metrostate.ics499.team2.controllers;
 
+import edu.metrostate.ics499.team2.controllers.chemistry.ReactionController;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.security.http.JwtAccessDeniedHandler;
 import edu.metrostate.ics499.team2.security.http.JwtAuthenticationEntryPoint;
@@ -19,8 +20,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = CompoundController.class)
-class CompoundControllerTest {
+@WebMvcTest(controllers = ReactionController.class)
+class ReactionControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 

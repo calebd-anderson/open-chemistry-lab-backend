@@ -1,5 +1,6 @@
 package edu.metrostate.ics499.team2.controllers;
 
+import edu.metrostate.ics499.team2.controllers.game.FlashcardController;
 import edu.metrostate.ics499.team2.model.game.Flashcard;
 import edu.metrostate.ics499.team2.model.game.FlashcardDTO;
 import edu.metrostate.ics499.team2.repositories.FlashcardRepository;
@@ -13,7 +14,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 

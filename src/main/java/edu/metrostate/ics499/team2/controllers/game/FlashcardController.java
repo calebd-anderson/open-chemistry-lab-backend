@@ -1,4 +1,4 @@
-package edu.metrostate.ics499.team2.controllers;
+package edu.metrostate.ics499.team2.controllers.game;
 
 import edu.metrostate.ics499.team2.model.game.Flashcard;
 import edu.metrostate.ics499.team2.model.game.FlashcardDTO;

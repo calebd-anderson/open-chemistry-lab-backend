@@ -1,6 +1,6 @@
 package edu.metrostate.ics499.team2.controllers.integration;
 
-import edu.metrostate.ics499.team2.controllers.QuizController;
+import edu.metrostate.ics499.team2.controllers.game.QuizController;
 import edu.metrostate.ics499.team2.model.game.Quiz;
 import edu.metrostate.ics499.team2.security.JwtTokenProvider;
 import edu.metrostate.ics499.team2.services.QuizService;

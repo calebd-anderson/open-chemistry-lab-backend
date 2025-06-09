@@ -1,4 +1,4 @@
-package edu.metrostate.ics499.team2.controllers;
+package edu.metrostate.ics499.team2.controllers.chemistry;
 
 import edu.metrostate.ics499.team2.exceptions.domain.PugApiException;
 import edu.metrostate.ics499.team2.model.Compound;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/compound")
-public class CompoundController {
+public class ReactionController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired

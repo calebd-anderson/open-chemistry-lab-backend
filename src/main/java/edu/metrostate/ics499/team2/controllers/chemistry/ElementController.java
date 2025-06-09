@@ -1,5 +1,5 @@
 // the controller class has model view features, end-point config, and error handling
-package edu.metrostate.ics499.team2.controllers;
+package edu.metrostate.ics499.team2.controllers.chemistry;
 
 import edu.metrostate.ics499.team2.exceptions.domain.FailedToLoadPTException;
 import edu.metrostate.ics499.team2.model.Element;
