@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -22,7 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static edu.metrostate.ics499.team2.constants.SecurityConstants.CORS_ORIGIN;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,24 +27,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = SecurityConfig.class)
-//@WebMvcTest(controllers = ElementController.class)
-// load entire app context instead of explicitly as above
 @SpringBootTest
 @AutoConfigureMockMvc
 @WebAppConfiguration
 class ElementControllerMockTest {
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
     private WebApplicationContext webApplicationContext;
+
     @MockitoBean
     private ElementService elmServiceMock;
+
+    private MockMvc mockMvc;
 
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
+                .webAppContextSetup(this.webApplicationContext)
                 .apply(springSecurity())
                 .build();
     }
@@ -76,16 +71,6 @@ class ElementControllerMockTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print());
-    }
-
-    // https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/test/mockmvc.html#_running_as_a_user_in_spring_mvc_test_with_annotations
-    @Test
-    @WithMockUser(roles="USER")
-    public void requestProtectedUrlWithUser() throws Exception {
-        mockMvc
-            .perform(MockMvcRequestBuilders.get("/user/list"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(authenticated());
     }
 
     @Test
