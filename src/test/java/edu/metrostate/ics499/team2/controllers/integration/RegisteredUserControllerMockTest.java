@@ -1,4 +1,4 @@
-package edu.metrostate.ics499.team2.controllers;
+package edu.metrostate.ics499.team2.controllers.integration;
 
 import edu.metrostate.ics499.team2.model.User;
 import edu.metrostate.ics499.team2.services.RegisteredUserService;
@@ -64,9 +64,9 @@ public class RegisteredUserControllerMockTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"}, authorities = {"user:update"})
+    @WithMockUser(authorities = {"user:read", "user:create", "user:update"})
     @DisplayName("authority user:update is able to enumerate all users")
-    public void enumerateUsersSucess() throws Exception {
+    public void enumerateUsersSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                 .andExpect(status().isOk())
                 .andExpect(authenticated());
