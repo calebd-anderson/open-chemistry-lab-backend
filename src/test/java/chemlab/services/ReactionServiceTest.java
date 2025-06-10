@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.PugApiDTO;
-import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Reaction;
 import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.services.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class ReactionServiceTest {
     @Test
     @DisplayName("It should return false if the compound does not exist in the repo")
     void doesValueExistInRepo_false() {
-        List<Compound> mockValue = new ArrayList<>();
+        List<Reaction> mockValue = new ArrayList<>();
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
         assertFalse(reactionService.doesValueExistInRepo("H2O"));
     }
@@ -64,8 +64,8 @@ class ReactionServiceTest {
         elements.put("H", 2);
         elements.put("O", 1);
 
-        Compound c1 = new Compound(elements, userId);
-        List<Compound> mockValue = new ArrayList<>();
+        Reaction c1 = new Reaction(elements, userId);
+        List<Reaction> mockValue = new ArrayList<>();
         mockValue.add(c1);
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
 
@@ -80,9 +80,9 @@ class ReactionServiceTest {
         elements.put("H", 2);
         elements.put("O", 1);
 
-        Compound c1 = new Compound(elements, userId);
+        Reaction c1 = new Reaction(elements, userId);
         String formula = "H2O";
-        List<Compound> mockValue = new ArrayList<>();
+        List<Reaction> mockValue = new ArrayList<>();
         mockValue.add(c1);
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula(formula);
 
@@ -94,14 +94,14 @@ class ReactionServiceTest {
     @Test
     @DisplayName("It should return the value from PUG API if the value does not exist in the repo")
     void validateInput_returnFromPugApi() throws Exception {
-        List<Compound> mockValue = new ArrayList<>();
+        List<Reaction> mockValue = new ArrayList<>();
         String formula = "NaCl";
         String userId = "12345";
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("Na", 1);
         elements.put("Cl", 1);
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("NaCl");
-        Compound c1 = new Compound(elements, userId);
+        Reaction c1 = new Reaction(elements, userId);
         Mockito.doReturn(c1).when(repoMock).save(c1);
 
         PugApiDTO pugApiMock = new PugApiDTO();

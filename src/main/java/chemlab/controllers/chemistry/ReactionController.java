@@ -1,7 +1,7 @@
 package chemlab.controllers.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.CompoundDTO;
 import chemlab.services.chemistry.ReactionService;
 import org.slf4j.Logger;
@@ -20,14 +20,14 @@ public class ReactionController {
     private ReactionService reactionService;
 
     @PostMapping(value = "validate")
-    public Compound validate(@RequestBody CompoundDTO payload) throws PugApiException {
-        Compound compound = new Compound(payload.getMappedPayload(), payload.getUserId());
-        LOG.info("Controller received formula, userId: {}, {}", compound.getFormula(), compound.getUserId());
-        return reactionService.validateInput(compound);
+    public Reaction validate(@RequestBody CompoundDTO payload) throws PugApiException {
+        Reaction reaction = new Reaction(payload.getMappedPayload(), payload.getUserId());
+        LOG.info("Controller received formula, userId: {}, {}", reaction.getFormula(), reaction.getUserId());
+        return reactionService.validateInput(reaction);
     }
 
     @GetMapping(value = "getByUserId")
-    public List<Compound> getByUserId(@RequestParam String userId) {
+    public List<Reaction> getByUserId(@RequestParam String userId) {
         return reactionService.getCompoundsByUserId(userId);
     }
 }

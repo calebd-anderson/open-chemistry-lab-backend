@@ -1,19 +1,21 @@
 package chemlab.model.chemistry;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Document(collection = "compound")
-public class Compound {
+@Document(collection = "reaction")
+@Data
+public class Reaction {
 
     private final HashMap<String, Integer> elements;
     private String formula;
     private String title;
     private final String userId;
 
-    public Compound(HashMap<String, Integer> elements, String userId) {
+    public Reaction(HashMap<String, Integer> elements, String userId) {
         this.elements = elements;
         this.formula = createFormula();
         this.userId = userId;
@@ -33,32 +35,7 @@ public class Compound {
         return formula.toString();
     }
 
-    public HashMap<String, Integer> getElements() {
-        return this.elements;
+    public boolean equals(Reaction reaction) {
+        return this.formula.equals(reaction.getFormula());
     }
-
-    public String getFormula() {
-        return this.formula;
-    }
-
-    public void setFormula(String formula) {
-        this.formula = formula;
-    }
-
-    public String getUserId() {
-        return this.userId;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean equals(Compound compound) {
-        return this.formula.equals(compound.getFormula());
-    }
-
 }

@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.services.chemistry.ElementService;
 import com.mongodb.MongoException;
-import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.Element;
 import chemlab.model.game.Quiz;
 import chemlab.repositories.game.QuizRepository;
@@ -64,21 +64,21 @@ public class QuizService implements ServiceInterface<Quiz> {
 
     }
 
-    public void createNewQuizes(Compound compound, String userId, String quizType) {
+    public void createNewQuizes(Reaction reaction, String userId, String quizType) {
         LOG.info("creating multiple compound quizes");
         List<Quiz> quizList = new ArrayList<>();
 
         if (quizType.equalsIgnoreCase("compound")) {
-            String q1 = "What is the name of this compound: " + compound.getFormula() + "?";
-            String a1 = compound.getTitle();
-            String q2 = "What is the formula for " + compound.getTitle() + "?";
-            String a2 = compound.getFormula();
+            String q1 = "What is the name of this compound: " + reaction.getFormula() + "?";
+            String a1 = reaction.getTitle();
+            String q2 = "What is the formula for " + reaction.getTitle() + "?";
+            String a2 = reaction.getFormula();
             Quiz quiz1 = new Quiz(userId, q1, a1, quizType);
             Quiz quiz2 = new Quiz(userId, q2, a2, quizType);
             quizList.add(quiz1);
             quizList.add(quiz2);
         } else if (quizType.equalsIgnoreCase("element")) {
-            compound.getElements().keySet().stream().forEach((k) -> {
+            reaction.getElements().keySet().stream().forEach((k) -> {
                 LOG.info("creating a quiz for the element: " + k);
                 Element element = null;
                 element = elementService.getElementBySymbol(k);

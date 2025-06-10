@@ -1,16 +1,16 @@
 package chemlab.repositories.chemistry;
 
-import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Reaction;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface ReactionRepository extends MongoRepository<Compound, String> {
+public interface ReactionRepository extends MongoRepository<Reaction, String> {
 	
     @Query("{formula:'?0'}")
-	List<Compound> findCompoundByFormula(String formula);
+	List<Reaction> findCompoundByFormula(String formula);
 
     @Query("{ userId: '?0' }")
-    List<Compound> findCompoundByUserId(String userId);
+    List<Reaction> findCompoundByUserId(String userId);
 }

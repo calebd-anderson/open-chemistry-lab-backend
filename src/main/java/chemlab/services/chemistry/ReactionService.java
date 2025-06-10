@@ -2,7 +2,7 @@ package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.PugApiDTO;
-import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Reaction;
 import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.services.QuizService;
 import org.slf4j.Logger;
@@ -49,25 +49,25 @@ public class ReactionService {
         }
     }
 
-    private Compound retrieveCompoundFromRepo(String formula) {
+    private Reaction retrieveCompoundFromRepo(String formula) {
         LOG.info("Value [{}] exists in repo, retrieving...", formula);
         return reactionRepo.findCompoundByFormula(formula).get(0);
     }
 
-    private Compound retrieveCompoundFromPugApi(String formula, Compound compound) throws PugApiException {
+    private Reaction retrieveCompoundFromPugApi(String formula, Reaction reaction) throws PugApiException {
         LOG.info("Calling PUG API with argument: {}", formula);
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT;
         try {
 //            LOG.info("Sending PugAPI url in service: {}", pubChemUrl);
             PugApiDTO pugApiValue = restTemplate.getForObject(pubChemUrl, PugApiDTO.class);
             assert pugApiValue != null;
-            compound.setTitle(pugApiValue.getFirstPropertyTitle());
-            if (compound.getUserId() != null) {
-                quizService.createNewQuizes(compound, compound.getUserId(), "compound");
-                quizService.createNewQuizes(compound, compound.getUserId(), "element");
-                return reactionRepo.save(compound);
+            reaction.setTitle(pugApiValue.getFirstPropertyTitle());
+            if (reaction.getUserId() != null) {
+                quizService.createNewQuizes(reaction, reaction.getUserId(), "compound");
+                quizService.createNewQuizes(reaction, reaction.getUserId(), "element");
+                return reactionRepo.save(reaction);
             } else
-                return compound;
+                return reaction;
         } catch (HttpStatusCodeException exception) {
             // to do: parse the JSON returned as an error to get a useful response
             // LOG.error(exception.getResponseBodyAsString());
@@ -79,13 +79,13 @@ public class ReactionService {
         }
     }
 
-    public List<Compound> getCompoundsByUserId(String userId) {
+    public List<Reaction> getCompoundsByUserId(String userId) {
         return reactionRepo.findCompoundByUserId(userId);
     }
 
-    public Compound validateInput(Compound compound) throws PugApiException {
-        String formula = compound.getFormula();
+    public Reaction validateInput(Reaction reaction) throws PugApiException {
+        String formula = reaction.getFormula();
         LOG.info("Validating: [{}]", formula);
-        return doesValueExistInRepo(formula) ? retrieveCompoundFromRepo(formula) : retrieveCompoundFromPugApi(formula, compound);
+        return doesValueExistInRepo(formula) ? retrieveCompoundFromRepo(formula) : retrieveCompoundFromPugApi(formula, reaction);
     }
 }
