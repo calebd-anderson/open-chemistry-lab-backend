@@ -10,10 +10,10 @@
         <!-- lookup parent from repository -->
     </parent>
     <groupId>chemlab</groupId>
-    <artifactId>ics499.team2</artifactId>
+    <artifactId>chemlab</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ics499.team2</name>
-    <description>Team 2 Project for ICS-499</description>
+    <name>chemlab</name>
+    <description>Machine Processing Chemistry Game</description>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
