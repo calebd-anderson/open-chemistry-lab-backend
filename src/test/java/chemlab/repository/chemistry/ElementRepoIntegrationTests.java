@@ -1,4 +1,4 @@
-package chemlab.repository;
+package chemlab.repository.chemistry;
 
 import chemlab.repositories.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;

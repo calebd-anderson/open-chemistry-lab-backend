@@ -1,4 +1,4 @@
-package chemlab.repository;
+package chemlab.repository.chemistry;
 
 import chemlab.model.chemistry.Compound;
 import chemlab.repositories.chemistry.ReactionRepository;
