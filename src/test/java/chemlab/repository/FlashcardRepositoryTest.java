@@ -39,7 +39,7 @@ public class FlashcardRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        creatMockFlashcards();
+        createMockFlashcards();
     }
 
     @AfterEach
@@ -47,7 +47,7 @@ public class FlashcardRepositoryTest {
         flashcardRepo.deleteAll();
     }
 
-    private void creatMockFlashcards() {
+    private void createMockFlashcards() {
         Flashcard fc1 = new Flashcard("Is this the first?", "yes");
         Flashcard fc2 = new Flashcard("Is this the first still?", "no");
         Flashcard fc3 = new Flashcard("iS ThIs ThE fIrSt UnIqUe?", "no");
