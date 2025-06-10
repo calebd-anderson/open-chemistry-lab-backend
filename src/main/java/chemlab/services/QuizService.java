@@ -2,10 +2,10 @@ package chemlab.services;
 
 import chemlab.services.chemistry.ElementService;
 import com.mongodb.MongoException;
-import chemlab.model.Compound;
-import chemlab.model.Element;
+import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.Element;
 import chemlab.model.game.Quiz;
-import chemlab.repositories.QuizRepository;
+import chemlab.repositories.game.QuizRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

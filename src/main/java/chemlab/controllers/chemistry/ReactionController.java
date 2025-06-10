@@ -1,8 +1,8 @@
 package chemlab.controllers.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.Compound;
-import chemlab.model.CompoundDTO;
+import chemlab.model.chemistry.Compound;
+import chemlab.model.chemistry.CompoundDTO;
 import chemlab.services.chemistry.ReactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

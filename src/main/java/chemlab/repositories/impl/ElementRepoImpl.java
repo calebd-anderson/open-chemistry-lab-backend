@@ -3,8 +3,8 @@ package chemlab.repositories.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.Element;
-import chemlab.repositories.ElementRepository;
+import chemlab.model.chemistry.Element;
+import chemlab.repositories.chemistry.ElementRepository;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;

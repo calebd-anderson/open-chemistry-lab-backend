@@ -1,6 +1,6 @@
-package chemlab.repositories;
+package chemlab.repositories.chemistry;
 
-import chemlab.model.Compound;
+import chemlab.model.chemistry.Compound;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

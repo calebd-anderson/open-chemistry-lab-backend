@@ -3,7 +3,7 @@ package chemlab.controllers;
 import chemlab.controllers.game.FlashcardController;
 import chemlab.model.game.Flashcard;
 import chemlab.model.game.FlashcardDTO;
-import chemlab.repositories.FlashcardRepository;
+import chemlab.repositories.game.FlashcardRepository;
 import chemlab.services.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

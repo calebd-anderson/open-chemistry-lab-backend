@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.model.game.Quiz;
-import chemlab.repositories.QuizRepository;
+import chemlab.repositories.game.QuizRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

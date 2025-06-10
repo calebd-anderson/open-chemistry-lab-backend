@@ -1,9 +1,9 @@
 package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.Compound;
+import chemlab.model.chemistry.Compound;
 import chemlab.model.PugApiDTO;
-import chemlab.repositories.ReactionRepository;
+import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.services.QuizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package chemlab.repository;
 
-import chemlab.repositories.ElementRepository;
+import chemlab.repositories.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

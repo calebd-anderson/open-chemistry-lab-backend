@@ -1,8 +1,8 @@
 package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.Element;
-import chemlab.repositories.ElementRepository;
+import chemlab.model.chemistry.Element;
+import chemlab.repositories.chemistry.ElementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package chemlab.repositories;
+package chemlab.repositories.game;
 
 import chemlab.model.game.Quiz;
 import org.springframework.data.mongodb.repository.MongoRepository;

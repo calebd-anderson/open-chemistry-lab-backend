@@ -1,7 +1,7 @@
 package chemlab.repository;
 
 import chemlab.model.game.Flashcard;
-import chemlab.repositories.FlashcardRepository;
+import chemlab.repositories.game.FlashcardRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

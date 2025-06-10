@@ -1,8 +1,8 @@
 // the repository class implements CRUD actions
-package chemlab.repositories;
+package chemlab.repositories.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.Element;
+import chemlab.model.chemistry.Element;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
