@@ -2,7 +2,7 @@ package chemlab.controllers.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.chemistry.Reaction;
-import chemlab.model.chemistry.CompoundDTO;
+import chemlab.model.chemistry.ReactionDto;
 import chemlab.services.chemistry.ReactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class ReactionController {
     private ReactionService reactionService;
 
     @PostMapping(value = "validate")
-    public Reaction validate(@RequestBody CompoundDTO payload) throws PugApiException {
+    public Reaction validate(@RequestBody ReactionDto payload) throws PugApiException {
         Reaction reaction = new Reaction(payload.getMappedPayload(), payload.getUserId());
         LOG.info("Controller received formula, userId: {}, {}", reaction.getFormula(), reaction.getUserId());
         return reactionService.validateInput(reaction);

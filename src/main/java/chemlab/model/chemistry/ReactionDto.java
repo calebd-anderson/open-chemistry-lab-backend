@@ -1,27 +1,21 @@
 package chemlab.model.chemistry;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class CompoundDTO {
-    private ArrayList<Data> data;
+@Data
+public class ReactionDto {
+    private ArrayList<Element> elements;
     private String userId;
 
     @JsonCreator
-    public CompoundDTO(ArrayList<Data> data, String userId) {
-        this.data = data;
+    public ReactionDto(ArrayList<Element> elements, String userId) {
+        this.elements = elements;
         this.userId = userId;
-    }
-
-    public ArrayList<Data> getData() {
-        return this.data;
-    }
-
-    public String getUserId() {
-        return this.userId;
     }
 
     public String getConcatPayload() {
@@ -30,30 +24,21 @@ public class CompoundDTO {
 
     public HashMap<String, Integer> getMappedPayload() {
         HashMap<String, Integer> molecule = new HashMap<>();
-
-        for (Data d : data) {
+        for (Element d : elements) {
             molecule.put(d.getElement(), d.getNumberOfAtoms());
         }
-
         return molecule;
     }
 
-    static class Data {
+    @lombok.Data
+    public static class Element {
         private String element;
         private int numberOfAtoms;
 
         @JsonCreator
-        public Data(String element, int numberOfAtoms) {
+        public Element(String element, int numberOfAtoms) {
             this.element = element;
             this.numberOfAtoms = numberOfAtoms;
-        }
-
-        public String getElement() {
-            return this.element;
-        }
-
-        public int getNumberOfAtoms() {
-            return this.numberOfAtoms;
         }
     }
 }
