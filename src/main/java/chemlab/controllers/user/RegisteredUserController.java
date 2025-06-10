@@ -2,7 +2,7 @@ package chemlab.controllers.user;
 
 import chemlab.exceptions.ExceptionHandling;
 import chemlab.exceptions.domain.*;
-import chemlab.model.user.dto.User;
+import chemlab.model.user.User;
 import chemlab.model.user.dto.UserLoginDto;
 import chemlab.model.user.dto.UserRegisterDto;
 import chemlab.security.JwtTokenProvider;

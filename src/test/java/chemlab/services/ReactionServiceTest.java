@@ -1,20 +1,17 @@
 package chemlab.services;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.chemistry.Compound;
 import chemlab.model.PugApiDTO;
+import chemlab.model.chemistry.Compound;
 import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.services.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,9 +23,7 @@ import static chemlab.constants.PugApiConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class ReactionServiceTest {
 
     @Autowired
@@ -37,20 +32,18 @@ class ReactionServiceTest {
     @MockitoBean
     private RestTemplate restMock;
 
+    // mocked in setup()
     private ReactionRepository repoMock;
 
     @MockitoBean
     private QuizService quizMock;
-
-    @LocalServerPort
-    int randomServerPort;
 
     String compound = "NaCl";
 
     @BeforeEach
     public void setUp() {
         repoMock = mock(ReactionRepository.class);
-        ReflectionTestUtils.setField(reactionService, "compoundRepo", repoMock);
+        ReflectionTestUtils.setField(reactionService, "reactionRepo", repoMock);
         ReflectionTestUtils.setField(reactionService, "restTemplate", restMock);
         ReflectionTestUtils.setField(reactionService, "quizService", quizMock);
     }
@@ -60,7 +53,6 @@ class ReactionServiceTest {
     void doesValueExistInRepo_false() {
         List<Compound> mockValue = new ArrayList<>();
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
-
         assertFalse(reactionService.doesValueExistInRepo("H2O"));
     }
 

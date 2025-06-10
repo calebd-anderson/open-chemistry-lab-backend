@@ -1,6 +1,6 @@
 package chemlab.controllers.integration;
 
-import chemlab.model.user.dto.User;
+import chemlab.model.user.User;
 import chemlab.services.user.RegisteredUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

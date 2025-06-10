@@ -1,6 +1,6 @@
 package chemlab.repositories.user;
 
-import chemlab.model.user.dto.User;
+import chemlab.model.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

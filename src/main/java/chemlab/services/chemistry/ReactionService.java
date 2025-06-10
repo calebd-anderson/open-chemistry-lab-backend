@@ -1,8 +1,8 @@
 package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.chemistry.Compound;
 import chemlab.model.PugApiDTO;
+import chemlab.model.chemistry.Compound;
 import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.services.QuizService;
 import org.slf4j.Logger;
@@ -80,8 +80,8 @@ public class ReactionService {
     }
 
     public List<Compound> getCompoundsByUserId(String userId) {
-		return reactionRepo.findCompoundByUserId(userId);
-	}
+        return reactionRepo.findCompoundByUserId(userId);
+    }
 
     public Compound validateInput(Compound compound) throws PugApiException {
         String formula = compound.getFormula();

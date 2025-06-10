@@ -1,7 +1,7 @@
 package chemlab.services.user;
 
 import chemlab.exceptions.domain.*;
-import chemlab.model.user.dto.User;
+import chemlab.model.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

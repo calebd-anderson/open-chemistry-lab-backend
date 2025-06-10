@@ -2,7 +2,7 @@ package chemlab.services.impl;
 
 import chemlab.constants.Role;
 import chemlab.exceptions.domain.*;
-import chemlab.model.user.dto.User;
+import chemlab.model.user.User;
 import chemlab.repositories.user.RegisteredUserRepository;
 import chemlab.security.RegisteredUserPrincipal;
 import chemlab.services.user.EmailService;
