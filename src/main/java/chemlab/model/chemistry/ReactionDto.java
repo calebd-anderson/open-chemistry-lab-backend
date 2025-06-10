@@ -25,19 +25,19 @@ public class ReactionDto {
     public HashMap<String, Integer> getMappedPayload() {
         HashMap<String, Integer> molecule = new HashMap<>();
         for (Element d : elements) {
-            molecule.put(d.getElement(), d.getNumberOfAtoms());
+            molecule.put(d.getSymbol(), d.getNumberOfAtoms());
         }
         return molecule;
     }
 
     @lombok.Data
     public static class Element {
-        private String element;
+        private String symbol;
         private int numberOfAtoms;
 
         @JsonCreator
-        public Element(String element, int numberOfAtoms) {
-            this.element = element;
+        public Element(String symbol, int numberOfAtoms) {
+            this.symbol = symbol;
             this.numberOfAtoms = numberOfAtoms;
         }
     }
