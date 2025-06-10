@@ -1,4 +1,4 @@
-package chemlab.model.dto;
+package chemlab.model.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;

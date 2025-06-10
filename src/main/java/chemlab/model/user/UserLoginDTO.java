@@ -1,4 +1,4 @@
-package chemlab.model;
+package chemlab.model.user;
 
 public class UserLoginDTO {
 

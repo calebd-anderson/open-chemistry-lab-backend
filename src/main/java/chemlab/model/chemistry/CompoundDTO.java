@@ -1,4 +1,4 @@
-package chemlab.model;
+package chemlab.model.chemistry;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

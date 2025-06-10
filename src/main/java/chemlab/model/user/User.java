@@ -1,4 +1,4 @@
-package chemlab.model;
+package chemlab.model.user;
 
 import java.io.Serializable;
 import java.util.Date;

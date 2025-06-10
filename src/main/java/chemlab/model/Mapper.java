@@ -1,5 +1,8 @@
 package chemlab.model;
 
+import chemlab.model.user.User;
+import chemlab.model.user.UserDAO;
+import chemlab.model.user.UserLoginDTO;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
