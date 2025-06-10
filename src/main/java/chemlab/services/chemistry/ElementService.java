@@ -1,4 +1,4 @@
-package chemlab.services;
+package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.Element;

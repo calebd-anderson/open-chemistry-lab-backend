@@ -1,7 +1,7 @@
 package chemlab.controllers.integration;
 
 import chemlab.model.User;
-import chemlab.services.RegisteredUserService;
+import chemlab.services.user.RegisteredUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

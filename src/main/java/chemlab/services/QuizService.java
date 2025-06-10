@@ -1,5 +1,6 @@
 package chemlab.services;
 
+import chemlab.services.chemistry.ElementService;
 import com.mongodb.MongoException;
 import chemlab.model.Compound;
 import chemlab.model.Element;

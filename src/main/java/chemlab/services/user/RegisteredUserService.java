@@ -1,4 +1,4 @@
-package chemlab.services;
+package chemlab.services.user;
 
 import chemlab.exceptions.domain.*;
 import chemlab.model.User;

@@ -4,7 +4,7 @@ import chemlab.controllers.chemistry.ReactionController;
 import chemlab.security.JwtTokenProvider;
 import chemlab.security.http.JwtAccessDeniedHandler;
 import chemlab.security.http.JwtAuthenticationEntryPoint;
-import chemlab.services.ReactionService;
+import chemlab.services.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

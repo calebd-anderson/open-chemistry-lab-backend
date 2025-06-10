@@ -1,4 +1,4 @@
-package chemlab.services;
+package chemlab.services.user;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

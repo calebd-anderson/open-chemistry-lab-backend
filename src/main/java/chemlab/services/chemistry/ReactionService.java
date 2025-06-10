@@ -1,9 +1,10 @@
-package chemlab.services;
+package chemlab.services.chemistry;
 
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.Compound;
 import chemlab.model.PugApiDTO;
 import chemlab.repositories.ReactionRepository;
+import chemlab.services.QuizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

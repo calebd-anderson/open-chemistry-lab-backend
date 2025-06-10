@@ -4,6 +4,7 @@ import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.Compound;
 import chemlab.model.PugApiDTO;
 import chemlab.repositories.ReactionRepository;
+import chemlab.services.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package chemlab.services;
+package chemlab.services.user;
 
 import org.springframework.stereotype.Service;
 

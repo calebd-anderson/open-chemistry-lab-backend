@@ -1,6 +1,6 @@
 package chemlab.controllers.integration;
 
-import chemlab.services.ElementService;
+import chemlab.services.chemistry.ElementService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

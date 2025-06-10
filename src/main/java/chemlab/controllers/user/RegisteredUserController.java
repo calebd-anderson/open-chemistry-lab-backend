@@ -8,7 +8,7 @@ import chemlab.model.dto.UserRegisterDto;
 import chemlab.security.JwtTokenProvider;
 import chemlab.security.RegisteredUserPrincipal;
 import chemlab.security.http.HttpResponse;
-import chemlab.services.RegisteredUserService;
+import chemlab.services.user.RegisteredUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.Data;

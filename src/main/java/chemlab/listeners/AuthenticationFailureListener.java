@@ -1,6 +1,6 @@
 package chemlab.listeners;
 
-import chemlab.services.LoginAttemptService;
+import chemlab.services.user.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
