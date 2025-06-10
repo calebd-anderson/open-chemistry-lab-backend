@@ -3,7 +3,7 @@ package chemlab.services;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.Compound;
 import chemlab.model.PugApiDTO;
-import chemlab.repositories.CompoundRepository;
+import chemlab.repositories.ReactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,15 +28,15 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CompoundServiceTest {
+class ReactionServiceTest {
 
     @Autowired
-    private CompoundService compoundService;
+    private ReactionService reactionService;
 
     @MockitoBean
     private RestTemplate restMock;
 
-    private CompoundRepository repoMock;
+    private ReactionRepository repoMock;
 
     @MockitoBean
     private QuizService quizMock;
@@ -48,10 +48,10 @@ class CompoundServiceTest {
 
     @BeforeEach
     public void setUp() {
-        repoMock = mock(CompoundRepository.class);
-        ReflectionTestUtils.setField(compoundService, "compoundRepo", repoMock);
-        ReflectionTestUtils.setField(compoundService, "restTemplate", restMock);
-        ReflectionTestUtils.setField(compoundService, "quizService", quizMock);
+        repoMock = mock(ReactionRepository.class);
+        ReflectionTestUtils.setField(reactionService, "compoundRepo", repoMock);
+        ReflectionTestUtils.setField(reactionService, "restTemplate", restMock);
+        ReflectionTestUtils.setField(reactionService, "quizService", quizMock);
     }
 
     @Test
@@ -60,7 +60,7 @@ class CompoundServiceTest {
         List<Compound> mockValue = new ArrayList<>();
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
 
-        assertFalse(compoundService.doesValueExistInRepo("H2O"));
+        assertFalse(reactionService.doesValueExistInRepo("H2O"));
     }
 
     @Test
@@ -76,7 +76,7 @@ class CompoundServiceTest {
         mockValue.add(c1);
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
 
-        assertTrue(compoundService.doesValueExistInRepo("H2O"));
+        assertTrue(reactionService.doesValueExistInRepo("H2O"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class CompoundServiceTest {
         mockValue.add(c1);
         Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula(formula);
 
-        assertNotNull(compoundService.validateInput(c1));
+        assertNotNull(reactionService.validateInput(c1));
 
         verify(restMock, never()).getForObject(PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT, HashMap.class);
     }
@@ -116,7 +116,7 @@ class CompoundServiceTest {
         pugApiMock.appendToPropertyTableObj(5234, "ClNa", "58.44", "Sodium chloride");
         Mockito.doReturn(pugApiMock).when(restMock).getForObject(PUG_PROLOG + PUG_INPUT + compound + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
 
-        compoundService.validateInput(c1);
+        reactionService.validateInput(c1);
 
         verify(restMock, times(1)).getForObject(PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
         verify(repoMock, times(1)).save(c1);

@@ -1,7 +1,7 @@
 package chemlab.repository;
 
 import chemlab.model.Compound;
-import chemlab.repositories.CompoundRepository;
+import chemlab.repositories.ReactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-public class CompoundRepositoryTest {
+public class ReactionRepositoryTest {
     @Container
     public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0.0"));
 
     @Autowired
-    private CompoundRepository compoundRepo;
+    private ReactionRepository compoundRepo;
     private Compound c1;
 
     @DynamicPropertySource

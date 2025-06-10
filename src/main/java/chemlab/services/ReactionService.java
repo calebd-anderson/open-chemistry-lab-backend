@@ -3,7 +3,7 @@ package chemlab.services;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.Compound;
 import chemlab.model.PugApiDTO;
-import chemlab.repositories.CompoundRepository;
+import chemlab.repositories.ReactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,14 @@ import java.util.List;
 import static chemlab.constants.PugApiConstants.*;
 
 @Service
-public class CompoundService {
+public class ReactionService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
-    private CompoundRepository compoundRepo;
+    private ReactionRepository reactionRepo;
 
     @Autowired
     private QuizService quizService;
@@ -39,7 +39,7 @@ public class CompoundService {
 
     public boolean doesValueExistInRepo(String formula) {
         LOG.info("Checking if [{}] exists in db.", formula);
-        if (!compoundRepo.findCompoundByFormula(formula).isEmpty()) {
+        if (!reactionRepo.findCompoundByFormula(formula).isEmpty()) {
             LOG.info("[{}] found in db.", formula);
             return true;
         } else {
@@ -50,7 +50,7 @@ public class CompoundService {
 
     private Compound retrieveCompoundFromRepo(String formula) {
         LOG.info("Value [{}] exists in repo, retrieving...", formula);
-        return compoundRepo.findCompoundByFormula(formula).get(0);
+        return reactionRepo.findCompoundByFormula(formula).get(0);
     }
 
     private Compound retrieveCompoundFromPugApi(String formula, Compound compound) throws PugApiException {
@@ -64,7 +64,7 @@ public class CompoundService {
             if (compound.getUserId() != null) {
                 quizService.createNewQuizes(compound, compound.getUserId(), "compound");
                 quizService.createNewQuizes(compound, compound.getUserId(), "element");
-                return compoundRepo.save(compound);
+                return reactionRepo.save(compound);
             } else
                 return compound;
         } catch (HttpStatusCodeException exception) {
@@ -79,7 +79,7 @@ public class CompoundService {
     }
 
     public List<Compound> getCompoundsByUserId(String userId) {
-		return compoundRepo.findCompoundByUserId(userId);
+		return reactionRepo.findCompoundByUserId(userId);
 	}
 
     public Compound validateInput(Compound compound) throws PugApiException {

@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface CompoundRepository extends MongoRepository<Compound, String> {
+public interface ReactionRepository extends MongoRepository<Compound, String> {
 	
     @Query("{formula:'?0'}")
 	List<Compound> findCompoundByFormula(String formula);

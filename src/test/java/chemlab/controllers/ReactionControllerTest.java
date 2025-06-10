@@ -4,7 +4,7 @@ import chemlab.controllers.chemistry.ReactionController;
 import chemlab.security.JwtTokenProvider;
 import chemlab.security.http.JwtAccessDeniedHandler;
 import chemlab.security.http.JwtAuthenticationEntryPoint;
-import chemlab.services.CompoundService;
+import chemlab.services.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class ReactionControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    private CompoundService compoundServiceMock;
+    private ReactionService reactionServiceMock;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
