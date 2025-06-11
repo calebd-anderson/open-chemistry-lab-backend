@@ -1,8 +1,10 @@
 package chemlab.model.chemistry;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +12,13 @@ import java.util.Map;
 @Data
 public class Reaction {
 
-    private final HashMap<String, Integer> elements;
+    private HashMap<String, Integer> elements;
     private String formula;
     private String title;
+    private Instant dateTimeFirstDiscovered;
+    private String discoveredBy;
+
+    public Reaction() {}
 
     public Reaction(HashMap<String, Integer> elements) {
         this.elements = elements;

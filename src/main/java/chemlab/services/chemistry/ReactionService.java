@@ -3,11 +3,13 @@ package chemlab.services.chemistry;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.PugApiDTO;
 import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
 import chemlab.model.user.User;
 import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.repositories.user.UserReactionsRepo;
 import chemlab.services.QuizService;
 import chemlab.services.user.RegisteredUserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.util.List;
 
 import static chemlab.constants.PugApiConstants.*;
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 @Service
 public class ReactionService {
@@ -94,13 +98,22 @@ public class ReactionService {
             resultingReaction = retrieveCompoundFromRepo(formula);
         } else {
             resultingReaction = retrieveCompoundFromPugApi(formula, reaction);
+            resultingReaction.setDateTimeFirstDiscovered(Instant.now());
+            if(authentication != null && authentication.isAuthenticated()) {
+                resultingReaction.setDiscoveredBy(authentication.getName());
+            } else {
+                resultingReaction.setDiscoveredBy("anonymous");
+            }
             resultingReaction = reactionRepo.save(resultingReaction);
         }
-        // if user is logged in; create game data and save reaction from discovered reaction
+        // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authentication != null && authentication.isAuthenticated()) {
             User user = userService.findUserByUsername(authentication.getName());
-            quizService.createNewQuizes(reaction, user.getUserId(), "compound");
-            quizService.createNewQuizes(reaction, user.getUserId(), "element");
+            quizService.createNewQuizes(resultingReaction, user.getUserId(), "compound");
+            quizService.createNewQuizes(resultingReaction, user.getUserId(), "element");
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserReaction userReaction = objectMapper.convertValue(resultingReaction, UserReaction.class);
+            userReaction.setDateIDiscoveredIt(Instant.now());
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
         return resultingReaction;
