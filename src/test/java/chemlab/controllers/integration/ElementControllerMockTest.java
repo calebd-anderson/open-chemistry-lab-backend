@@ -1,5 +1,6 @@
 package chemlab.controllers.integration;
 
+import chemlab.security.config.CorsProperties;
 import chemlab.services.chemistry.ElementService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static chemlab.constants.SecurityConstants.CORS_ORIGIN;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -26,12 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //@WebAppConfiguration
+@ActiveProfiles(profiles = "dev")
 class ElementControllerMockTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
     private ElementService elmServiceMock;
+    @MockitoBean
+    private CorsProperties corsProperties;
 
     private MockMvc mockMvc;
 
@@ -62,7 +66,7 @@ class ElementControllerMockTest {
         mockMvc.perform(get("/elements/list")
                         .header("Authorization", "Bearer null")
                         .header("Access-Control-Request-Method", "GET")
-                        .header("Origin", CORS_ORIGIN)
+//                        .header("Origin", "http://localhost:4200/")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))

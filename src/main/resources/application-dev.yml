@@ -7,3 +7,35 @@ spring:
       database: chem-lab
 server:
   port: 8080
+
+web:
+  cors:
+    allowed-origins:
+      - "http://localhost:4200/"
+#    allowed-methods: "HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    allowed-methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowed-headers:
+      - "Origin"
+      - "Access-Control-Allow-Origin"
+      - "Content-Type"
+      - "Accept"
+      - "Jwt-Token"
+      - "Authorization"
+      - "Accept"
+      - "X-Requested-With"
+      - "Access-Control-Request-Method"
+      - "Access-Control-Request-Headers"
+    expose-headers:
+      - "Origin"
+      - "Content-Type"
+      - "Accept"
+      - "Jwt-Token"
+      - "Authorization"
+      - "Access-Control-Allow-Origin"
+      - "Access-Control-Allow-Credentials"
+    allow-credentials: true

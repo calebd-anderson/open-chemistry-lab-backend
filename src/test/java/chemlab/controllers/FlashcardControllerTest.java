@@ -4,6 +4,7 @@ import chemlab.controllers.game.FlashcardController;
 import chemlab.model.game.Flashcard;
 import chemlab.model.game.FlashcardDTO;
 import chemlab.repositories.game.FlashcardRepository;
+import chemlab.security.config.CorsProperties;
 import chemlab.services.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ class FlashcardControllerTest {
     private FlashcardService flashcardService;
     // mocked in beforeeach
     private FlashcardRepository repoMock;
+    @MockitoBean
+    private CorsProperties corsProperties;
 
     @Captor
     ArgumentCaptor<Flashcard> valueCaptor;

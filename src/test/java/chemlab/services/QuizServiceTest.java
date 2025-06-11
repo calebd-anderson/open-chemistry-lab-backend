@@ -2,6 +2,7 @@ package chemlab.services;
 
 import chemlab.model.game.Quiz;
 import chemlab.repositories.game.QuizRepository;
+import chemlab.security.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -25,7 +27,9 @@ class QuizServiceTest {
 
     @Autowired
     private QuizService quizService;
-
+    @MockitoBean
+    private CorsProperties corsProperties;
+    // mocked in setup
     private QuizRepository repoMock;
 
     @BeforeEach

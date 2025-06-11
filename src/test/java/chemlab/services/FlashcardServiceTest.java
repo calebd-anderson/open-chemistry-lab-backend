@@ -2,6 +2,7 @@ package chemlab.services;
 
 import chemlab.model.game.Flashcard;
 import chemlab.repositories.game.FlashcardRepository;
+import chemlab.security.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -28,7 +30,8 @@ class FlashcardServiceTest {
 
     @Autowired
     private FlashcardService flashcardService;
-
+    @MockitoBean
+    private CorsProperties corsProperties;
     private FlashcardRepository repoMock;
 
     private final String question1 = "is this mock value 1?";

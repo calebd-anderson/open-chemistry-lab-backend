@@ -4,6 +4,7 @@ import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.PugApiDTO;
 import chemlab.model.chemistry.Reaction;
 import chemlab.repositories.chemistry.ReactionRepository;
+import chemlab.security.config.CorsProperties;
 import chemlab.services.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,8 @@ class ReactionServiceTest {
 
     @Autowired
     private ReactionService reactionService;
-
+    @MockitoBean
+    private CorsProperties corsProperties;
     @MockitoBean
     private RestTemplate restMock;
 

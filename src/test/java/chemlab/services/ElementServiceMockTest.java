@@ -2,12 +2,14 @@ package chemlab.services;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.Element;
+import chemlab.security.config.CorsProperties;
 import chemlab.services.chemistry.ElementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.FileNotFoundException;
@@ -25,6 +27,8 @@ class ElementServiceMockTest {
 
     private ElementService elmService;
     private Element elm;
+    @MockitoBean
+    private CorsProperties corsProperties;
 
     @BeforeEach
     public void setupMock() {

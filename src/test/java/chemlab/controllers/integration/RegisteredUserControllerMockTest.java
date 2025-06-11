@@ -1,6 +1,7 @@
 package chemlab.controllers.integration;
 
 import chemlab.model.user.User;
+import chemlab.security.config.CorsProperties;
 import chemlab.services.user.RegisteredUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +40,8 @@ public class RegisteredUserControllerMockTest {
     private RegisteredUserService registeredUserService;
     @MockitoBean
     private UserDetailsService userDetailsService;
+    @MockitoBean
+    private CorsProperties corsProperties;
 
     private MockMvc mockMvc;
 

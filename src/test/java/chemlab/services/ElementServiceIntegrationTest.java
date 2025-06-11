@@ -2,12 +2,14 @@ package chemlab.services;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.Element;
+import chemlab.security.config.CorsProperties;
 import chemlab.services.chemistry.ElementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -21,6 +23,8 @@ class ElementServiceIntegrationTest {
 
     @Autowired
     ElementService elmService;
+    @MockitoBean
+    private CorsProperties corsProperties;
 
     @Test
     @DisplayName("should list all 118 elements from database")
