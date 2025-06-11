@@ -77,7 +77,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(corsProperties.getAllowedMethods());
         configuration.setAllowedHeaders(corsProperties.getAllowedHeaders());
         configuration.setExposedHeaders(corsProperties.getExposeHeaders());
-        configuration.setAllowCredentials(corsProperties.isAllowCredentials());
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // source.registerCorsConfiguration("/api/**", configuration);
