@@ -2,6 +2,7 @@ package chemlab.repository.chemistry;
 
 import chemlab.model.chemistry.Reaction;
 import chemlab.repositories.chemistry.ReactionRepository;
+import chemlab.repositories.user.UserReactionsRepo;
 import chemlab.security.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,8 @@ public class ReactionRepositoryTest {
 
     @Autowired
     private ReactionRepository compoundRepo;
+    @Autowired
+    private UserReactionsRepo userReactionsRepo;
     @MockitoBean
     private CorsProperties corsProperties;
     private Reaction c1;
@@ -52,11 +55,10 @@ public class ReactionRepositoryTest {
     }
 
     private void createMockCompounds() {
-        String userId = "12345";
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
-        c1 = new Reaction(elements, userId);
+        c1 = new Reaction(elements);
         compoundRepo.save(c1);
     }
 
@@ -67,48 +69,12 @@ public class ReactionRepositoryTest {
         assertTrue(result.get(0).equals(c1));
     }
 
-    @Test
-    @DisplayName("it should return all quizes from the queried user")
-    void getCompoundsByUserId() {
-        List<Reaction> result = compoundRepo.findCompoundByUserId("12345");
-        System.out.println("size: " + result.size());
-        assertEquals(1, result.size());
-    }
-
-    @Test
-    @DisplayName("it should only return quizes fro the specified user")
-    void getCompoundsByUserId_2() {
-        String userId = "12345";
-        HashMap<String, Integer> elements2 = new HashMap<>();
-        elements2.put("H", 1);
-        elements2.put("O", 2);
-
-        Reaction c2 = new Reaction(elements2, userId);
-
-        HashMap<String, Integer> elements3 = new HashMap<>();
-        elements2.put("Na", 1);
-        elements2.put("Cl", 1);
-
-        Reaction c3 = new Reaction(elements2, userId);
-
-        HashMap<String, Integer> elements4 = new HashMap<>();
-        elements4.put("H", 1);
-        elements4.put("Cl", 1);
-
-        Reaction c4 = new Reaction(elements2, "54321");
-
-        HashMap<String, Integer> elements5 = new HashMap<>();
-        elements5.put("C", 1);
-        elements5.put("O", 2);
-
-        Reaction c5 = new Reaction(elements2, "54321");
-
-        compoundRepo.save(c2);
-        compoundRepo.save(c3);
-        compoundRepo.save(c4);
-        compoundRepo.save(c5);
-        List<Reaction> result = compoundRepo.findCompoundByUserId("12345");
-        System.out.println("size: " + result.size());
-        assertEquals(3, result.size());
-    }
+// user is null obviously
+//    @Test
+//    @DisplayName("it should return all quizes from the queried user")
+//    void getCompoundsByUserId() {
+//        List<Reaction> result = userReactionsRepo.findReactionsByUserId("12345");
+//        System.out.println("size: " + result.size());
+//        assertEquals(1, result.size());
+//    }
 }

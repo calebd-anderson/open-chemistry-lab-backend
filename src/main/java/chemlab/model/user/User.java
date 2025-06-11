@@ -1,13 +1,19 @@
 package chemlab.model.user;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import chemlab.model.chemistry.Reaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Document(collection = "users")
+@Data
 public class User implements Serializable {
     @Id
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -22,48 +28,19 @@ public class User implements Serializable {
     private String profileImgUrl;
     private Date lastLoginDate;
     private Date joinDate;
-    //spring properties
+    // spring properties
     private String role;            // ROLE_USER{ read, edit }, ROLE_ADMIN{ delete , update, create }
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
-
+    // game information
     private int highScore;
+    // reaction information
+//    @BsonProperty(value = "reactions")
+    private List<Reaction> discoveredReactions = new ArrayList<>();
 
     // default empty constructor
     public User() {
-    }
-
-    public User(String id,
-                String userId,
-                String email,
-                String username,
-                String firstName,
-                String lastName,
-                String password,
-                String profileImgUrl,
-                Date lastLoginDate,
-                Date joinDate,
-                String role,
-                String[] authorities,
-                boolean isActive,
-                boolean isNotLocked,
-                int highScore) {
-        this.id = id;
-        this.userId = userId;
-        this.email = email;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.profileImgUrl = profileImgUrl;
-        this.lastLoginDate = lastLoginDate;
-        this.joinDate = joinDate;
-        this.role = role;
-        this.authorities = authorities;
-        this.isActive = isActive;
-        this.isNotLocked = isNotLocked;
-        this.highScore = highScore;
     }
 
     public User(UserLoginDTO userDTO) {
@@ -78,130 +55,5 @@ public class User implements Serializable {
     public User(String username, String email) {
         this.username = username;
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public boolean isNotLocked() {
-        return isNotLocked;
-    }
-
-    public void setNotLocked(boolean notLocked) {
-        isNotLocked = notLocked;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getProfileImgUrl() {
-        return profileImgUrl;
-    }
-
-    public void setProfileImgUrl(String profileImgUrl) {
-        this.profileImgUrl = profileImgUrl;
-    }
-
-    public Date getLastLoginDate() {
-        return this.lastLoginDate;
-    }
-
-    public void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
-    public Date getJoinDate() {
-        return joinDate;
-    }
-
-    public void setJoinDate(Date joinDate) {
-        this.joinDate = joinDate;
-    }
-
-    public String[] getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(String[] authorities) {
-        this.authorities = authorities;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getHighScore() {
-        return highScore;
-    }
-
-    public void setHighScore(int highScore) {
-        this.highScore = highScore;
-    }
-
-    public String getName() {
-        return getFirstName() + " " + getLastName();
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

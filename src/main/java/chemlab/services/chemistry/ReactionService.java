@@ -3,12 +3,17 @@ package chemlab.services.chemistry;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.PugApiDTO;
 import chemlab.model.chemistry.Reaction;
+import chemlab.model.user.User;
 import chemlab.repositories.chemistry.ReactionRepository;
+import chemlab.repositories.user.UserReactionsRepo;
 import chemlab.services.QuizService;
+import chemlab.services.user.RegisteredUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -26,10 +31,12 @@ public class ReactionService {
 
     @Autowired
     private ReactionRepository reactionRepo;
-
+    @Autowired
+    private RegisteredUserService userService;
+    @Autowired
+    private UserReactionsRepo userReactionsRepo;
     @Autowired
     private QuizService quizService;
-
 
     /**
      * TODO:
@@ -58,20 +65,15 @@ public class ReactionService {
         LOG.info("Calling PUG API with argument: {}", formula);
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT;
         try {
-//            LOG.info("Sending PugAPI url in service: {}", pubChemUrl);
+            // LOG.info("Sending PugAPI url in service: {}", pubChemUrl);
             PugApiDTO pugApiValue = restTemplate.getForObject(pubChemUrl, PugApiDTO.class);
             assert pugApiValue != null;
             reaction.setTitle(pugApiValue.getFirstPropertyTitle());
-            if (reaction.getUserId() != null) {
-                quizService.createNewQuizes(reaction, reaction.getUserId(), "compound");
-                quizService.createNewQuizes(reaction, reaction.getUserId(), "element");
-                return reactionRepo.save(reaction);
-            } else
-                return reaction;
+            return reaction;
         } catch (HttpStatusCodeException exception) {
             // to do: parse the JSON returned as an error to get a useful response
             // LOG.error(exception.getResponseBodyAsString());
-//            LOG.error("Received " + exception.getStatusCode().value() + " response code from PUG API.");
+            // LOG.error("Received " + exception.getStatusCode().value() + " response code from PUG API.");
             if (exception.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new PugApiException("404 error from PugAPI url: " + pubChemUrl);
             } else
@@ -80,12 +82,27 @@ public class ReactionService {
     }
 
     public List<Reaction> getCompoundsByUserId(String userId) {
-        return reactionRepo.findCompoundByUserId(userId);
+        return userReactionsRepo.findReactionsByUserId(userId);
     }
 
     public Reaction validateInput(Reaction reaction) throws PugApiException {
         String formula = reaction.getFormula();
         LOG.info("Validating: [{}]", formula);
-        return doesValueExistInRepo(formula) ? retrieveCompoundFromRepo(formula) : retrieveCompoundFromPugApi(formula, reaction);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Reaction resultingReaction;
+        if (doesValueExistInRepo(formula)) {
+            resultingReaction = retrieveCompoundFromRepo(formula);
+        } else {
+            resultingReaction = retrieveCompoundFromPugApi(formula, reaction);
+            resultingReaction = reactionRepo.save(resultingReaction);
+        }
+        // if user is logged in; create game data and save reaction from discovered reaction
+        if (authentication != null && authentication.isAuthenticated()) {
+            User user = userService.findUserByUsername(authentication.getName());
+            quizService.createNewQuizes(reaction, user.getUserId(), "compound");
+            quizService.createNewQuizes(reaction, user.getUserId(), "element");
+            userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
+        }
+        return resultingReaction;
     }
 }

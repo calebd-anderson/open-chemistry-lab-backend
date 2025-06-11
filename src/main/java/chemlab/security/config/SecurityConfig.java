@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(SecurityConstants.PUBLIC_URLS)
                         .permitAll()
                         .anyRequest().authenticated()
-                )
+                ).anonymous(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

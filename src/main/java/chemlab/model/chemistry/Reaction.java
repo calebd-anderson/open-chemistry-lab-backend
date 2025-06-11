@@ -13,12 +13,10 @@ public class Reaction {
     private final HashMap<String, Integer> elements;
     private String formula;
     private String title;
-    private final String userId;
 
-    public Reaction(HashMap<String, Integer> elements, String userId) {
+    public Reaction(HashMap<String, Integer> elements) {
         this.elements = elements;
         this.formula = createFormula();
-        this.userId = userId;
     }
 
     private String createFormula() {

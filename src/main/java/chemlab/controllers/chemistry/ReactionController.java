@@ -21,8 +21,8 @@ public class ReactionController {
 
     @PostMapping(value = "validate")
     public Reaction validate(@RequestBody ReactionDto payload) throws PugApiException {
-        Reaction reaction = new Reaction(payload.getMappedPayload(), payload.getUserId());
-        LOG.info("Controller received formula, userId: {}, {}", reaction.getFormula(), reaction.getUserId());
+        Reaction reaction = new Reaction(payload.getMappedPayload());
+        LOG.info("Controller received formula: {}", reaction.getFormula());
         return reactionService.validateInput(reaction);
     }
 
