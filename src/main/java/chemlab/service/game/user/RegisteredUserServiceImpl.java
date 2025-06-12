@@ -1,13 +1,12 @@
 package chemlab.service.game.user;
 
+import auth.user.LoginAttemptService;
+import auth.user.RegisteredUserPrincipal;
 import auth.user.Role;
-import chemlab.domain.user.RegisteredUserService;
-import chemlab.exceptions.domain.*;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.user.RegisteredUserRepository;
-import auth.user.RegisteredUserPrincipal;
-import services.email.EmailService;
-import auth.user.LoginAttemptService;
+import chemlab.domain.user.RegisteredUserService;
+import chemlab.exceptions.domain.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import services.email.EmailService;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +33,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static chemlab.constants.FileConstants.*;
 import static auth.user.Role.ROLE_USER;
+import static chemlab.constants.FileConstants.*;
 import static chemlab.service.game.user.UserImplementationConstant.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -273,11 +273,11 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
 
     private String generateUserId() {
         // return random number length 10
-        return RandomStringUtils.randomNumeric(10);
+        return RandomStringUtils.secure().next(10);
     }
 
     private String generatePassword() {
-        return RandomStringUtils.randomAlphanumeric(10);
+        return RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     private Role getRoleEnumName(String role) {
@@ -319,7 +319,8 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
             byte[] messageDigest = md.digest(input.getBytes());
             return convertToHex(messageDigest);
         } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+//            e.printStackTrace();
             return null;
         }
     }
