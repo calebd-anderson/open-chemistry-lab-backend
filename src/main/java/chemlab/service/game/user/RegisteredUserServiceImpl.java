@@ -1,13 +1,13 @@
-package chemlab.service;
+package chemlab.service.game.user;
 
-import chemlab.constants.Role;
+import auth.user.Role;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.user.RegisteredUserRepository;
-import auth.RegisteredUserPrincipal;
-import services.EmailService;
-import auth.LoginAttemptService;
+import auth.user.RegisteredUserPrincipal;
+import services.email.EmailService;
+import auth.user.LoginAttemptService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,8 +34,8 @@ import java.util.Date;
 import java.util.List;
 
 import static chemlab.constants.FileConstants.*;
-import static chemlab.constants.Role.ROLE_USER;
-import static chemlab.constants.UserImplementationConstant.*;
+import static auth.user.Role.ROLE_USER;
+import static chemlab.service.game.user.UserImplementationConstant.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;

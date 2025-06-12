@@ -1,7 +1,7 @@
 package chemlab.service.game;
 
 import chemlab.service.chemistry.ElementService;
-import chemlab.service.ServiceInterface;
+import chemlab.domain.ServiceInterface;
 import com.mongodb.MongoException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.Element;

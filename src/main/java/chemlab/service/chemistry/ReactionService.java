@@ -22,8 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.util.List;
 
-import static chemlab.constants.PugApiConstants.*;
-
 @Service
 public class ReactionService {
     private final Logger LOG = LoggerFactory.getLogger(getClass());

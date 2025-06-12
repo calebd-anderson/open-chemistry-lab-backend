@@ -1,4 +1,4 @@
-package auth;
+package auth.user;
 
 import chemlab.domain.model.user.User;
 import org.springframework.security.core.GrantedAuthority;

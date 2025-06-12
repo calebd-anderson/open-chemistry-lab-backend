@@ -1,7 +1,7 @@
 package auth.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import chemlab.constants.SecurityConstants;
+import auth.config.SecurityConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;

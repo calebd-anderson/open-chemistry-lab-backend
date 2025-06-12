@@ -1,7 +1,7 @@
 package auth.listeners;
 
-import auth.RegisteredUserPrincipal;
-import auth.LoginAttemptService;
+import auth.user.RegisteredUserPrincipal;
+import auth.user.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;

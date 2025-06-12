@@ -1,6 +1,6 @@
 package auth.jwt;
 
-import auth.RegisteredUserPrincipal;
+import auth.user.RegisteredUserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static chemlab.constants.SecurityConstants.*;
+import static auth.config.SecurityConstants.*;
 import static java.util.Arrays.stream;
 
 @Component

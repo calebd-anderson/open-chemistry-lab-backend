@@ -3,7 +3,6 @@ package auth.config;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
 import auth.jwt.JwtAuthorizationFilter;
-import chemlab.constants.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

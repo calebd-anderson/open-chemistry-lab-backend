@@ -1,4 +1,4 @@
-package chemlab.constants;
+package chemlab.service.game.user;
 
 public class UserImplementationConstant {
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";

@@ -1,6 +1,6 @@
 package auth.jwt;
 
-import chemlab.constants.SecurityConstants;
+import auth.config.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.util.List;
 
-import static chemlab.constants.SecurityConstants.TOKEN_PREFIX;
+import static auth.config.SecurityConstants.TOKEN_PREFIX;
 
 @Component
 @Slf4j

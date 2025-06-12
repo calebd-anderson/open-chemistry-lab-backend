@@ -1,6 +1,6 @@
 package chemlab.service.game;
 
-import chemlab.service.ServiceInterface;
+import chemlab.domain.ServiceInterface;
 import com.mongodb.MongoException;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.repository.game.FlashcardRepository;

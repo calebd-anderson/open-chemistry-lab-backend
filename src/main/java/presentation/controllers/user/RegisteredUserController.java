@@ -6,7 +6,7 @@ import chemlab.domain.model.user.User;
 import chemlab.domain.model.user.dto.UserLoginDto;
 import chemlab.domain.model.user.dto.UserRegisterDto;
 import auth.jwt.JwtTokenProvider;
-import auth.RegisteredUserPrincipal;
+import auth.user.RegisteredUserPrincipal;
 import auth.http.HttpResponse;
 import chemlab.domain.user.RegisteredUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 import static chemlab.constants.FileConstants.*;
-import static chemlab.constants.SecurityConstants.JWT_TOKEN_HEADER;
+import static auth.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 

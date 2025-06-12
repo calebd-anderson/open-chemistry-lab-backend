@@ -1,4 +1,4 @@
-package auth;
+package auth.user;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

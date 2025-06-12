@@ -1,4 +1,4 @@
-package chemlab.constants;
+package services.email;
 
 public class EmailConstant {
     public static final String FROM_EMAIL = "support@mail.chemlab.edu";
