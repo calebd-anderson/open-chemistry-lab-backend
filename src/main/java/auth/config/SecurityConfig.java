@@ -39,19 +39,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)
-                // "/api/v1/auth/**"
-                .authorizeHttpRequests(request -> request.requestMatchers("/user/list")
-                        .hasAnyAuthority("user:update")
-                        .requestMatchers(SecurityConstants.PUBLIC_URLS)
-                        .permitAll()
-                        .anyRequest().authenticated()
-                ).anonymous(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler))
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(AbstractHttpConfigurer::disable)
+            // "/api/v1/auth/**"
+            .authorizeHttpRequests(request -> request.requestMatchers("/user/list")
+                .hasAnyAuthority("user:update")
+                .requestMatchers(SecurityConstants.PUBLIC_URLS)
+                .permitAll()
+                .anyRequest().authenticated()
+            ).anonymous(AbstractHttpConfigurer::disable)
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+            )
+            .sessionManagement(manager -> manager
+                .sessionCreationPolicy(STATELESS))
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
