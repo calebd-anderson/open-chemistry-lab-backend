@@ -1,13 +1,13 @@
 package chemlab.service.chemistry;
 
-import chemlab.domain.user.RegisteredUserService;
-import chemlab.exceptions.domain.PugApiException;
 import chemlab.domain.model.PugApiDTO;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.user.UserReactionsRepo;
+import chemlab.domain.user.RegisteredUserService;
+import chemlab.exceptions.domain.PugApiException;
 import chemlab.service.game.QuizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
+
+import static services.pubchem.PugApiConstants.*;
 
 @Service
 public class ReactionService {

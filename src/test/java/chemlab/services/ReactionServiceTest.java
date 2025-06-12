@@ -1,12 +1,12 @@
 package chemlab.services;
 
-import chemlab.exceptions.domain.PugApiException;
+import auth.config.CorsProperties;
 import chemlab.domain.model.PugApiDTO;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
-import auth.config.CorsProperties;
-import chemlab.service.game.QuizService;
+import chemlab.exceptions.domain.PugApiException;
 import chemlab.service.chemistry.ReactionService;
+import chemlab.service.game.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static services.pubchem.PugApiConstants.*;
 
 @SpringBootTest
 class ReactionServiceTest {
