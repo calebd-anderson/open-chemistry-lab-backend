@@ -1,6 +1,6 @@
 package chemlab.controllers.integration;
 
-import auth.CorsProperties;
+import auth.config.CorsProperties;
 import chemlab.service.chemistry.ElementService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

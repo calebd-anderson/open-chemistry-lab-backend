@@ -4,7 +4,7 @@ import chemlab.exceptions.domain.PugApiException;
 import chemlab.domain.model.PugApiDTO;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
-import auth.CorsProperties;
+import auth.config.CorsProperties;
 import chemlab.service.game.QuizService;
 import chemlab.service.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;

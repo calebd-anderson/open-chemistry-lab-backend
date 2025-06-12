@@ -1,4 +1,4 @@
-package auth;
+package auth.jwt;
 
 import chemlab.constants.SecurityConstants;
 import jakarta.servlet.FilterChain;

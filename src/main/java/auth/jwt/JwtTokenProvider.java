@@ -1,5 +1,6 @@
-package auth;
+package auth.jwt;
 
+import auth.RegisteredUserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;

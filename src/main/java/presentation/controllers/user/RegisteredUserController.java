@@ -5,7 +5,7 @@ import chemlab.exceptions.domain.*;
 import chemlab.domain.model.user.User;
 import chemlab.domain.model.user.dto.UserLoginDto;
 import chemlab.domain.model.user.dto.UserRegisterDto;
-import auth.JwtTokenProvider;
+import auth.jwt.JwtTokenProvider;
 import auth.RegisteredUserPrincipal;
 import auth.http.HttpResponse;
 import chemlab.domain.user.RegisteredUserService;

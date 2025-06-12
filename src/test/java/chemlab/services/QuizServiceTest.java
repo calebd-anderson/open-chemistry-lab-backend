@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.model.game.Quiz;
 import chemlab.domain.repository.game.QuizRepository;
-import auth.CorsProperties;
+import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -5,7 +5,7 @@ import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import presentation.controllers.game.QuizController;
 import chemlab.domain.model.game.Quiz;
-import auth.JwtTokenProvider;
+import auth.jwt.JwtTokenProvider;
 import chemlab.service.game.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

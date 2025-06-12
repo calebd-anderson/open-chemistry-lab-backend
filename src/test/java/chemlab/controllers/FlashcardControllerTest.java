@@ -4,7 +4,7 @@ import presentation.controllers.game.FlashcardController;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.game.FlashcardDTO;
 import chemlab.domain.repository.game.FlashcardRepository;
-import auth.CorsProperties;
+import auth.config.CorsProperties;
 import chemlab.service.game.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

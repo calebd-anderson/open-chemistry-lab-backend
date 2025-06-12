@@ -1,10 +1,9 @@
 package auth.config;
 
-import chemlab.constants.SecurityConstants;
-import auth.JwtAuthorizationFilter;
-import auth.CorsProperties;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import auth.jwt.JwtAuthorizationFilter;
+import chemlab.constants.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

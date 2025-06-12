@@ -1,6 +1,6 @@
 package chemlab.controllers.integration;
 
-import auth.JwtTokenProvider;
+import auth.jwt.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
 import chemlab.domain.model.game.Flashcard;
