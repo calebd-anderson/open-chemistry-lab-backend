@@ -3,6 +3,7 @@ package chemlab.controllers.chemistry;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.ReactionDto;
+import chemlab.model.chemistry.UserReaction;
 import chemlab.services.chemistry.ReactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class ReactionController {
     }
 
     @GetMapping(value = "getByUserId")
-    public List<Reaction> getByUserId(@RequestParam String userId) {
+    public List<UserReaction> getByUserId(@RequestParam String userId) {
         return reactionService.getCompoundsByUserId(userId);
     }
 }

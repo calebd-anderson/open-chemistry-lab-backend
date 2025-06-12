@@ -1,9 +1,8 @@
 package chemlab.model.user;
 
-import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,15 +28,16 @@ public class User implements Serializable {
     private Date lastLoginDate;
     private Date joinDate;
     // spring properties
-    private String role;            // ROLE_USER{ read, edit }, ROLE_ADMIN{ delete , update, create }
+    // ROLE_USER{ read, edit }, ROLE_ADMIN{ delete , update, create }
+    private String role;
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
     // game information
     private int highScore;
     // reaction information
-//    @BsonProperty(value = "reactions")
-    private List<Reaction> discoveredReactions = new ArrayList<>();
+    // @BsonProperty(value = "reactions")
+    private List<UserReaction> discoveredReactions = new ArrayList<>();
 
     // default empty constructor
     public User() {

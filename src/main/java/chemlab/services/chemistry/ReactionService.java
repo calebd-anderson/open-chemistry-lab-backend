@@ -9,7 +9,6 @@ import chemlab.repositories.chemistry.ReactionRepository;
 import chemlab.repositories.user.UserReactionsRepo;
 import chemlab.services.QuizService;
 import chemlab.services.user.RegisteredUserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import java.time.Instant;
 import java.util.List;
 
 import static chemlab.constants.PugApiConstants.*;
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 @Service
 public class ReactionService {
@@ -85,7 +83,7 @@ public class ReactionService {
         }
     }
 
-    public List<Reaction> getCompoundsByUserId(String userId) {
+    public List<UserReaction> getCompoundsByUserId(String userId) {
         return userReactionsRepo.findReactionsByUserId(userId);
     }
 
@@ -98,8 +96,8 @@ public class ReactionService {
             resultingReaction = retrieveCompoundFromRepo(formula);
         } else {
             resultingReaction = retrieveCompoundFromPugApi(formula, reaction);
-            resultingReaction.setDateTimeFirstDiscovered(Instant.now());
-            if(authentication != null && authentication.isAuthenticated()) {
+            resultingReaction.setDiscoveredWhen(Instant.now());
+            if (authentication != null && authentication.isAuthenticated()) {
                 resultingReaction.setDiscoveredBy(authentication.getName());
             } else {
                 resultingReaction.setDiscoveredBy("anonymous");
@@ -111,9 +109,6 @@ public class ReactionService {
             User user = userService.findUserByUsername(authentication.getName());
             quizService.createNewQuizes(resultingReaction, user.getUserId(), "compound");
             quizService.createNewQuizes(resultingReaction, user.getUserId(), "element");
-            ObjectMapper objectMapper = new ObjectMapper();
-            UserReaction userReaction = objectMapper.convertValue(resultingReaction, UserReaction.class);
-            userReaction.setDateIDiscoveredIt(Instant.now());
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
         return resultingReaction;
