@@ -1,9 +1,12 @@
 package chemlab.controllers;
 
-import presentation.controllers.chemistry.ReactionController;
 import auth.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.domain.repository.game.QuizRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.domain.user.RegisteredUserService;
 import chemlab.service.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import presentation.controllers.chemistry.ReactionController;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ReactionController.class)
@@ -27,6 +31,14 @@ class ReactionControllerTest {
 
     @MockitoBean
     private ReactionService reactionServiceMock;
+    @MockitoBean
+    private FlashcardRepository flashcardRepository;
+    @MockitoBean
+    private QuizRepository quizRepository;
+    @MockitoBean
+    private RegisteredUserRepository registeredUserRepository;
+    @MockitoBean
+    private RegisteredUserService registeredUserService;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;

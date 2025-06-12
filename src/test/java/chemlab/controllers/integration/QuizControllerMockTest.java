@@ -1,5 +1,8 @@
 package chemlab.controllers.integration;
 
+import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
 import presentation.controllers.game.QuizController;
 import chemlab.domain.model.game.Quiz;
 import auth.JwtTokenProvider;
@@ -35,6 +38,12 @@ public class QuizControllerMockTest {
 
     @MockitoBean
     private QuizService quizServiceMock;
+    @MockitoBean
+    private RegisteredUserRepository registeredUserRepository;
+    @MockitoBean
+    private ReactionRepository reactionRepository;
+    @MockitoBean
+    private FlashcardRepository flashcardRepository;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
     @MockitoBean

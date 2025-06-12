@@ -1,10 +1,13 @@
 package chemlab.controllers.integration;
 
-import presentation.controllers.game.FlashcardController;
-import chemlab.domain.model.game.Flashcard;
 import auth.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.game.QuizRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.domain.user.RegisteredUserService;
 import chemlab.service.game.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import presentation.controllers.game.FlashcardController;
 
 import java.util.List;
 
@@ -42,6 +46,15 @@ class FlashcardControllerMockTest {
 
     @MockitoBean
     private FlashcardService flashcardServiceMock;
+    @MockitoBean
+    private ReactionRepository reactionRepository;
+    @MockitoBean
+    private RegisteredUserService registeredUserService;
+    @MockitoBean
+    private RegisteredUserRepository registeredUserRepository;
+    @MockitoBean
+    private QuizRepository quizRepository;
+
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
     @MockitoBean
