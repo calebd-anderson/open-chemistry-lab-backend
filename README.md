@@ -48,3 +48,4 @@ sops encrypt src/main/resources/application.yml > src/main/resources/application
 This project was built with help from:
 - my peers and instructor at Metro State
 - an online tutorial from [Get Arrays](https://www.getarrays.io/)
+- [PubChem API](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial)
