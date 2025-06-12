@@ -1,11 +1,12 @@
 package chemlab.services;
 
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.model.PugApiDTO;
-import chemlab.model.chemistry.Reaction;
-import chemlab.repositories.chemistry.ReactionRepository;
-import chemlab.security.config.CorsProperties;
-import chemlab.services.chemistry.ReactionService;
+import chemlab.domain.model.PugApiDTO;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.repository.chemistry.ReactionRepository;
+import auth.CorsProperties;
+import chemlab.service.game.QuizService;
+import chemlab.service.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

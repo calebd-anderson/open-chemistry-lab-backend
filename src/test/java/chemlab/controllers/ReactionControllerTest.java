@@ -1,10 +1,10 @@
 package chemlab.controllers;
 
-import chemlab.controllers.chemistry.ReactionController;
-import chemlab.security.JwtTokenProvider;
-import chemlab.security.http.JwtAccessDeniedHandler;
-import chemlab.security.http.JwtAuthenticationEntryPoint;
-import chemlab.services.chemistry.ReactionService;
+import presentation.controllers.chemistry.ReactionController;
+import auth.JwtTokenProvider;
+import auth.http.JwtAccessDeniedHandler;
+import auth.http.JwtAuthenticationEntryPoint;
+import chemlab.service.chemistry.ReactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

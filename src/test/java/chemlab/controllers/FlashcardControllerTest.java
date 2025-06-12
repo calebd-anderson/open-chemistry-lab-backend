@@ -1,11 +1,11 @@
 package chemlab.controllers;
 
-import chemlab.controllers.game.FlashcardController;
-import chemlab.model.game.Flashcard;
-import chemlab.model.game.FlashcardDTO;
-import chemlab.repositories.game.FlashcardRepository;
-import chemlab.security.config.CorsProperties;
-import chemlab.services.FlashcardService;
+import presentation.controllers.game.FlashcardController;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.game.FlashcardDTO;
+import chemlab.domain.repository.game.FlashcardRepository;
+import auth.CorsProperties;
+import chemlab.service.game.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

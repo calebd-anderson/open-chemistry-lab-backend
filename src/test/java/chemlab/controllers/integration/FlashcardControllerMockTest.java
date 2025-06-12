@@ -1,11 +1,11 @@
 package chemlab.controllers.integration;
 
-import chemlab.controllers.game.FlashcardController;
-import chemlab.model.game.Flashcard;
-import chemlab.security.JwtTokenProvider;
-import chemlab.security.http.JwtAccessDeniedHandler;
-import chemlab.security.http.JwtAuthenticationEntryPoint;
-import chemlab.services.FlashcardService;
+import presentation.controllers.game.FlashcardController;
+import chemlab.domain.model.game.Flashcard;
+import auth.JwtTokenProvider;
+import auth.http.JwtAccessDeniedHandler;
+import auth.http.JwtAuthenticationEntryPoint;
+import chemlab.service.game.FlashcardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,9 +1,9 @@
 package chemlab.controllers.integration;
 
-import chemlab.controllers.game.QuizController;
-import chemlab.model.game.Quiz;
-import chemlab.security.JwtTokenProvider;
-import chemlab.services.QuizService;
+import presentation.controllers.game.QuizController;
+import chemlab.domain.model.game.Quiz;
+import auth.JwtTokenProvider;
+import chemlab.service.game.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

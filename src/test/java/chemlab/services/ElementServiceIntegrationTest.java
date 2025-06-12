@@ -1,9 +1,9 @@
 package chemlab.services;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
-import chemlab.security.config.CorsProperties;
-import chemlab.services.chemistry.ElementService;
+import chemlab.domain.model.chemistry.Element;
+import auth.CorsProperties;
+import chemlab.service.chemistry.ElementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

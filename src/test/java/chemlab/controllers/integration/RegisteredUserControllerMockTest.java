@@ -1,8 +1,8 @@
 package chemlab.controllers.integration;
 
-import chemlab.model.user.User;
-import chemlab.security.config.CorsProperties;
-import chemlab.services.user.RegisteredUserService;
+import chemlab.domain.model.user.User;
+import auth.CorsProperties;
+import chemlab.domain.user.RegisteredUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,9 @@
 package chemlab.repository.chemistry;
 
-import chemlab.model.chemistry.Reaction;
-import chemlab.repositories.chemistry.ReactionRepository;
-import chemlab.repositories.user.UserReactionsRepo;
-import chemlab.security.config.CorsProperties;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.user.UserReactionsRepo;
+import auth.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
