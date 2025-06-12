@@ -1,6 +1,7 @@
 package chemlab.model.user;
 
 import chemlab.model.chemistry.UserReaction;
+import chemlab.model.user.dto.UserLoginDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -43,9 +44,9 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(UserLoginDTO userDTO) {
+    public User(UserLoginDto userDTO) {
         this.password = userDTO.getPassword();
-        this.email = userDTO.getEmail();
+        this.username = userDTO.getUsername();
     }
 
     public User(String username) {

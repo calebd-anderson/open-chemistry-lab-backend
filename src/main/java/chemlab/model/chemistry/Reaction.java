@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-@Document(collection = "reaction")
+@Document(collection = "reactions")
 @Data
 public class Reaction {
 
