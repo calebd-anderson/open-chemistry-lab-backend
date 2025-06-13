@@ -16,6 +16,9 @@ public class Reaction {
     private String title;
     private Instant discoveredWhen;
     private String discoveredBy;
+    private Instant lastDiscoveredWhen;
+    private String lastDiscoveredBy;
+    private int discoveryCount;
 
     public Reaction() {}
 

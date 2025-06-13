@@ -92,9 +92,9 @@ public class ReactionService {
         LOG.info("Validating: [{}]", formula);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Reaction resultingReaction;
-        if (doesValueExistInRepo(formula)) {
-            resultingReaction = retrieveCompoundFromRepo(formula);
-        } else {
+        // new discovery
+        if (!doesValueExistInRepo(formula)) {
+            // try formula with pubchem api
             resultingReaction = retrieveCompoundFromPugApi(formula, reaction);
             resultingReaction.setDiscoveredWhen(Instant.now());
             if (authentication != null && authentication.isAuthenticated()) {
@@ -102,15 +102,28 @@ public class ReactionService {
             } else {
                 resultingReaction.setDiscoveredBy("anonymous");
             }
-            resultingReaction = reactionRepo.save(resultingReaction);
+        } else {
+            // reaction already discovered
+            resultingReaction = retrieveCompoundFromRepo(formula);
         }
+        resultingReaction.setLastDiscoveredWhen(Instant.now());
+        resultingReaction.setDiscoveryCount(resultingReaction.getDiscoveryCount() + 1);
+        // set last discovered by
+        if (authentication != null && authentication.isAuthenticated()) {
+            resultingReaction.setLastDiscoveredBy(authentication.getName());
+        } else {
+            resultingReaction.setLastDiscoveredBy("anonymous");
+        }
+
         // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authentication != null && authentication.isAuthenticated()) {
+            // need to lookup user by username until able to add userid to JWT
             User user = userService.findUserByUsername(authentication.getName());
-            quizService.createNewQuizes(resultingReaction, user.getUserId(), "compound");
-            quizService.createNewQuizes(resultingReaction, user.getUserId(), "element");
+            // quizService.createNewQuizes(resultingReaction, user.getUserId(), "compound");
+            // quizService.createNewQuizes(resultingReaction, user.getUserId(), "element");
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
+        resultingReaction = reactionRepo.save(resultingReaction);
         return resultingReaction;
     }
 }

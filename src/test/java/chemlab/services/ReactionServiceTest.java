@@ -109,7 +109,12 @@ class ReactionServiceTest {
 
         PugApiDTO pugApiMock = new PugApiDTO();
         pugApiMock.initializePropertyTableObj();
-        pugApiMock.appendToPropertyTableObj(5234, "ClNa", "58.44", "Sodium chloride");
+        pugApiMock.appendToPropertyTableObj(
+                5234,
+                "ClNa",
+                "58.44",
+                "Sodium chloride"
+        );
         Mockito.doReturn(pugApiMock).when(restMock).getForObject(PUG_PROLOG + PUG_INPUT + compound + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
 
         reactionService.validateInput(c1);
@@ -117,7 +122,26 @@ class ReactionServiceTest {
         verify(restMock, times(1)).getForObject(PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
         verify(repoMock, times(1)).save(c1);
         // zero interactions with this mock?
-//        verify(quizMock, times(1)).createNewQuizes(c1, userId, "compound");
-//        verify(quizMock, times(1)).createNewQuizes(c1, userId, "element");
+        // verify(quizMock, times(1)).createNewQuizes(c1, userId, "compound");
+        // verify(quizMock, times(1)).createNewQuizes(c1, userId, "element");
+    }
+
+    @Test
+    @DisplayName("When discovery is made do all the things")
+    void discoveredIncrements() {
+        // make discovery
+        // check if discovery is recorded
+        // if not record in mongodb
+            // set discovery attributes:
+            // discoveredWhen
+            // discoveredBy
+            // timesDiscovered
+            // lastDiscoveredWhen
+            // lasterDiscoveredBy
+        // if so retrieve from database
+            // set discovery attributes:
+            // timesDiscovered
+            // lastDiscoveredWhen
+            // lasterDiscoveredBy
     }
 }
