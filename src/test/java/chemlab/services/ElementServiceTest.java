@@ -1,18 +1,16 @@
 package chemlab.services;
 
-import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.domain.chemistry.ElementService;
 import chemlab.domain.model.chemistry.Element;
-import auth.config.CorsProperties;
-import chemlab.service.chemistry.ElementService;
+import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.exceptions.domain.FailedToLoadPTException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -21,18 +19,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
-class ElementServiceMockTest {
+class ElementServiceTest {
 
+    @Autowired
     private ElementService elmService;
-    private Element elm;
+
     @MockitoBean
-    private CorsProperties corsProperties;
+    private ElementRepository elmRepo;
+
+    private Element elm;
 
     @BeforeEach
     public void setupMock() {
-        elmService = mock(ElementService.class);
         elm = mock(Element.class);
     }
 
@@ -44,8 +43,8 @@ class ElementServiceMockTest {
 
     @Test
     @DisplayName("should list all elements")
-        // https://stackoverflow.com/questions/54674251/how-to-mock-jpa-repositorys-find-method-in-unit-tests
-    void testListAll() throws FailedToLoadPTException, FileNotFoundException {
+    void testListAll() throws FailedToLoadPTException {
+        // Arrange
         Element elm1 = new Element();
         elm1.setAtomicNumber("1");
         elm1.setAtomicMass("4.5");
@@ -53,21 +52,26 @@ class ElementServiceMockTest {
         elm2.setAtomicNumber("2");
         elm2.setAtomicMass("10.3");
         // define what will happen
-        when(elmService.getAllElements()).thenReturn(asList(elm1, elm2));
+        when(elmRepo.findAll()).thenReturn(asList(elm1, elm2));
+        // Act
         List<Element> allElements = elmService.getAllElements();
+        // Assert
         assertThat(allElements).containsExactly(elm1, elm2);
-        verify(elmService).getAllElements();
+        verify(elmRepo).findAll();
     }
 
     @Test
     @DisplayName("should find Element with symbol of H")
     void testFindBySymbol() {
+        // Arrange
         Element testElm = new Element();
         testElm.setSymbol("H");
-        when(elmService.getElementBySymbol("H")).thenReturn(testElm);
+        when(elmRepo.findElementBySymbol("H")).thenReturn(testElm);
+        // Act
         Element actualElm = elmService.getElementBySymbol("H");
+        // Assert
         assertEquals(testElm.getSymbol(), actualElm.getSymbol());
-        verify(elmService).getElementBySymbol("H");
+        verify(elmRepo).findElementBySymbol("H");
     }
 
 //    @Test

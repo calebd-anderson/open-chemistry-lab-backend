@@ -3,7 +3,7 @@ package presentation.controllers.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.domain.model.chemistry.Element;
-import chemlab.service.chemistry.ElementService;
+import chemlab.service.chemistry.ElementServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,10 @@ import java.util.List;
 @RequestMapping("/elements")
 public class ElementController {
 
-    private final ElementService elmService;
+    private final ElementServiceImpl elmService;
 
     @Autowired
-    public ElementController(ElementService service) {
+    public ElementController(ElementServiceImpl service) {
         this.elmService = service;
     }
 

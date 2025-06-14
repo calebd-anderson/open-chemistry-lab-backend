@@ -1,23 +1,23 @@
 package chemlab.service.chemistry;
 
-import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.domain.chemistry.ElementService;
 import chemlab.domain.model.chemistry.Element;
 import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.exceptions.domain.FailedToLoadPTException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @Slf4j
-public class ElementService {
+public class ElementServiceImpl implements ElementService {
 
     private final ElementRepository elmRepo;
 
     @Autowired
-    public ElementService(ElementRepository elmRepo) {
+    public ElementServiceImpl(ElementRepository elmRepo) {
         this.elmRepo = elmRepo;
     }
 

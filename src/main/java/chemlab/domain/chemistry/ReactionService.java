@@ -1,4 +1,4 @@
-package chemlab.domain;
+package chemlab.domain.chemistry;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;

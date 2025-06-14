@@ -1,6 +1,6 @@
 package chemlab.service.chemistry;
 
-import chemlab.domain.ReactionService;
+import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.chemistry.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
@@ -9,7 +9,6 @@ import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.repository.user.UserReactionsRepo;
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.service.game.QuizService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

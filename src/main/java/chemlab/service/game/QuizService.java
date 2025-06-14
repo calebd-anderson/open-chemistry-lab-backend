@@ -1,6 +1,6 @@
 package chemlab.service.game;
 
-import chemlab.service.chemistry.ElementService;
+import chemlab.service.chemistry.ElementServiceImpl;
 import chemlab.domain.ServiceInterface;
 import com.mongodb.MongoException;
 import chemlab.domain.model.chemistry.Reaction;
@@ -22,7 +22,7 @@ public class QuizService implements ServiceInterface<Quiz> {
     private QuizRepository quizRepo;
 
     @Autowired
-    private ElementService elementService;
+    private ElementServiceImpl elementServiceImpl;
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -82,7 +82,7 @@ public class QuizService implements ServiceInterface<Quiz> {
             reaction.getElements().keySet().stream().forEach((k) -> {
                 LOG.info("creating a quiz for the element: " + k);
                 Element element = null;
-                element = elementService.getElementBySymbol(k);
+                element = elementServiceImpl.getElementBySymbol(k);
                 LOG.info("About to call element");
                 LOG.info("Element: " + element.toString());
                 String q1 = "What is the name of the element " + element.getSymbol() + "?";

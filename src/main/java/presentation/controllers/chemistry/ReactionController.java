@@ -1,11 +1,10 @@
 package presentation.controllers.chemistry;
 
-import chemlab.domain.ReactionService;
+import chemlab.domain.chemistry.ReactionService;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.ReactionDto;
 import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.service.chemistry.ReactionServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

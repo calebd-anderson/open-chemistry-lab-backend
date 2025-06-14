@@ -1,15 +1,13 @@
 package chemlab.services;
 
-import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.domain.chemistry.ElementService;
 import chemlab.domain.model.chemistry.Element;
-import auth.config.CorsProperties;
-import chemlab.service.chemistry.ElementService;
+import chemlab.exceptions.domain.FailedToLoadPTException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -17,23 +15,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class ElementServiceIntegrationTest {
 
     @Autowired
     ElementService elmService;
-    @MockitoBean
-    private CorsProperties corsProperties;
 
     @Test
     @DisplayName("should list all 118 elements from database")
     void testListAll() throws FailedToLoadPTException {
         List<Element> allElements = elmService.getAllElements();
-        assertEquals(allElements.size(), 118);
+        assertEquals(118, allElements.size());
     }
 
-    // must overhaul repo
 //	@Test
 //	@DisplayName("should equal H (hydrogen)")
 //	void testFindBySymbol() {
