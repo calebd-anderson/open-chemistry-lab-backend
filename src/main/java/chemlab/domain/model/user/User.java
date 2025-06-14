@@ -1,7 +1,7 @@
 package chemlab.domain.model.user;
 
 import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.domain.model.user.dto.UserLoginDto;
+import shared.UserLoginDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

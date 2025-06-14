@@ -2,7 +2,7 @@ package chemlab.controllers;
 
 import presentation.controllers.game.FlashcardController;
 import chemlab.domain.model.game.Flashcard;
-import chemlab.domain.model.game.FlashcardDTO;
+import shared.FlashcardDto;
 import chemlab.domain.repository.game.FlashcardRepository;
 import auth.config.CorsProperties;
 import chemlab.service.game.FlashcardService;
@@ -46,7 +46,7 @@ class FlashcardControllerTest {
 
     private final String question = "is this unique?";
     private final String answer = "yes";
-    private final FlashcardDTO flashcardDto = new FlashcardDTO(question, answer);
+    private final FlashcardDto flashcardDto = new FlashcardDto(question, answer);
 
     @BeforeEach
     void setUp() {
@@ -77,7 +77,7 @@ class FlashcardControllerTest {
     void testCreate() {
         String question1 = "Make me unique?";
         String answer1 = "yes";
-        FlashcardDTO flashcardDto2 = new FlashcardDTO(question1, answer1);
+        FlashcardDto flashcardDto2 = new FlashcardDto(question1, answer1);
         Flashcard fc = new Flashcard(question1, answer1);
 
         Mockito.doReturn(new ArrayList<Flashcard>()).when(repoMock).findAll();

@@ -1,4 +1,4 @@
-package chemlab.domain.model.user.dto;
+package shared;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

@@ -1,7 +1,7 @@
 package presentation.controllers.game;
 
 import chemlab.domain.model.game.Flashcard;
-import chemlab.domain.model.game.FlashcardDTO;
+import shared.FlashcardDto;
 import chemlab.service.game.FlashcardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class FlashcardController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> create(@RequestBody final FlashcardDTO flashcardDto) {
+    public ResponseEntity<String> create(@RequestBody final FlashcardDto flashcardDto) {
         Flashcard flashcard = new Flashcard(flashcardDto.getUserId(), flashcardDto.getQuestion(), flashcardDto.getAnswer());
         return flashcardService.create(flashcard) != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }

@@ -1,19 +1,19 @@
-package chemlab.domain.model.game;
+package shared;
 
-public class FlashcardDTO {
+public class FlashcardDto {
 
 	private String userId;
 	private String question;
 	private String answer;
 
-	public FlashcardDTO() {}
+	public FlashcardDto() {}
 
-	public FlashcardDTO(String question, String answer) {
+	public FlashcardDto(String question, String answer) {
 		this.question = question;
 		this.answer = answer;
 	}
 	
-	public FlashcardDTO(String userId, String question, String answer) {
+	public FlashcardDto(String userId, String question, String answer) {
 		this.userId = userId;
 		this.question = question;
 		this.answer = answer;

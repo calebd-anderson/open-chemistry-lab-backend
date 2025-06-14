@@ -3,7 +3,7 @@ package presentation.controllers.chemistry;
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.exceptions.domain.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.chemistry.ReactionDto;
+import shared.ReactionDto;
 import chemlab.domain.model.chemistry.UserReaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
