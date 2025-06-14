@@ -144,21 +144,48 @@ class ReactionServiceTest {
 
     @Test
     @DisplayName("Discovery count increments.")
-    void discoveryCountIncrements() {
-        assert (true);
+    void discoveryCountIncrements() throws PugApiException {
+        // Arrange
         // make discovery
+        HashMap<String, Integer> elements = new HashMap<>();
+        elements.put("H", 2);
+        elements.put("O", 1);
+        // create reaction from elements
+        Reaction r1 = new Reaction(elements);
+        int initialDiscoveryCount = r1.getDiscoveryCount();
+        // create list of reactions
+//        List<Reaction> reactions = new ArrayList<>();
+//        reactions.add(r1);
+        String formula = "H2O";
+        // stub in the repo finds the reaction
+//        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+        // stub in the api return
+        doReturn(r1).when(pubChemApi).testFormula(formula, r1);
+        // stub in the service returns the saved reaction
+        doReturn(r1).when(reactionRepo).save(r1);
+
         // check if discovery is recorded
         // if not record in mongodb
+
         // set discovery attributes:
-        // discoveredWhen
-        // discoveredBy
-        // timesDiscovered
-        // lastDiscoveredWhen
-        // lasterDiscoveredBy
+            // discoveredWhen
+            // discoveredBy
+            // timesDiscovered
+            // lastDiscoveredWhen
+            // lasterDiscoveredBy
         // if so retrieve from database
         // set discovery attributes:
-        // timesDiscovered
-        // lastDiscoveredWhen
-        // lasterDiscoveredBy
+            // timesDiscovered
+            // lastDiscoveredWhen
+            // lasterDiscoveredBy
+
+        // Act
+        Reaction reactionResult = reactionService.validateInput(r1);
+
+        // Assert
+        // reaction discovered for first time so PubChem api called
+        verify(pubChemApi, atLeastOnce()).testFormula(formula, r1);
+        // after discovery (validateInput) the reaction discovery count is incremented by 1
+        assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveryCount());
     }
 }
