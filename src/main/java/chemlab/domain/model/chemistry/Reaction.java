@@ -1,7 +1,9 @@
 package chemlab.domain.model.chemistry;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -10,7 +12,8 @@ import java.util.Map;
 @Document(collection = "reactions")
 @Data
 public class Reaction {
-
+    @MongoId
+    private ObjectId Id;
     private HashMap<String, Integer> elements;
     private String formula;
     private String title;
