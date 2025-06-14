@@ -1,4 +1,4 @@
-package chemlab.service.game.user;
+package chemlab.service.user;
 
 import auth.user.LoginAttemptService;
 import auth.user.RegisteredUserPrincipal;
@@ -35,7 +35,7 @@ import java.util.List;
 
 import static auth.user.Role.ROLE_USER;
 import static chemlab.constants.FileConstants.*;
-import static chemlab.service.game.user.UserImplementationConstant.*;
+import static chemlab.service.user.UserImplementationConstant.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
