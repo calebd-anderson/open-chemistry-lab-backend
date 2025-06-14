@@ -1,4 +1,4 @@
-package chemlab.domain.chemistry;
+package services.pubchem;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.exceptions.domain.PugApiException;

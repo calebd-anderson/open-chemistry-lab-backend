@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.domain.chemistry.ReactionService;
-import chemlab.domain.chemistry.PubChemApiService;
+import services.pubchem.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
