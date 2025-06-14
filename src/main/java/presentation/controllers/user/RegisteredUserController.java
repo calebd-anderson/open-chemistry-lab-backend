@@ -3,6 +3,7 @@ package presentation.controllers.user;
 import chemlab.exceptions.ExceptionHandling;
 import chemlab.exceptions.domain.*;
 import chemlab.domain.model.user.User;
+import services.robohash.RoboHashService;
 import shared.UserLoginDto;
 import shared.UserRegisterDto;
 import auth.jwt.JwtTokenProvider;
@@ -48,11 +49,14 @@ public class RegisteredUserController extends ExceptionHandling {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final RoboHashService roboHashService;
+
     @Autowired
-    public RegisteredUserController(RegisteredUserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public RegisteredUserController(RegisteredUserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, RoboHashService roboHashService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.roboHashService = roboHashService;
     }
 
     @PostMapping("/login")
@@ -167,16 +171,7 @@ public class RegisteredUserController extends ExceptionHandling {
 
     @GetMapping(path = "/image/profile/{username}", produces = IMAGE_JPEG_VALUE)
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
-        URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try (InputStream inputStream = url.openStream()) {
-            int bytesRead;
-            byte[] chunk = new byte[1024];
-            while ((bytesRead = inputStream.read(chunk)) > 0) {
-                byteArrayOutputStream.write(chunk, 0, bytesRead);
-            }
-        }
-        return byteArrayOutputStream.toByteArray();
+        return roboHashService.getProfileImage(username);
     }
 
 

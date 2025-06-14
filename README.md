@@ -49,3 +49,6 @@ This project was built with help from:
 - my peers and instructor at Metro State
 - an online tutorial from [Get Arrays](https://www.getarrays.io/)
 - [PubChem API](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial)
+  - public chemistry data
+- [RoboHash](https://robohash.org/)
+  - temporary profile image generator
