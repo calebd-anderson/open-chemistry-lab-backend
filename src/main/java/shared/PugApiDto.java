@@ -1,4 +1,4 @@
-package services.pubchem;
+package shared;
 
 import java.util.ArrayList;
 
