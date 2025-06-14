@@ -7,15 +7,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PugApiDTO {
+public class PugApiDto {
 	private PropertyTableObj PropertyTable;
 
-	public PugApiDTO() {
+	public PugApiDto() {
 		this.PropertyTable = new PropertyTableObj(new ArrayList<Properties>());
 	}
 
 	@JsonCreator
-	public PugApiDTO(@JsonProperty("PropertyTable") PropertyTableObj PropertyTable) {
+	public PugApiDto(@JsonProperty("PropertyTable") PropertyTableObj PropertyTable) {
 		this.PropertyTable = PropertyTable;
 	}
 	

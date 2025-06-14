@@ -20,7 +20,8 @@ public class Reaction {
     private String lastDiscoveredBy;
     private int discoveryCount;
 
-    public Reaction() {}
+    public Reaction() {
+    }
 
     public Reaction(HashMap<String, Integer> elements) {
         this.elements = elements;

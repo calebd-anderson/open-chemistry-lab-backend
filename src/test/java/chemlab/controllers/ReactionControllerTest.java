@@ -7,7 +7,7 @@ import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
-import chemlab.service.chemistry.ReactionService;
+import chemlab.service.chemistry.ReactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class ReactionControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    private ReactionService reactionServiceMock;
+    private ReactionServiceImpl reactionServiceMock;
     @MockitoBean
     private FlashcardRepository flashcardRepository;
     @MockitoBean

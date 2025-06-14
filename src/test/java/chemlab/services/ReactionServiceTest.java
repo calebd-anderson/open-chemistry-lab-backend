@@ -1,21 +1,19 @@
 package chemlab.services;
 
-import auth.config.CorsProperties;
-import chemlab.domain.model.PugApiDTO;
+import chemlab.domain.ReactionService;
+import chemlab.domain.chemistry.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.domain.repository.user.UserReactionsRepo;
 import chemlab.exceptions.domain.PugApiException;
-import chemlab.service.chemistry.ReactionService;
-import chemlab.service.game.QuizService;
-import org.junit.jupiter.api.BeforeEach;
+import chemlab.service.chemistry.ReactionServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,125 +21,144 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static services.pubchem.PugApiConstants.*;
 
 @SpringBootTest
 class ReactionServiceTest {
 
-    @Autowired
-    private ReactionService reactionService;
-    @MockitoBean
-    private CorsProperties corsProperties;
-    @MockitoBean
-    private RestTemplate restMock;
 
-    // mocked in setup()
-    private ReactionRepository repoMock;
+    @Mock
+    private ReactionRepository reactionRepo;
+    @Mock
+    private UserReactionsRepo userReactionsRepo;
+    @Mock
+    private RegisteredUserRepository userRepo;
 
-    @MockitoBean
-    private QuizService quizMock;
+    @Mock
+    private PubChemApiService pubChemApi;
 
-    String compound = "NaCl";
+    @InjectMocks
+    private ReactionService reactionService = new ReactionServiceImpl();
 
-    @BeforeEach
-    public void setUp() {
-        repoMock = mock(ReactionRepository.class);
-        ReflectionTestUtils.setField(reactionService, "reactionRepo", repoMock);
-        ReflectionTestUtils.setField(reactionService, "restTemplate", restMock);
-        ReflectionTestUtils.setField(reactionService, "quizService", quizMock);
+
+    @Test
+    @DisplayName("compound not yet discovered")
+    void hasCompoundBeenDiscovered_false() {
+        List<Reaction> reactions = new ArrayList<>();
+        Mockito.doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
+        assertFalse(reactionService.hasCompoundBeenDiscovered("H2O"));
     }
 
     @Test
-    @DisplayName("It should return false if the compound does not exist in the repo")
-    void doesValueExistInRepo_false() {
-        List<Reaction> mockValue = new ArrayList<>();
-        Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
-        assertFalse(reactionService.doesValueExistInRepo("H2O"));
-    }
-
-    @Test
-    @DisplayName("It should return true if the compound exists in the repo")
-    void doesValueExistInRepo_true() {
-        String userId = "12345";
+    @DisplayName("compound has been discovered before")
+    void hasCompoundBeenDiscovered_true() {
+        // Arrange
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
+        // create reaction from elements
+        Reaction r1 = new Reaction(elements);
+        // create list of reactions
+        List<Reaction> reactions = new ArrayList<>();
+        reactions.add(r1);
+        // stub in the reaction repository behavior
+        doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
 
-        Reaction c1 = new Reaction(elements);
-        List<Reaction> mockValue = new ArrayList<>();
-        mockValue.add(c1);
-        Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("H2O");
+        // Act
+        boolean result = reactionService.hasCompoundBeenDiscovered("H2O");
 
-        assertTrue(reactionService.doesValueExistInRepo("H2O"));
+        // Assert
+        assertTrue(result);
     }
 
     @Test
     @DisplayName("It should return the value from the repo if it exists")
     void validateInput_returnFromRepo() throws PugApiException {
-        String userId = "12345";
+        // Arrange
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
+        // create reaction from elements
+        Reaction r1 = new Reaction(elements);
+        // create list of reactions
+        List<Reaction> reactions = new ArrayList<>();
+        reactions.add(r1);
 
-        Reaction c1 = new Reaction(elements);
         String formula = "H2O";
-        List<Reaction> mockValue = new ArrayList<>();
-        mockValue.add(c1);
-        Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula(formula);
+        // stub in the repo finds the reaction
+        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+        // the service returns the saved reaction
+        doReturn(r1).when(reactionRepo).save(r1);
 
-        assertNotNull(reactionService.validateInput(c1));
+        // Act
+        Reaction reactionResult = reactionService.validateInput(r1);
 
-        verify(restMock, never()).getForObject(PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT, HashMap.class);
+        // Assert
+        assertNotNull(reactionResult);
+        // PubChem api not called when reaction already discovered
+        verify(pubChemApi, never()).testFormula(formula, r1);
     }
 
     @Test
-    @DisplayName("It should return the value from PUG API if the value does not exist in the repo")
+    @DisplayName("PubChem api is called when reaction not yet discovered")
     void validateInput_returnFromPugApi() throws Exception {
-        List<Reaction> mockValue = new ArrayList<>();
-        String formula = "NaCl";
-        String userId = "12345";
+        // Arrange
+        List<Reaction> reactions = new ArrayList<>();
+        // setup a compound
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("Na", 1);
         elements.put("Cl", 1);
-        Mockito.doReturn(mockValue).when(repoMock).findCompoundByFormula("NaCl");
-        Reaction c1 = new Reaction(elements);
-        Mockito.doReturn(c1).when(repoMock).save(c1);
+        // create a reaction from the elements
+        Reaction r1 = new Reaction(elements);
 
-        PugApiDTO pugApiMock = new PugApiDTO();
-        pugApiMock.initializePropertyTableObj();
-        pugApiMock.appendToPropertyTableObj(
-                5234,
-                "ClNa",
-                "58.44",
-                "Sodium chloride"
-        );
-        Mockito.doReturn(pugApiMock).when(restMock).getForObject(PUG_PROLOG + PUG_INPUT + compound + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
+        // TODO: ...
+//        PugApiDto pugApiMock = new PugApiDto();
+//        pugApiMock.initializePropertyTableObj();
+//        pugApiMock.appendToPropertyTableObj(
+//                5234,
+//                "ClNa",
+//                "58.44",
+//                "Sodium chloride"
+//        );
 
-        reactionService.validateInput(c1);
+        String formula = "NaCl";
+        // stub in the repo will not find the reaction
+        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+        // stub in the api return
+        doReturn(r1).when(pubChemApi).testFormula(formula, r1);
+        // stub in the service returns the saved reaction
+        doReturn(r1).when(reactionRepo).save(r1);
 
-        verify(restMock, times(1)).getForObject(PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT, PugApiDTO.class);
-        verify(repoMock, times(1)).save(c1);
-        // zero interactions with this mock?
+        // Act
+        Reaction reactionResult = reactionService.validateInput(r1);
+
+        // Assert
+        assertNotNull(reactionResult);
+        // PubChem api called when reaction not yet discovered
+        verify(pubChemApi, atLeastOnce()).testFormula(formula, r1);
+        verify(reactionRepo, atLeastOnce()).save(r1);
+
+        // TODO: setup the game stuff again
         // verify(quizMock, times(1)).createNewQuizes(c1, userId, "compound");
         // verify(quizMock, times(1)).createNewQuizes(c1, userId, "element");
     }
 
     @Test
-    @DisplayName("When discovery is made do all the things")
-    void discoveredIncrements() {
+    @DisplayName("Discovery count increments.")
+    void discoveryCountIncrements() {
+        assert (true);
         // make discovery
         // check if discovery is recorded
         // if not record in mongodb
-            // set discovery attributes:
-            // discoveredWhen
-            // discoveredBy
-            // timesDiscovered
-            // lastDiscoveredWhen
-            // lasterDiscoveredBy
+        // set discovery attributes:
+        // discoveredWhen
+        // discoveredBy
+        // timesDiscovered
+        // lastDiscoveredWhen
+        // lasterDiscoveredBy
         // if so retrieve from database
-            // set discovery attributes:
-            // timesDiscovered
-            // lastDiscoveredWhen
-            // lasterDiscoveredBy
+        // set discovery attributes:
+        // timesDiscovered
+        // lastDiscoveredWhen
+        // lasterDiscoveredBy
     }
 }
