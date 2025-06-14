@@ -1,23 +1,21 @@
 package presentation.controllers.game;
 
 import chemlab.domain.model.game.Flashcard;
-import shared.FlashcardDto;
 import chemlab.service.game.FlashcardService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import shared.FlashcardDto;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@Controller
+@RestController
 @RequestMapping("/flashcards")
+@Slf4j
 public class FlashcardController {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private FlashcardService flashcardService;
@@ -25,33 +23,33 @@ public class FlashcardController {
     @GetMapping(value = "/all")
     @ResponseBody
     public List<Flashcard> list() {
-        LOG.info("Getting all flashcards.");
+        log.trace("Getting all flashcards.");
         return flashcardService.list();
     }
 
     @GetMapping("/{gameId}")
     @ResponseBody
     public Flashcard getFlashcardById(String id) {
-        LOG.info("Return flashcard by id.");
+        log.trace("Return flashcard by id.");
         return this.flashcardService.getFlashcardById(id);
     }
 
     @GetMapping(value = "/userflashcards/{userId}")
     public ResponseEntity<List<Flashcard>> getFlashcardByUserId(@PathVariable("userId") String userId) {
-        LOG.info("Returning flashcards by userId: {} in controller.", userId);
+        log.trace("Returning flashcards by userId: {} in controller.", userId);
         List<Flashcard> flashcards = flashcardService.listUserFlashcards(userId);
         return new ResponseEntity<>(flashcards, OK);
     }
 
     @GetMapping(value = "/questions")
     public List<Flashcard> queryQuestions(String question) {
-        LOG.info("Getting all flashcards that match the question");
+        log.trace("Getting all flashcards that match the question");
         return flashcardService.queryByQuestion(question);
     }
 
     @GetMapping(value = "/answers")
     public List<Flashcard> queryAnswers(String answer) {
-        LOG.info("Getting all flashcards that match the answer");
+        log.trace("Getting all flashcards that match the answer");
         return flashcardService.queryByAnswer(answer);
     }
 
