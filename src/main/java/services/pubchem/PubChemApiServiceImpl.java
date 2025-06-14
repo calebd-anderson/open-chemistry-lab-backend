@@ -1,7 +1,6 @@
 package services.pubchem;
 
 import chemlab.domain.chemistry.PubChemApiService;
-import chemlab.domain.model.PugApiDto;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.exceptions.domain.PugApiException;
 import lombok.extern.slf4j.Slf4j;

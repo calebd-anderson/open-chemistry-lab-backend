@@ -1,4 +1,4 @@
-package chemlab.domain.model;
+package services.pubchem;
 
 import java.util.ArrayList;
 
