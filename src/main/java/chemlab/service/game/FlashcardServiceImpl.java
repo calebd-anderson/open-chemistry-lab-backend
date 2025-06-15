@@ -1,19 +1,19 @@
 package chemlab.service.game;
 
 import chemlab.domain.ServiceInterface;
-import com.mongodb.MongoException;
+import chemlab.domain.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.repository.game.FlashcardRepository;
+import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class FlashcardService implements ServiceInterface<Flashcard> {
+public class FlashcardServiceImpl implements ServiceInterface<Flashcard>, FlashcardService {
 
     @Autowired
     private FlashcardRepository flashcardRepo;
@@ -34,7 +34,7 @@ public class FlashcardService implements ServiceInterface<Flashcard> {
 
     public Flashcard create(final Flashcard flashcard) {
         Flashcard fc = new Flashcard();
-        Boolean validFlashcard = isValid(flashcard);
+        boolean validFlashcard = isValid(flashcard);
         try {
             if (validFlashcard) {
                 LOG.info("User input is valid. Inserting new flashcard into DB");
@@ -68,6 +68,6 @@ public class FlashcardService implements ServiceInterface<Flashcard> {
         List<Flashcard> result = list();
         return result.stream()
                 .filter(fc -> fc.getQuestion().equalsIgnoreCase(obj.getQuestion()))
-                .filter(fc -> fc.getAnswer().equalsIgnoreCase(obj.getAnswer())).collect(Collectors.toList()).size() <= 0;
+                .filter(fc -> fc.getAnswer().equalsIgnoreCase(obj.getAnswer())).toList().size() <= 0;
     }
 }

@@ -5,7 +5,7 @@ import chemlab.domain.model.game.Flashcard;
 import shared.FlashcardDto;
 import chemlab.domain.repository.game.FlashcardRepository;
 import auth.config.CorsProperties;
-import chemlab.service.game.FlashcardService;
+import chemlab.service.game.FlashcardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class FlashcardControllerTest {
     @Autowired
     private FlashcardController flashcardController;
     @Autowired
-    private FlashcardService flashcardService;
+    private FlashcardServiceImpl flashcardServiceImpl;
     // mocked in beforeeach
     private FlashcardRepository repoMock;
     @MockitoBean
@@ -52,7 +52,7 @@ class FlashcardControllerTest {
     void setUp() {
         repoMock = mock(FlashcardRepository.class);
         // manually inject flashcardService repo dependency -> repoMock
-        ReflectionTestUtils.setField(flashcardService, "flashcardRepo", repoMock);
+        ReflectionTestUtils.setField(flashcardServiceImpl, "flashcardRepo", repoMock);
     }
 
     @Test
