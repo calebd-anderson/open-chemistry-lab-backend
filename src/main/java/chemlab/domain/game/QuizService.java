@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface QuizService {
     Quiz createQuiz(Quiz quiz);
-    void createQuizes(List<Quiz> quizList);
+    void createQuizzes(List<Quiz> quizList);
     List<Quiz> list();
     Quiz getQuizById(String id);
-    void createNewQuizes(Reaction reaction, String userId, String quizType);
+    void createNewQuizzes(Reaction reaction, String userId, String quizType);
     List<Quiz> queryQuestions(String question);
     List<Quiz> queryAnswers(String answer);
     List<Quiz> findQuizByUserId(String userId);

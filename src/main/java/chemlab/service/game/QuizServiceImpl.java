@@ -43,7 +43,7 @@ public class QuizServiceImpl implements ServiceInterface<Quiz>, QuizService {
         return q;
     }
 
-    public void createQuizes(List<Quiz> quizList) {
+    public void createQuizzes(List<Quiz> quizList) {
         LOG.info("Create Quiz from list");
         quizList.forEach(quiz -> {
             if (isValid(quiz)) {
@@ -65,7 +65,7 @@ public class QuizServiceImpl implements ServiceInterface<Quiz>, QuizService {
 
     }
 
-    public void createNewQuizes(Reaction reaction, String userId, String quizType) {
+    public void createNewQuizzes(Reaction reaction, String userId, String quizType) {
         LOG.info("creating multiple compound quizes");
         List<Quiz> quizList = new ArrayList<>();
 
@@ -97,7 +97,7 @@ public class QuizServiceImpl implements ServiceInterface<Quiz>, QuizService {
                 quizList.add(quiz2);
             });
         }
-        createQuizes(quizList);
+        createQuizzes(quizList);
     }
 
     public List<Quiz> queryQuestions(String question) {

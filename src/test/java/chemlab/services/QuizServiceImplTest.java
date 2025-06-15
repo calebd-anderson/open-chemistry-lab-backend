@@ -98,7 +98,7 @@ class QuizServiceImplTest {
 
     @Test
     @DisplayName("it should iterate through the list of quizes and insert into the repo")
-    void createQuizes() {
+    void createQuizzes() {
         Quiz q1 = new Quiz("Does this work?", "yes", "12345");
 
         List<Quiz> quizList = new ArrayList<>();
@@ -108,7 +108,7 @@ class QuizServiceImplTest {
         quizList.add(q1);
         quizList.add(q1);
 
-        quizService.createQuizes(quizList);
+        quizService.createQuizzes(quizList);
 
         verify(repoMock, times(5)).save(q1);
     }
