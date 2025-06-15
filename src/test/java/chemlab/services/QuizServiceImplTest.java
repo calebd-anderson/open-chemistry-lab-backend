@@ -1,8 +1,9 @@
 package chemlab.services;
 
+import auth.config.CorsProperties;
+import chemlab.domain.game.QuizService;
 import chemlab.domain.model.game.Quiz;
 import chemlab.domain.repository.game.QuizRepository;
-import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import chemlab.service.game.QuizService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class QuizServiceTest {
+class QuizServiceImplTest {
 
     @Autowired
     private QuizService quizService;

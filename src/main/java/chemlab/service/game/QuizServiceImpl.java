@@ -1,12 +1,13 @@
 package chemlab.service.game;
 
-import chemlab.service.chemistry.ElementServiceImpl;
 import chemlab.domain.ServiceInterface;
-import com.mongodb.MongoException;
-import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.game.QuizService;
 import chemlab.domain.model.chemistry.Element;
+import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.game.Quiz;
 import chemlab.domain.repository.game.QuizRepository;
+import chemlab.service.chemistry.ElementServiceImpl;
+import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class QuizService implements ServiceInterface<Quiz> {
+public class QuizServiceImpl implements ServiceInterface<Quiz>, QuizService {
     @Autowired
     private QuizRepository quizRepo;
-
     @Autowired
     private ElementServiceImpl elementServiceImpl;
 
@@ -97,12 +97,10 @@ public class QuizService implements ServiceInterface<Quiz> {
                 quizList.add(quiz2);
             });
         }
-
         createQuizes(quizList);
     }
 
     public List<Quiz> queryQuestions(String question) {
-
         return quizRepo.findByQuestion(question);
     }
 

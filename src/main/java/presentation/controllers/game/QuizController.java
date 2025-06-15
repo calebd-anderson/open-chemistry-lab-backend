@@ -1,7 +1,7 @@
 package presentation.controllers.game;
 
+import chemlab.domain.game.QuizService;
 import chemlab.domain.model.game.Quiz;
-import chemlab.service.game.QuizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

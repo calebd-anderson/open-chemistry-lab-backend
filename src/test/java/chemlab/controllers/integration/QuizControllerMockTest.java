@@ -1,12 +1,11 @@
 package chemlab.controllers.integration;
 
+import auth.jwt.JwtTokenProvider;
+import chemlab.domain.game.QuizService;
+import chemlab.domain.model.game.Quiz;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
-import presentation.controllers.game.QuizController;
-import chemlab.domain.model.game.Quiz;
-import auth.jwt.JwtTokenProvider;
-import chemlab.service.game.QuizService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import presentation.controllers.game.QuizController;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class QuizControllerMockTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    private QuizService quizServiceMock;
+    private QuizService quizService;
     @MockitoBean
     private RegisteredUserRepository registeredUserRepository;
     @MockitoBean
@@ -58,7 +58,7 @@ public class QuizControllerMockTest {
 
     @Test
     void shouldReturnAllQuizzes() throws Exception {
-        when(quizServiceMock.list())
+        when(quizService.list())
                 .thenReturn(List.of(new Quiz("is this correct?", "no")));
         this.mockMvc
                 .perform(get("/quiz/all")
@@ -70,6 +70,6 @@ public class QuizControllerMockTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].question").value("is this correct?"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].answer").value("no"))
                 .andDo(print());
-        verify(quizServiceMock).list();
+        verify(quizService).list();
     }
 }
