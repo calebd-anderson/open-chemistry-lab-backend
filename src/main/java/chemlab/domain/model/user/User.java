@@ -2,12 +2,14 @@ package chemlab.domain.model.user;
 
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.game.FormulaQuiz;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import shared.UserLoginDto;
 
 import java.io.Serializable;
@@ -44,7 +46,8 @@ public class User implements Serializable {
     // @BsonProperty(value = "reactions")
     private List<UserReaction> discoveredReactions = new ArrayList<>();
     private List<Flashcard> userFlashcards = new ArrayList<>();
-    private List<ObjectId> quizzes = new ArrayList<>();
+    @DocumentReference
+    private List<FormulaQuiz> quizzes = new ArrayList<>();
 
     public User(UserLoginDto userDTO) {
         this.password = userDTO.getPassword();

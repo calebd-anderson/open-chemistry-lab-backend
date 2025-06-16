@@ -71,13 +71,6 @@ public class QuizServiceImpl implements QuizService {
 
     public List<FormulaQuiz> findQuizByUserId(String userId) {
         User user = userRepo.findRegisteredUserByUserId(userId);
-        List<ObjectId> quizIds = user.getQuizzes();
-
-        List<FormulaQuiz> formulaQuizs = new ArrayList<>();
-        for (ObjectId id : quizIds) {
-            Optional<FormulaQuiz> quiz = quizRepo.findById(id);
-            quiz.ifPresent(formulaQuizs::add);
-        }
-        return formulaQuizs;
+        return user.getQuizzes();
     }
 }

@@ -98,9 +98,11 @@ public class ReactionServiceImpl implements ReactionService {
         if (authentication != null && authentication.isAuthenticated()) {
             // need to lookup user by username until able to add userid to JWT
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            CreateQuizDto quizDto = new CreateQuizDto(QuizType.COMPOUND, resultingReaction.getFormula(), resultingReaction.getTitle());
+            CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
             FormulaQuiz quiz = quizService.createQuiz(quizDto);
-//            user.setQuizzes(quiz);
+            List<FormulaQuiz> userquizzes = user.getQuizzes();
+            userquizzes.add(quiz);
+            user.setQuizzes(userquizzes);
             userRepo.save(user);
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
