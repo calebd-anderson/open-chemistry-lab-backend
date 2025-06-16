@@ -3,56 +3,65 @@ package chemlab.service.game;
 import chemlab.domain.ServiceInterface;
 import chemlab.domain.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.user.User;
 import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
 import com.mongodb.MongoException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import shared.FlashcardDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@Slf4j
 public class FlashcardServiceImpl implements ServiceInterface<Flashcard>, FlashcardService {
 
     @Autowired
     private FlashcardRepository flashcardRepo;
-
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private RegisteredUserRepository userRepo;
 
     public List<Flashcard> list() {
-        LOG.info("Getting all flashcards.");
+        log.info("Getting all flashcards.");
         List<Flashcard> list = flashcardRepo.findAll();
         return list;
     }
 
     public List<Flashcard> listUserFlashcards(String userId) {
-        LOG.info("Getting flashcards by userId in service.");
-        List<Flashcard> list = flashcardRepo.findByUserId(userId);
+        log.info("Getting flashcards by userId in service.");
+        User user = userRepo.findRegisteredUserByUserId(userId);
+        List<Flashcard> list = user.getUserFlashcards();
         return list;
     }
 
-    public Flashcard create(final Flashcard flashcard) {
-        Flashcard fc = new Flashcard();
-        boolean validFlashcard = isValid(flashcard);
-        try {
-            if (validFlashcard) {
-                LOG.info("User input is valid. Inserting new flashcard into DB");
-                fc = flashcardRepo.save(flashcard);
-                LOG.info("New Flashcard ID: " + fc.getGameId());
-            } else {
-                throw new MongoException("Invalid entry into database");
-            }
-        } catch (MongoException exception) {
-            LOG.error("Invalid entry into database");
-        } catch (NullPointerException exception) {
-            LOG.error("Insert into database returned null");
-        }
-        return fc;
-    }
+    public List<Flashcard> create(FlashcardDto flashcard) throws Exception {
+        // map dto to actual
+        ModelMapper modelMapper = new ModelMapper();
+        Flashcard newFlashcard = modelMapper.map(flashcard, Flashcard.class);
 
-    public Flashcard getFlashcardById(String id) {
-        return flashcardRepo.findByGameId(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findRegisteredUserByUsername(authentication.getName());
+
+        if (!Objects.equals(flashcard.getUserId(), user.getUserId())) {
+            throw new Exception();
+        }
+        // I don't know what this is for
+        boolean validFlashcard = isValid(newFlashcard);
+
+        log.trace("add flashcard to user");
+        List<Flashcard> userFlashcards = user.getUserFlashcards();
+        userFlashcards.add(newFlashcard);
+        user.setUserFlashcards(userFlashcards);
+        userRepo.save(user);
+        return user.getUserFlashcards();
     }
 
     public List<Flashcard> queryByQuestion(String question) {

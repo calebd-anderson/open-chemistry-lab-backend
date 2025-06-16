@@ -1,6 +1,9 @@
 package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
+import chemlab.domain.game.QuizService;
+import chemlab.domain.model.game.QuizType;
+import org.bson.types.ObjectId;
 import services.pubchem.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import shared.CreateQuizDto;
 
 import java.time.Instant;
 import java.util.List;
@@ -28,6 +32,8 @@ public class ReactionServiceImpl implements ReactionService {
     private UserReactionsRepo userReactionsRepo;
     @Autowired
     private RegisteredUserRepository userRepo;
+    @Autowired
+    private QuizService quizService;
 
     @Autowired
     private PubChemApiService pubChemApi;
@@ -91,8 +97,10 @@ public class ReactionServiceImpl implements ReactionService {
         if (authentication != null && authentication.isAuthenticated()) {
             // need to lookup user by username until able to add userid to JWT
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            // quizService.createNewQuizes(resultingReaction, user.getUserId(), "compound");
-            // quizService.createNewQuizes(resultingReaction, user.getUserId(), "element");
+            CreateQuizDto quizDto = new CreateQuizDto(QuizType.COMPOUND, resultingReaction.getFormula(), resultingReaction.getTitle());
+            List<ObjectId> quizIds = quizService.createQuiz(quizDto);
+            user.setQuizzes(quizIds);
+            userRepo.save(user);
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
         resultingReaction = reactionRepo.save(resultingReaction);

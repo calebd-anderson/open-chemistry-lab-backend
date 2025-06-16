@@ -1,17 +1,17 @@
 package chemlab.domain.model.game;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Document(collection = "flashcard")
-public class Flashcard extends Game {
+@Data
+@NoArgsConstructor
+public class Flashcard {
+    private String question;
+    private String answer;
 
-	public Flashcard() {};
-
-	public Flashcard(String question, String answer) {
-		super(question, answer);
-	}
-	
-	public Flashcard(String userId, String question, String answer) {
-		super(userId, question, answer);
-	}
+    public Flashcard(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 }

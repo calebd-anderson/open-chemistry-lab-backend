@@ -1,34 +1,18 @@
 package chemlab.domain.model.game;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "quiz")
-public class Quiz extends Game {
-	private String quizType;
-
-	public Quiz() {
-		super();
-	}
-
-	public Quiz(String question, String answer) {
-		super(question, answer);
-	}
-
-	public Quiz(String userId, String question, String answer) {
-		super(userId, question, answer);
-	}
-
-	public Quiz(String userId, String question, String answer, String quizType) {
-		super(userId, question, answer);
-		this.quizType = quizType;
-	}
-
-	public String getQuizType() {
-		return this.quizType;
-	}
-
-	public void setQuizType(String quizType) {
-		this.quizType = quizType;
-	}
-
+@Data
+@RequiredArgsConstructor
+@Document
+public class Quiz {
+	private ObjectId id;
+	private final QuizType quizType;
+	private final String formula;
+	private final String question;
+	private final String answer;
 }

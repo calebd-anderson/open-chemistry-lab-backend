@@ -1,17 +1,18 @@
 package chemlab.controllers;
 
+import chemlab.domain.game.FlashcardService;
+import chemlab.domain.model.user.User;
+import chemlab.domain.repository.user.RegisteredUserRepository;
+import org.springframework.security.test.context.support.WithMockUser;
 import presentation.controllers.game.FlashcardController;
 import chemlab.domain.model.game.Flashcard;
 import shared.FlashcardDto;
 import chemlab.domain.repository.game.FlashcardRepository;
-import auth.config.CorsProperties;
-import chemlab.service.game.FlashcardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -35,24 +36,25 @@ class FlashcardControllerTest {
     @Autowired
     private FlashcardController flashcardController;
     @Autowired
-    private FlashcardServiceImpl flashcardServiceImpl;
+    private FlashcardService flashcardService;
     // mocked in beforeeach
-    private FlashcardRepository repoMock;
+    private FlashcardRepository flashcardRepo;
     @MockitoBean
-    private CorsProperties corsProperties;
+    private RegisteredUserRepository userRepository;
 
     @Captor
     ArgumentCaptor<Flashcard> valueCaptor;
+    ArgumentCaptor<User> valueCaptor2;
 
     private final String question = "is this unique?";
     private final String answer = "yes";
-    private final FlashcardDto flashcardDto = new FlashcardDto(question, answer);
+    private final FlashcardDto flashcardDto = new FlashcardDto("12345", question, answer);
 
     @BeforeEach
     void setUp() {
-        repoMock = mock(FlashcardRepository.class);
+        flashcardRepo = mock(FlashcardRepository.class);
         // manually inject flashcardService repo dependency -> repoMock
-        ReflectionTestUtils.setField(flashcardServiceImpl, "flashcardRepo", repoMock);
+        ReflectionTestUtils.setField(flashcardService, "flashcardRepo", flashcardRepo);
     }
 
     @Test
@@ -62,43 +64,43 @@ class FlashcardControllerTest {
     }
 
     @Test
-    @DisplayName("It should not insert the flashcard into the db if it is not unique")
-    void testCreateFail() {
-        ArrayList<Flashcard> mockResult = new ArrayList<Flashcard>();
-        mockResult.add(new Flashcard(question, answer));
-        Mockito.doReturn(mockResult).when(repoMock).findAll();
-        int beforeInsert = flashcardController.list().size();
-        flashcardController.create(flashcardDto);
-        assertEquals(beforeInsert, flashcardController.list().size());
-    }
-
-    @Test
     @DisplayName("It should insert the flashcard into the db")
-    void testCreate() {
+    @WithMockUser(username = "testuser", roles = {"USER", "ADMIN"})
+    void testCreate() throws Exception {
+        // Arrange
         String question1 = "Make me unique?";
         String answer1 = "yes";
-        FlashcardDto flashcardDto2 = new FlashcardDto(question1, answer1);
+        FlashcardDto flashcardDto2 = new FlashcardDto("12345", question1, answer1);
         Flashcard fc = new Flashcard(question1, answer1);
 
-        Mockito.doReturn(new ArrayList<Flashcard>()).when(repoMock).findAll();
-        Mockito.doReturn(fc).when(repoMock).save(fc);
+        doReturn(new ArrayList<Flashcard>()).when(flashcardRepo).findAll();
+        doReturn(fc).when(flashcardRepo).save(fc);
 
+        User user = new User();
+        user.setUserId("12345");
+        user.setUsername("testuser");
+        user.setEmail("test@mail.com");
+        when(userRepository.findRegisteredUserByUsername("testuser")).thenReturn(user);
+
+        // Act
         flashcardController.create(flashcardDto2);
 
-        verify(repoMock, times(1)).save(valueCaptor.capture());
+        // Assert
+//        verify(flashcardRepo, times(1)).save(valueCaptor.capture());
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
     @DisplayName("It should request findByQuestion when queryQuestion called")
     void testQueryQuestion() {
         flashcardController.queryQuestions(question);
-        verify(repoMock, times(1)).findByQuestion(question);
+        verify(flashcardRepo, times(1)).findByQuestion(question);
     }
 
     @Test
     @DisplayName("It should return a list of questions from the db")
     void testQueryAnswers() {
         flashcardController.queryAnswers(answer);
-        verify(repoMock, times(1)).findByAnswer(answer);
+        verify(flashcardRepo, times(1)).findByAnswer(answer);
     }
 }

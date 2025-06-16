@@ -9,14 +9,9 @@ import java.util.List;
 
 @Repository
 public interface FlashcardRepository extends MongoRepository<Flashcard, String> {
-    Flashcard findByGameId(String id);
-
     @Query("{ 'question' : { $regex: ?0 } }")
     List<Flashcard> findByQuestion(String question);
 
     @Query("{ 'answer' : { $regex: ?0 } }")
     List<Flashcard> findByAnswer(String answer);
-
-    @Query("{ 'userId' : { $regex: ?0 } }")
-    List<Flashcard> findByUserId(String userId);
 }

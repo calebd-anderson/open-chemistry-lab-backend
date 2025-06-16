@@ -1,14 +1,14 @@
 package chemlab.controllers.integration;
 
-import auth.jwt.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import auth.jwt.JwtTokenProvider;
+import chemlab.domain.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
-import chemlab.service.game.FlashcardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +45,7 @@ class FlashcardControllerMockTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
-    private FlashcardServiceImpl flashcardServiceImplMock;
+    private FlashcardService flashcardService;
     @MockitoBean
     private ReactionRepository reactionRepository;
     @MockitoBean
@@ -79,8 +79,8 @@ class FlashcardControllerMockTest {
     @Test
     @WithMockUser(roles = "USER")
     public void testList() throws Exception {
-        assertNotNull(flashcardServiceImplMock);
-        when(flashcardServiceImplMock.list())
+        assertNotNull(flashcardService);
+        when(flashcardService.list())
                 .thenReturn(List.of(new Flashcard("is this correct?", "no")));
 
         mockMvc.perform(get("/flashcards/all")
@@ -92,6 +92,6 @@ class FlashcardControllerMockTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].question").value("is this correct?"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].answer").value("no"))
                 .andDo(print());
-        verify(flashcardServiceImplMock).list();
+        verify(flashcardService).list();
     }
 }

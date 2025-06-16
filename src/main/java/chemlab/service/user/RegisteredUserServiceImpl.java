@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import services.email.EmailService;
+import shared.UserRegisterDto;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,36 +45,31 @@ import static org.springframework.http.MediaType.*;
 @Slf4j
 public class RegisteredUserServiceImpl implements RegisteredUserService, UserDetailsService {
 
-    private final RegisteredUserRepository userRepo;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final LoginAttemptService loginAttemptService;
-    private final EmailService emailService;
-
     @Autowired
-    public RegisteredUserServiceImpl(RegisteredUserRepository userRepo, BCryptPasswordEncoder bCryptPasswordEncoder,
-                                     LoginAttemptService loginAttemptService, EmailService emailService) {
-        this.userRepo = userRepo;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.loginAttemptService = loginAttemptService;
-        this.emailService = emailService;
-    }
+    private RegisteredUserRepository userRepo;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
-    public User register(String firstName, String lastName, String username, String password, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        validateNewUsernameAndEmail(EMPTY, username, email);
+    public User register(UserRegisterDto userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
+        validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
         User user = new User();
         user.setUserId(generateUserId());
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setUsername(username);
-        user.setEmail(email);
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
         user.setJoinDate(new Date());
-        user.setPassword(encodePassword(password));
+        user.setPassword(encodePassword(userDto.getPassword()));
         user.setActive(true);
         user.setNotLocked(true);
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
-        user.setProfileImgUrl(getTemporaryProfileImageUrl(username));
+        user.setProfileImgUrl(getTemporaryProfileImageUrl(userDto.getUsername()));
         userRepo.save(user);
         return user;
     }
@@ -205,10 +201,10 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
             if (currentUser == null) {
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentUsername);
             }
-            if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
+            if (userByNewUsername != null && !currentUser.getUsername().equals(userByNewUsername.getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
+            if (userByNewEmail != null && !currentUser.getEmail().equals(userByNewEmail.getId())) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
             return currentUser;

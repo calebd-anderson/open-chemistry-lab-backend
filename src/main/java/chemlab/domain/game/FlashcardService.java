@@ -1,6 +1,7 @@
 package chemlab.domain.game;
 
 import chemlab.domain.model.game.Flashcard;
+import shared.FlashcardDto;
 
 import java.util.List;
 
@@ -9,9 +10,7 @@ public interface FlashcardService {
 
     List<Flashcard> listUserFlashcards(String userId);
 
-    Flashcard create(final Flashcard flashcard);
-
-    Flashcard getFlashcardById(String id);
+    List<Flashcard> create(FlashcardDto flashcard) throws Exception;
 
     List<Flashcard> queryByQuestion(String question);
 

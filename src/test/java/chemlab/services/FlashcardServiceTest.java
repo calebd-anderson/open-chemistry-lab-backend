@@ -3,19 +3,33 @@ package chemlab.services;
 import auth.config.CorsProperties;
 import chemlab.domain.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.user.User;
 import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.service.game.FlashcardServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import shared.FlashcardDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +38,25 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest
+@AutoConfigureMockMvc
 class FlashcardServiceTest {
-
     @Autowired
-    private FlashcardService flashcardService;
-    @MockitoBean
-    private CorsProperties corsProperties;
+    private WebApplicationContext context;
+
+    @Mock
     private FlashcardRepository flashcardRepo;
+    @Mock
+    private RegisteredUserRepository userRepo;
+    @Autowired
+    private MockMvc mockMvc;
+//    @Mock
+//    private AuthenticationManager authenticationManager;
+
+    @InjectMocks
+    private FlashcardService flashcardService = new FlashcardServiceImpl();
 
     private final String question1 = "is this mock value 1?";
     private final String question2 = "is this mock value 2?";
@@ -44,8 +67,7 @@ class FlashcardServiceTest {
 
     @BeforeEach
     void setUp() {
-        flashcardRepo = mock(FlashcardRepository.class);
-        ReflectionTestUtils.setField(flashcardService, "flashcardRepo", flashcardRepo);
+
         String question5 = "This might be unique?";
 
         when(flashcardRepo.findAll()).thenReturn(
@@ -55,55 +77,41 @@ class FlashcardServiceTest {
                                 new Flashcard(question4, answerNo),
                                 new Flashcard(question5, answerYes))
                         .collect(Collectors.toList()));
-    }
 
-    @AfterEach
-    void tearDown() {
-        flashcardRepo.deleteAll();
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(this.context)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test
     @DisplayName("it should request findAll")
     void test_list() {
         flashcardService.list();
-
         verify(flashcardRepo, times(1)).findAll();
     }
 
     @Test
-    @DisplayName("it should not insert into the DB if not valid")
-    void test_create_fail() {
-        Flashcard fc = new Flashcard(question1, answerYes);
+    @WithMockUser(username = "testuser", roles = {"USER", "ADMIN"}, password = "abc123")
+    void test_create_success() throws Exception {
+        // Arrange
+        // configure a user to hold the flashcard
+        User user = new User();
+        user.setUserId("12345");
+        user.setUsername("testuser");
+        user.setEmail("test@mail.com");
+        when(userRepo.findRegisteredUserByUsername("testuser")).thenReturn(user);
+        // create a flashcard
+        FlashcardDto fc = new FlashcardDto("12345", question1, answerYes);
 
-        Flashcard result = flashcardService.create(fc);
+        ModelMapper modelMapper = new ModelMapper();
+        Flashcard newFlashcard = modelMapper.map(fc, Flashcard.class);
 
-        assertNotEquals(result, fc);
-    }
-
-//	@Test
-//	@DisplayName("it should throw if flashcard is not valid")
-//	void test_create_should_throw() {
-//		Flashcard fc = new Flashcard(question1, answerYes);
-//		
-//		Exception exception = assertThrows(MongoException.class, () -> {
-//			flashcardService.create(fc);
-//		});
-//		
-//		String expectedMessage = "Invalid entry into database";
-//		String actualMessage = exception.getMessage();
-//		
-//		assertTrue(actualMessage.contains(expectedMessage));
-//	}
-
-    @Test
-    @DisplayName("it should insert into the DB")
-    void test_create_true() {
-        Flashcard fc = new Flashcard("is this question the same as the other mocks?", "no");
-
-        Mockito.doReturn(fc).when(flashcardRepo).save(fc);
-
-        assertEquals(fc.getQuestion(), flashcardService.create(fc).getQuestion());
-        assertEquals(fc.getAnswer(), flashcardService.create(fc).getAnswer());
+        // Act
+        List<Flashcard> result = flashcardService.create(fc);
+        // Assert
+        verify(userRepo, atLeastOnce()).save(user);
+        assertTrue(result.contains(newFlashcard));
     }
 
     @Test

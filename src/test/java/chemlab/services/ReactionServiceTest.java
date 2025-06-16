@@ -1,6 +1,8 @@
 package chemlab.services;
 
 import chemlab.domain.chemistry.ReactionService;
+import chemlab.domain.game.FlashcardService;
+import chemlab.domain.repository.game.FlashcardRepository;
 import services.pubchem.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
@@ -32,6 +34,10 @@ class ReactionServiceTest {
     private UserReactionsRepo userReactionsRepo;
     @Mock
     private RegisteredUserRepository userRepo;
+    @Mock
+    FlashcardService flashcardService;
+    @Mock
+    FlashcardRepository flashcardRepository;
 
     @Mock
     private PubChemApiService pubChemApi;
@@ -39,12 +45,11 @@ class ReactionServiceTest {
     @InjectMocks
     private ReactionService reactionService = new ReactionServiceImpl();
 
-
     @Test
     @DisplayName("compound not yet discovered")
     void hasCompoundBeenDiscovered_false() {
         List<Reaction> reactions = new ArrayList<>();
-        Mockito.doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
+        doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
         assertFalse(reactionService.hasCompoundBeenDiscovered("H2O"));
     }
 

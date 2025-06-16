@@ -1,6 +1,7 @@
 package chemlab.repository;
 
 import chemlab.domain.model.game.Quiz;
+import chemlab.domain.model.game.QuizType;
 import chemlab.domain.repository.game.QuizRepository;
 import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
@@ -51,10 +52,10 @@ public class QuizRepositoryTest {
     }
 
     private void createMockQuizzes() {
-        Quiz q1 = new Quiz("12345", "Is this the first?", "yes", "test");
-        Quiz q2 = new Quiz("12345", "Is this the first still?", "no", "test");
-        Quiz q3 = new Quiz("54321", "iS ThIs ThE fIrSt UnIqUe?", "no", "non-test");
-        Quiz q4 = new Quiz("6789", "Is this the last?", "yes", "still-testing");
+        Quiz q1 = new Quiz(QuizType.ELEMENT, "test", "Is this the first?", "yes");
+        Quiz q2 = new Quiz(QuizType.COMPOUND, "test", "Is this the first still?", "no");
+        Quiz q3 = new Quiz(QuizType.ELEMENT, "non-test", "iS ThIs ThE fIrSt UnIqUe?", "no");
+        Quiz q4 = new Quiz(QuizType.COMPOUND, "still-testing", "Is this the last?", "yes");
 
         List<Quiz> quizzes = Arrays.asList(q1, q2, q3, q4);
         for (Quiz quiz : quizzes) {
@@ -88,16 +89,9 @@ public class QuizRepositoryTest {
     }
 
     @Test
-    @DisplayName("it should return a list of quizes from a specific user")
-    void test_findQuizByUserId() {
-        List<Quiz> result = quizRepo.findQuizByUserId("12345");
-        assertEquals(2, result.size());
-    }
-
-    @Test
-    @DisplayName("it should return a list of quizes by type")
+    @DisplayName("it should return a list of quizzes by type")
     void test_findQuizByQuizType() {
-        List<Quiz> result = quizRepo.findQuizByQuizType("test");
+        List<Quiz> result = quizRepo.findQuizByQuizType(QuizType.ELEMENT.name());
         assertEquals(2, result.size());
     }
 }

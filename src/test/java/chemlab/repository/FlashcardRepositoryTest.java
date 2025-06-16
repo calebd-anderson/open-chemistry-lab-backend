@@ -101,14 +101,14 @@ public class FlashcardRepositoryTest {
         assertEquals(2, flashcards.size());
     }
 
-    @Test
-    @DisplayName("it should find the flashcard by gameId")
-    void test_findByGameId() {
-        List<Flashcard> allFlashcards = flashcardRepo.findAll();
-
-        Flashcard fc = allFlashcards.get(0);
-        Flashcard result = flashcardRepo.findByGameId(fc.getGameId());
-
-        assertEquals(fc.getGameId(), result.getGameId());
-    }
+//    @Test
+//    @DisplayName("it should find the flashcard by gameId")
+//    void test_findByGameId() {
+//        List<Flashcard> allFlashcards = flashcardRepo.findAll();
+//
+//        Flashcard fc = allFlashcards.get(0);
+//        Flashcard result = flashcardRepo.findByGameId(fc.getGameId());
+//
+//        assertEquals(fc.getGameId(), result.getGameId());
+//    }
 }

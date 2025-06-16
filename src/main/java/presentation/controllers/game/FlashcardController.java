@@ -18,44 +18,36 @@ import static org.springframework.http.HttpStatus.OK;
 public class FlashcardController {
 
     @Autowired
-    private FlashcardService flashcardServiceImpl;
+    private FlashcardService flashcardService;
 
     @GetMapping(value = "/all")
     @ResponseBody
     public List<Flashcard> list() {
         log.trace("Getting all flashcards.");
-        return flashcardServiceImpl.list();
-    }
-
-    @GetMapping("/{gameId}")
-    @ResponseBody
-    public Flashcard getFlashcardById(String id) {
-        log.trace("Return flashcard by id.");
-        return this.flashcardServiceImpl.getFlashcardById(id);
+        return flashcardService.list();
     }
 
     @GetMapping(value = "/userflashcards/{userId}")
     public ResponseEntity<List<Flashcard>> getFlashcardByUserId(@PathVariable("userId") String userId) {
         log.trace("Returning flashcards by userId: {} in controller.", userId);
-        List<Flashcard> flashcards = flashcardServiceImpl.listUserFlashcards(userId);
+        List<Flashcard> flashcards = flashcardService.listUserFlashcards(userId);
         return new ResponseEntity<>(flashcards, OK);
     }
 
     @GetMapping(value = "/questions")
     public List<Flashcard> queryQuestions(String question) {
         log.trace("Getting all flashcards that match the question");
-        return flashcardServiceImpl.queryByQuestion(question);
+        return flashcardService.queryByQuestion(question);
     }
 
     @GetMapping(value = "/answers")
     public List<Flashcard> queryAnswers(String answer) {
         log.trace("Getting all flashcards that match the answer");
-        return flashcardServiceImpl.queryByAnswer(answer);
+        return flashcardService.queryByAnswer(answer);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> create(@RequestBody final FlashcardDto flashcardDto) {
-        Flashcard flashcard = new Flashcard(flashcardDto.getUserId(), flashcardDto.getQuestion(), flashcardDto.getAnswer());
-        return flashcardServiceImpl.create(flashcard) != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity<String> create(@RequestBody FlashcardDto flashcardDto) throws Exception {
+        return flashcardService.create(flashcardDto) != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

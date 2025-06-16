@@ -3,6 +3,7 @@ package chemlab.controllers.integration;
 import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.QuizService;
 import chemlab.domain.model.game.Quiz;
+import chemlab.domain.model.game.QuizType;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
@@ -59,7 +60,7 @@ public class QuizControllerMockTest {
     @Test
     void shouldReturnAllQuizzes() throws Exception {
         when(quizService.list())
-                .thenReturn(List.of(new Quiz("is this correct?", "no")));
+                .thenReturn(List.of(new Quiz(QuizType.ELEMENT, "abcd", "is this correct?", "no")));
         this.mockMvc
                 .perform(get("/quiz/all")
                         .contentType(MediaType.APPLICATION_JSON)

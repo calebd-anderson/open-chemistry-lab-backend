@@ -36,6 +36,7 @@ import java.util.List;
 
 import static chemlab.constants.FileConstants.*;
 import static auth.config.SecurityConstants.JWT_TOKEN_HEADER;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
@@ -79,8 +80,8 @@ public class RegisteredUserController extends ExceptionHandling {
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody UserRegisterDto user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
-        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(), user.getEmail());
-        return new ResponseEntity<>(newUser, OK);
+        User newUser = userService.register(user);
+        return new ResponseEntity<>(newUser, CREATED);
     }
 
     @PostMapping("/add")

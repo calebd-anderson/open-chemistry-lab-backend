@@ -2,10 +2,12 @@ package presentation.controllers.game;
 
 import chemlab.domain.game.QuizService;
 import chemlab.domain.model.game.Quiz;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import shared.CreateQuizDto;
 
 import java.util.List;
 
@@ -25,13 +27,13 @@ public class QuizController {
     }
 
     @GetMapping(value = "{gameId}")
-    public Quiz getQuizById(String id) {
-        return this.quizService.getQuizById(id);
+    public Quiz getQuizById(ObjectId id) {
+        return quizService.getQuizById(id);
     }
 
     @GetMapping(value = "/questions")
     public List<Quiz> queryQuestions(String question) {
-        LOG.info("Getting all quiz that match the question");
+        LOG.info("Getting all quizzes that match the question");
         return quizService.queryQuestions(question);
     }
 
@@ -41,11 +43,10 @@ public class QuizController {
         return quizService.queryAnswers(answer);
     }
 
-    @PostMapping("/add")
-    public Quiz create(@RequestBody final Quiz quiz) {
-        return quizService.createQuiz(quiz);
-
-    }
+//    @PostMapping("/add")
+//    public Quiz create(@RequestBody CreateQuizDto quiz) {
+//        return quizService.createQuiz(quiz);
+//    }
 
     @GetMapping("/getbyuserid/{userId}")
     public List<Quiz> getByUserId(@PathVariable("userId") String userId) {
