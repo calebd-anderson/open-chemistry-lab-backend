@@ -1,6 +1,7 @@
 package chemlab.repository;
 
-import chemlab.domain.model.game.Quiz;
+import chemlab.domain.model.game.FormulaQuiz;
+import chemlab.domain.model.game.QuestionAnswer;
 import chemlab.domain.model.game.QuizType;
 import chemlab.domain.repository.game.QuizRepository;
 import auth.config.CorsProperties;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
 @SpringBootTest
-public class QuizRepositoryTest {
+public class FormulaQuizRepositoryTest {
     @Container
     public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0.0"));
 
@@ -52,46 +53,20 @@ public class QuizRepositoryTest {
     }
 
     private void createMockQuizzes() {
-        Quiz q1 = new Quiz(QuizType.ELEMENT, "test", "Is this the first?", "yes");
-        Quiz q2 = new Quiz(QuizType.COMPOUND, "test", "Is this the first still?", "no");
-        Quiz q3 = new Quiz(QuizType.ELEMENT, "non-test", "iS ThIs ThE fIrSt UnIqUe?", "no");
-        Quiz q4 = new Quiz(QuizType.COMPOUND, "still-testing", "Is this the last?", "yes");
+        FormulaQuiz fq1 = new FormulaQuiz("abcd");
+        fq1.setQuestionAnswerList(List.of(
+                new QuestionAnswer("Is this the first still?", "no"),
+                new QuestionAnswer("Is this the first?", "yes")
+        ));
+        FormulaQuiz fq2 = new FormulaQuiz("abcd");
+        fq2.setQuestionAnswerList(List.of(
+                new QuestionAnswer("non-test", "no"),
+                new QuestionAnswer("still-testing", "yes")
+        ));
 
-        List<Quiz> quizzes = Arrays.asList(q1, q2, q3, q4);
-        for (Quiz quiz : quizzes) {
-            quizRepo.save(quiz);
+        List<FormulaQuiz> formulaQuizzes = Arrays.asList(fq1, fq2);
+        for (FormulaQuiz fq : formulaQuizzes) {
+            quizRepo.save(fq);
         }
-    }
-
-    @Test
-    @DisplayName("it should return an empty array if findByQuestion query returns no result")
-    void test_findByQuestion_return_empty() {
-        assertEquals(0, quizRepo.findByQuestion("Does this query exist?").size());
-    }
-
-    @Test
-    @DisplayName("it should query the repo by questions and return a list of flashcards")
-    void test_findByQuestion() {
-        assertNotNull(quizRepo.findByQuestion("Is this the first?"));
-    }
-
-    @Test
-    @DisplayName("it should return an empty array if findByAnswer query returns no result")
-    void test_findByAnswer_return_empty() {
-        assertEquals(0, quizRepo.findByQuestion("This is an invalid answer.").size());
-    }
-
-    @Test
-    @DisplayName("it should query the repo by answers and return a list of flashcards")
-    void test_findByAnswer() {
-        assertNotNull(quizRepo.findByAnswer("yes"));
-        assertEquals(2, quizRepo.findByAnswer("yes").size());
-    }
-
-    @Test
-    @DisplayName("it should return a list of quizzes by type")
-    void test_findQuizByQuizType() {
-        List<Quiz> result = quizRepo.findQuizByQuizType(QuizType.ELEMENT.name());
-        assertEquals(2, result.size());
     }
 }

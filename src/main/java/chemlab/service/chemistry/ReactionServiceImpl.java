@@ -2,6 +2,7 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.QuizService;
+import chemlab.domain.model.game.FormulaQuiz;
 import chemlab.domain.model.game.QuizType;
 import org.bson.types.ObjectId;
 import services.pubchem.PubChemApiService;
@@ -98,8 +99,8 @@ public class ReactionServiceImpl implements ReactionService {
             // need to lookup user by username until able to add userid to JWT
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
             CreateQuizDto quizDto = new CreateQuizDto(QuizType.COMPOUND, resultingReaction.getFormula(), resultingReaction.getTitle());
-            List<ObjectId> quizIds = quizService.createQuiz(quizDto);
-            user.setQuizzes(quizIds);
+            FormulaQuiz quiz = quizService.createQuiz(quizDto);
+//            user.setQuizzes(quiz);
             userRepo.save(user);
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
         }
