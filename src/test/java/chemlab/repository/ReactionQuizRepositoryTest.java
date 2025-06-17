@@ -1,14 +1,12 @@
 package chemlab.repository;
 
-import chemlab.domain.model.game.FormulaQuiz;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.model.game.ReactionQuiz;
 import chemlab.domain.model.game.QuestionAnswer;
-import chemlab.domain.model.game.QuizType;
 import chemlab.domain.repository.game.QuizRepository;
 import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -20,6 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
 @SpringBootTest
-public class FormulaQuizRepositoryTest {
+public class ReactionQuizRepositoryTest {
     @Container
     public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0.0"));
 
@@ -53,20 +52,26 @@ public class FormulaQuizRepositoryTest {
     }
 
     private void createMockQuizzes() {
-        FormulaQuiz fq1 = new FormulaQuiz("abcd");
+        HashMap<String, Integer> elements = new HashMap<>();
+        elements.put("H", 2);
+        elements.put("O", 1);
+        Reaction r1 = new Reaction(elements);
+
+        ReactionQuiz fq1 = new ReactionQuiz(r1);
+
         fq1.setQuestionAnswerList(List.of(
                 new QuestionAnswer("Is this the first still?", "no"),
                 new QuestionAnswer("Is this the first?", "yes")
         ));
-        FormulaQuiz fq2 = new FormulaQuiz("abcd");
+        ReactionQuiz fq2 = new ReactionQuiz(r1);
         fq2.setQuestionAnswerList(List.of(
                 new QuestionAnswer("non-test", "no"),
                 new QuestionAnswer("still-testing", "yes")
         ));
 
-        List<FormulaQuiz> formulaQuizzes = Arrays.asList(fq1, fq2);
-        for (FormulaQuiz fq : formulaQuizzes) {
-            quizRepo.save(fq);
+        List<ReactionQuiz> reactionQuizzes = Arrays.asList(fq1, fq2);
+        for (ReactionQuiz fq : reactionQuizzes) {
+            quizRepo.createFormulaQuiz(fq);
         }
     }
 }

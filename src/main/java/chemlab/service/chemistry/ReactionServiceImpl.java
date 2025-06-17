@@ -2,9 +2,7 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.QuizService;
-import chemlab.domain.model.game.FormulaQuiz;
-import chemlab.domain.model.game.QuizType;
-import org.bson.types.ObjectId;
+import chemlab.domain.model.game.ReactionQuiz;
 import services.pubchem.PubChemApiService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
@@ -48,7 +46,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     public boolean hasCompoundBeenDiscovered(String formula) {
         log.info("Checking if [{}] exists in db.", formula);
-        if (!reactionRepo.findCompoundByFormula(formula).isEmpty()) {
+        if (reactionRepo.findReactionByFormula(formula) != null) {
             log.info("[{}] found in db.", formula);
             return true;
         } else {
@@ -59,7 +57,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     private Reaction retrieveCompoundFromRepo(String formula) {
         log.trace("Looking up [{}] in repo ...", formula);
-        return reactionRepo.findCompoundByFormula(formula).get(0);
+        return reactionRepo.findReactionByFormula(formula);
     }
 
     public List<UserReaction> getCompoundsByUserId(String userId) {
@@ -93,20 +91,17 @@ public class ReactionServiceImpl implements ReactionService {
         } else {
             resultingReaction.setLastDiscoveredBy("anonymous");
         }
-
+        resultingReaction = reactionRepo.save(resultingReaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authentication != null && authentication.isAuthenticated()) {
             // need to lookup user by username until able to add userid to JWT
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
-            FormulaQuiz quiz = quizService.createQuiz(quizDto);
-            List<FormulaQuiz> userquizzes = user.getQuizzes();
-            userquizzes.add(quiz);
-            user.setQuizzes(userquizzes);
-            userRepo.save(user);
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
+
+            CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
+            ReactionQuiz quiz = quizService.createQuiz(quizDto);
+            log.trace("Added a quiz for: {}", quiz.getReaction().getFormula());
         }
-        resultingReaction = reactionRepo.save(resultingReaction);
         return resultingReaction;
     }
 }

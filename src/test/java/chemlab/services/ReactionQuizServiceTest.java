@@ -2,10 +2,12 @@ package chemlab.services;
 
 import chemlab.domain.game.QuizService;
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.game.FormulaQuiz;
+import chemlab.domain.model.game.Quiz;
+import chemlab.domain.model.game.ReactionQuiz;
 import chemlab.domain.model.game.QuestionAnswer;
 import chemlab.domain.model.game.QuizType;
 import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.service.game.QuizServiceImpl;
@@ -25,7 +27,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FormulaQuizServiceTest {
+class ReactionQuizServiceTest {
 
     @Mock
     private QuizRepository quizRepo;
@@ -33,6 +35,8 @@ class FormulaQuizServiceTest {
     private ElementRepository elementRepo;
     @Mock
     private RegisteredUserRepository userRepo;
+    @Mock
+    private ReactionRepository reactionRepository;
 
     @InjectMocks
     private QuizService quizService = new QuizServiceImpl();
@@ -48,42 +52,34 @@ class FormulaQuizServiceTest {
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
         r1.setTitle("Water");
-        // create list of reactions
-        List<Reaction> reactions = new ArrayList<>();
-        reactions.add(r1);
+//        // create list of reactions
+//        List<Reaction> reactions = new ArrayList<>();
+//        reactions.add(r1);
 
         String formula = "H2O";
 
-        CreateQuizDto quizDto = new CreateQuizDto(QuizType.COMPOUND, formula, r1.getTitle());
+        CreateQuizDto quizDto = new CreateQuizDto(formula, r1.getTitle());
 
         String q1 = "What is the name of this compound: " + quizDto.getFormula() + "?";
         String a1 = quizDto.getReactionName();
         String q2 = "What is the formula for " + quizDto.getReactionName() + "?";
         String a2 = quizDto.getFormula();
 
-        FormulaQuiz formulaQuiz = new FormulaQuiz(formula);
-        formulaQuiz.setQuestionAnswerList(List.of(
+        ReactionQuiz reactionQuiz = new ReactionQuiz(r1);
+        reactionQuiz.setQuestionAnswerList(List.of(
                 new QuestionAnswer(q1, a1),
                 new QuestionAnswer(q2, a2)
         ));
 
-        formulaQuiz.setId(new ObjectId());
+//        reactionQuiz.setId(new ObjectId());
 
         // stub in the repo finds the reaction
-        when(quizRepo.save(isA(FormulaQuiz.class))).thenReturn(formulaQuiz);
+//        when(quizRepo.save(isA(Quiz.class))).thenReturn(isA(Quiz.class));
 
         // Act
         quizService.createQuiz(quizDto);
 
         // Assert
-        verify(quizRepo, atLeastOnce()).save(isA(FormulaQuiz.class));
-    }
-
-
-    @Test
-    @DisplayName("it should request findAll from repo")
-    void list() {
-        quizService.list();
-        verify(quizRepo, times(1)).findAll();
+        verify(quizRepo, atLeastOnce()).createFormulaQuiz(isA(ReactionQuiz.class));
     }
 }

@@ -1,15 +1,22 @@
 package chemlab.repository.chemistry;
 
+import chemlab.domain.game.FlashcardService;
+import chemlab.domain.game.QuizService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.domain.repository.game.QuizRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.repository.user.UserReactionsRepo;
 import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -32,16 +39,14 @@ public class ReactionRepositoryTest {
 
     @Autowired
     private ReactionRepository compoundRepo;
-    @Autowired
-    private UserReactionsRepo userReactionsRepo;
-    @MockitoBean
-    private CorsProperties corsProperties;
+
     private Reaction c1;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
         registry.add("spring.data.mongodb.database", () -> "testdb");
+//        registry.add("spring.data.mongodb.auto-index-creation", () -> true);
     }
 
     @BeforeEach
@@ -65,8 +70,8 @@ public class ReactionRepositoryTest {
     @Test
     @DisplayName("it should fetch the compound from the repo if it exists")
     void getCompoundByFormula() {
-        List<Reaction> result = compoundRepo.findCompoundByFormula("H2O");
-        assertTrue(result.get(0).equals(c1));
+        Reaction result = compoundRepo.findReactionByFormula("H2O");
+        assertTrue(result.equals(c1));
     }
 
 // user is null obviously

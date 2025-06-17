@@ -6,6 +6,7 @@ import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -45,6 +47,8 @@ class FlashcardControllerMockTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
+    private MongoTemplate mongoTemplate;
+    @MockitoBean
     private FlashcardService flashcardService;
     @MockitoBean
     private ReactionRepository reactionRepository;
@@ -54,6 +58,8 @@ class FlashcardControllerMockTest {
     private RegisteredUserRepository registeredUserRepository;
     @MockitoBean
     private QuizRepository quizRepository;
+    @MockitoBean
+    private FlashcardRepository flashcardRepository;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;

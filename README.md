@@ -8,7 +8,7 @@
 - Elemental experimentation.
 - Real time chemical reaction.
 - Create flash cards.
-- Test your knowledge with a formulaQuiz.
+- Test your knowledge with a reactionQuiz.
 ## Angular Front End
 - https://github.com/calebTree/ics499-chem-frontend
 

@@ -1,8 +1,7 @@
 package presentation.controllers.game;
 
 import chemlab.domain.game.QuizService;
-import chemlab.domain.model.game.FormulaQuiz;
-import org.bson.types.ObjectId;
+import chemlab.domain.model.game.ReactionQuiz;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +18,8 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @GetMapping("/all")
-    @ResponseBody
-    public List<FormulaQuiz> all() {
-        return quizService.list();
-    }
-
-    @GetMapping(value = "{gameId}")
-    public FormulaQuiz getQuizById(ObjectId id) {
-        return quizService.getQuizById(id);
-    }
-
-
-//    @PostMapping("/add")
-//    public Quiz create(@RequestBody CreateQuizDto quiz) {
-//        return quizService.createQuiz(quiz);
-//    }
-
     @GetMapping("/getbyuserid/{userId}")
-    public List<FormulaQuiz> getByUserId(@PathVariable("userId") String userId) {
+    public List<ReactionQuiz> getByUserId(@PathVariable("userId") String userId) {
         return this.quizService.findQuizByUserId(userId);
     }
 }

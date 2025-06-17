@@ -14,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -48,8 +47,7 @@ class ReactionServiceTest {
     @Test
     @DisplayName("compound not yet discovered")
     void hasCompoundBeenDiscovered_false() {
-        List<Reaction> reactions = new ArrayList<>();
-        doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
+        doReturn(null).when(reactionRepo).findReactionByFormula("H2O");
         assertFalse(reactionService.hasCompoundBeenDiscovered("H2O"));
     }
 
@@ -62,11 +60,8 @@ class ReactionServiceTest {
         elements.put("O", 1);
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
-        // create list of reactions
-        List<Reaction> reactions = new ArrayList<>();
-        reactions.add(r1);
         // stub in the reaction repository behavior
-        doReturn(reactions).when(reactionRepo).findCompoundByFormula("H2O");
+        doReturn(r1).when(reactionRepo).findReactionByFormula("H2O");
 
         // Act
         boolean result = reactionService.hasCompoundBeenDiscovered("H2O");
@@ -84,13 +79,10 @@ class ReactionServiceTest {
         elements.put("O", 1);
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
-        // create list of reactions
-        List<Reaction> reactions = new ArrayList<>();
-        reactions.add(r1);
 
         String formula = "H2O";
         // stub in the repo finds the reaction
-        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+        doReturn(r1).when(reactionRepo).findReactionByFormula(formula);
         // the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
 
@@ -107,7 +99,6 @@ class ReactionServiceTest {
     @DisplayName("PubChem api is called when reaction not yet discovered")
     void validateInput_returnFromPugApi() throws Exception {
         // Arrange
-        List<Reaction> reactions = new ArrayList<>();
         // setup a compound
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("Na", 1);
@@ -127,7 +118,7 @@ class ReactionServiceTest {
 
         String formula = "NaCl";
         // stub in the repo will not find the reaction
-        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+        doReturn(null).when(reactionRepo).findReactionByFormula(formula);
         // stub in the api return
         doReturn(r1).when(pubChemApi).testFormula(formula, r1);
         // stub in the service returns the saved reaction

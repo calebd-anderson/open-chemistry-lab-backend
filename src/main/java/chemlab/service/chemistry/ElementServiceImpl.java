@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 public class ElementServiceImpl implements ElementService {
 
+    @Autowired
     private final ElementRepository elmRepo;
 
     @Autowired

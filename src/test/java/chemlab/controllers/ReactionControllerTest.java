@@ -3,6 +3,8 @@ package chemlab.controllers;
 import auth.jwt.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import chemlab.domain.game.QuizService;
+import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +33,10 @@ class ReactionControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @MockitoBean
+    private MongoTemplate mongoTemplate;
+    @MockitoBean
+    private ReactionRepository reactionRepository;
+    @MockitoBean
     private ReactionServiceImpl reactionServiceMock;
     @MockitoBean
     private FlashcardRepository flashcardRepository;
@@ -39,6 +46,8 @@ class ReactionControllerTest {
     private RegisteredUserRepository registeredUserRepository;
     @MockitoBean
     private RegisteredUserService registeredUserService;
+    @MockitoBean
+    private QuizService quizService;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;

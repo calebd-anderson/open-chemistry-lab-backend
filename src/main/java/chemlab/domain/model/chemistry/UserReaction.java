@@ -1,12 +1,14 @@
 package chemlab.domain.model.chemistry;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class UserReaction extends Reaction {
-    public Instant iDiscoveredWhen = Instant.EPOCH;
+public class UserReaction {
+    @DocumentReference
+    private final Reaction userDiscoveredReaction;
+    private Instant firstDiscovered = Instant.EPOCH;
+    private Instant lastDiscovered = Instant.EPOCH;
 }

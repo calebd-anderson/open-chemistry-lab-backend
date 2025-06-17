@@ -29,14 +29,15 @@ public class UserReactionsRepoImpl implements UserReactionsRepo {
             List<UserReaction> userReactions = user.getDiscoveredReactions();
             // skip if reaction already saved with user
             for (UserReaction userReaction : userReactions) {
-                if (Objects.equals(userReaction.getFormula(), reaction.getFormula())) {
+                if (Objects.equals(userReaction.getUserDiscoveredReaction().getFormula(), reaction.getFormula())) {
+                    userReaction.setLastDiscovered(Instant.now());
+                    userRepo.save(user);
                     return;
                 }
             }
-            // map reaction to userReaction
-            ModelMapper modelMapper = new ModelMapper();
-            UserReaction userReaction = modelMapper.map(reaction, UserReaction.class);
-            userReaction.setIDiscoveredWhen(Instant.now());
+            UserReaction userReaction = new UserReaction(reaction);
+            userReaction.setFirstDiscovered(Instant.now());
+            userReaction.setLastDiscovered(Instant.now());
             userReactions.add(userReaction);
             userRepo.save(user);
         } catch (Exception e) {

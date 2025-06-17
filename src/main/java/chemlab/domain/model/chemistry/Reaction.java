@@ -2,6 +2,7 @@ package chemlab.domain.model.chemistry;
 
 import lombok.Data;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -15,6 +16,7 @@ public class Reaction {
     @MongoId
     private ObjectId Id;
     private HashMap<String, Integer> elements;
+    @Indexed(unique = true)
     private String formula;
     private String title;
     private Instant discoveredWhen;
