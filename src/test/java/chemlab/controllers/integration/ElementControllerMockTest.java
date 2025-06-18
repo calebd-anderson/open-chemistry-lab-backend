@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //@WebAppConfiguration
-@ActiveProfiles(profiles = "dev")
+//@ActiveProfiles(profiles = "dev")
 class ElementControllerMockTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
