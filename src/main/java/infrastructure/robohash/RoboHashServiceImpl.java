@@ -1,4 +1,4 @@
-package services.robohash;
+package infrastructure.robohash;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.stereotype.Service;

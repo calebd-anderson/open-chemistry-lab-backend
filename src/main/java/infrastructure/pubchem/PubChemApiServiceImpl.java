@@ -1,7 +1,7 @@
-package services.pubchem;
+package infrastructure.pubchem;
 
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.exceptions.domain.PugApiException;
+import infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import shared.PugApiDto;
 
-import static services.pubchem.PugApiConstants.*;
+import static infrastructure.pubchem.PugApiConstants.*;
 
 @Slf4j
 @Service

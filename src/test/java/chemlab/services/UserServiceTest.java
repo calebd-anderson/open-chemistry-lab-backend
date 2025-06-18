@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import services.email.EmailService;
+import infrastructure.email.EmailService;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

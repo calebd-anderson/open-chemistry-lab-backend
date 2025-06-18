@@ -2,7 +2,7 @@ package chemlab.domain.chemistry;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.exceptions.domain.PugApiException;
+import infrastructure.pubchem.exceptions.PugApiException;
 
 import java.util.List;
 

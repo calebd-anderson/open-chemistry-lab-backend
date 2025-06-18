@@ -1,4 +1,4 @@
-package services.robohash;
+package infrastructure.robohash;
 
 import java.io.IOException;
 

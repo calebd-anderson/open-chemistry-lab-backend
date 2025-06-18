@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
-import chemlab.domain.repository.game.FormulaQuizRepositoryImpl;
 
 import java.io.File;
 
@@ -17,7 +16,7 @@ import static chemlab.constants.FileConstants.USER_FOLDER;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"chemlab.domain.model"})
-@ComponentScan({"chemlab", "auth", "services", "presentation", "repositories"})
+@ComponentScan({"chemlab", "auth", "infrastructure", "presentation", "repositories"})
 @EnableMongoRepositories(basePackages = {"repositories", "chemlab.domain.repository"})
 public class ChemistryApplication {
 

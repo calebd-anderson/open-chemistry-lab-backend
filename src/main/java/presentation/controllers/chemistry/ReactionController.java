@@ -3,7 +3,7 @@ package presentation.controllers.chemistry;
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.exceptions.domain.PugApiException;
+import infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

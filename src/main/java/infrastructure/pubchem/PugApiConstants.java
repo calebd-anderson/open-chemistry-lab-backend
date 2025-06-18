@@ -1,4 +1,4 @@
-package services.pubchem;
+package infrastructure.pubchem;
 
 public class PugApiConstants {
     public static final String PUG_PROLOG = "https://pubchem.ncbi.nlm.nih.gov/rest/pug";

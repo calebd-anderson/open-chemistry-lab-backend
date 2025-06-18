@@ -1,4 +1,4 @@
-package services.email;
+package infrastructure.email;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
-import static services.email.EmailConstant.*;
+import static infrastructure.email.EmailConstant.*;
 
 @Service
 public class EmailService {
