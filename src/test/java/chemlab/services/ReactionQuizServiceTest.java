@@ -6,7 +6,7 @@ import chemlab.model.game.ReactionQuiz;
 import chemlab.model.game.QuestionAnswer;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.game.QuizRepository;
+import chemlab.repository.game.quiz.QuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.game.QuizServiceImpl;
 import org.junit.jupiter.api.DisplayName;

@@ -1,20 +1,21 @@
-package chemlab.repository.user;
+package chemlab.service.user;
 
+import chemlab.domain.user.UserReactionService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
 import chemlab.model.user.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import chemlab.repository.user.RegisteredUserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
-@Repository
-public class UserReactionsRepoImpl implements UserReactionsRepo {
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
+@Slf4j
+@Service
+public class UserReactionServiceImpl implements UserReactionService {
 
     @Autowired
     RegisteredUserRepository userRepo;
@@ -38,7 +39,7 @@ public class UserReactionsRepoImpl implements UserReactionsRepo {
             userReactions.add(userReaction);
             userRepo.save(user);
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -47,4 +48,5 @@ public class UserReactionsRepoImpl implements UserReactionsRepo {
         User user = userRepo.findRegisteredUserByUserId(userId);
         return user.getDiscoveredReactions();
     }
+
 }

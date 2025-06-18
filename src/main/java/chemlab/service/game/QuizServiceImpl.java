@@ -8,7 +8,7 @@ import chemlab.model.game.ReactionQuiz;
 import chemlab.model.user.User;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.game.QuizRepository;
+import chemlab.repository.game.quiz.QuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;

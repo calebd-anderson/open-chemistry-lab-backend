@@ -2,14 +2,14 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.QuizService;
-import chemlab.model.game.ReactionQuiz;
-import infrastructure.pubchem.PubChemApiService;
+import chemlab.domain.user.UserReactionService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
+import chemlab.model.game.ReactionQuiz;
 import chemlab.model.user.User;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.repository.user.UserReactionsRepo;
+import infrastructure.pubchem.PubChemApiService;
 import infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,9 @@ public class ReactionServiceImpl implements ReactionService {
     @Autowired
     private ReactionRepository reactionRepo;
     @Autowired
-    private UserReactionsRepo userReactionsRepo;
-    @Autowired
     private RegisteredUserRepository userRepo;
+    @Autowired
+    private UserReactionService userReactionService;
     @Autowired
     private QuizService quizService;
 
@@ -61,7 +61,7 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     public List<UserReaction> getCompoundsByUserId(String userId) {
-        return userReactionsRepo.findReactionsByUserId(userId);
+        return userReactionService.findReactionsByUserId(userId);
     }
 
     public Reaction validateInput(Reaction reaction) throws PugApiException {
@@ -101,7 +101,7 @@ public class ReactionServiceImpl implements ReactionService {
             log.info("Querying the db for user with username: {}", authentication.getName());
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
             log.info("Saving the {} reaction with the user.", resultingReaction.getFormula());
-            userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
+            userReactionService.saveReactionWithUser(user.getUserId(), resultingReaction);
             log.info("Creating the reaction quiz.");
             CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
             ReactionQuiz quiz = quizService.createQuiz(quizDto);

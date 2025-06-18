@@ -1,4 +1,4 @@
-package chemlab.repository.game;
+package chemlab.repository.game.quiz;
 
 import chemlab.model.game.Quiz;
 import chemlab.model.game.QuizType;

@@ -4,7 +4,7 @@ import chemlab.domain.ServiceInterface;
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
 import chemlab.model.user.User;
-import chemlab.repository.game.FlashcardRepository;
+import chemlab.repository.game.flashcard.FlashcardRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

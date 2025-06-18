@@ -7,7 +7,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import presentation.controllers.game.FlashcardController;
 import chemlab.model.game.Flashcard;
 import shared.FlashcardDto;
-import chemlab.repository.game.FlashcardRepository;
+import chemlab.repository.game.flashcard.FlashcardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

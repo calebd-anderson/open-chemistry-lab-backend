@@ -2,14 +2,13 @@ package chemlab.services;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.FlashcardService;
-import chemlab.repository.game.FlashcardRepository;
-import infrastructure.pubchem.PubChemApiService;
+import chemlab.domain.user.UserReactionService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.repository.user.UserReactionsRepo;
-import infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.repository.game.flashcard.FlashcardRepository;
 import chemlab.service.chemistry.ReactionServiceImpl;
+import infrastructure.pubchem.PubChemApiService;
+import infrastructure.pubchem.exceptions.PugApiException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -28,9 +27,7 @@ class ReactionServiceTest {
     @Mock
     private ReactionRepository reactionRepo;
     @Mock
-    private UserReactionsRepo userReactionsRepo;
-    @Mock
-    private RegisteredUserRepository userRepo;
+    private UserReactionService userReactionService;
     @Mock
     FlashcardService flashcardService;
     @Mock
@@ -162,16 +159,16 @@ class ReactionServiceTest {
         // if not record in mongodb
 
         // set discovery attributes:
-            // discoveredWhen
-            // discoveredBy
-            // timesDiscovered
-            // lastDiscoveredWhen
-            // lasterDiscoveredBy
+        // discoveredWhen
+        // discoveredBy
+        // timesDiscovered
+        // lastDiscoveredWhen
+        // lasterDiscoveredBy
         // if so retrieve from database
         // set discovery attributes:
-            // timesDiscovered
-            // lastDiscoveredWhen
-            // lasterDiscoveredBy
+        // timesDiscovered
+        // lastDiscoveredWhen
+        // lasterDiscoveredBy
 
         // Act
         Reaction reactionResult = reactionService.validateInput(r1);
