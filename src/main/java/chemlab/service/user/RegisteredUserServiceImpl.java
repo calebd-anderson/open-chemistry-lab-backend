@@ -4,7 +4,7 @@ import auth.user.LoginAttemptService;
 import auth.user.RegisteredUserPrincipal;
 import auth.user.Role;
 import chemlab.model.user.User;
-import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
 import lombok.extern.slf4j.Slf4j;

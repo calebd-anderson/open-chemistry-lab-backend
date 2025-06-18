@@ -2,7 +2,7 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ElementService;
 import chemlab.model.chemistry.Element;
-import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.repository.chemistry.ElementRepository;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

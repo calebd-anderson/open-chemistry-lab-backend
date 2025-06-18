@@ -1,6 +1,6 @@
 package repositories;
 
-import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.repository.chemistry.ElementRepository;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.Element;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,4 +1,4 @@
-package chemlab.domain.repository.game;
+package chemlab.repository.game;
 
 import chemlab.model.game.Quiz;
 import chemlab.model.game.ReactionQuiz;

@@ -1,4 +1,4 @@
-package chemlab.domain.repository.chemistry;
+package chemlab.repository.chemistry;
 
 import chemlab.model.chemistry.Reaction;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -1,7 +1,7 @@
 package repositories;
 
-import chemlab.domain.repository.user.RegisteredUserRepository;
-import chemlab.domain.repository.user.UserReactionsRepo;
+import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.UserReactionsRepo;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
 import chemlab.model.user.User;

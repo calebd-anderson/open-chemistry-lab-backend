@@ -1,5 +1,5 @@
 // the repository class implements CRUD actions
-package chemlab.domain.repository.chemistry;
+package chemlab.repository.chemistry;
 
 import chemlab.model.chemistry.Element;
 import chemlab.exceptions.domain.FailedToLoadPTException;

@@ -3,7 +3,7 @@ package chemlab.repository;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.game.ReactionQuiz;
 import chemlab.model.game.QuestionAnswer;
-import chemlab.domain.repository.game.QuizRepository;
+import chemlab.repository.game.QuizRepository;
 import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

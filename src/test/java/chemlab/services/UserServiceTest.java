@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import auth.user.LoginAttemptService;
-import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.service.user.RegisteredUserServiceImpl;
 import org.junit.jupiter.api.Test;

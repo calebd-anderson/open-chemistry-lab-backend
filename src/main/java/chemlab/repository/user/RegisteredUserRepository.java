@@ -1,4 +1,4 @@
-package chemlab.domain.repository.user;
+package chemlab.repository.user;
 
 import chemlab.model.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,8 +11,4 @@ public interface RegisteredUserRepository extends MongoRepository<User, String> 
     User findRegisteredUserByUsername(String username);
 
     User findRegisteredUserByUserId(String userId);
-
-    // getAllUsers first 100 da da da
-    //	@Query("")
-    //	List<RegisteredUser> getUsers =
 }

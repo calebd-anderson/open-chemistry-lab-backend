@@ -2,10 +2,10 @@ package chemlab.controllers.integration;
 
 import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.QuizService;
-import chemlab.domain.repository.chemistry.ReactionRepository;
-import chemlab.domain.repository.game.FlashcardRepository;
-import chemlab.domain.repository.game.QuizRepository;
-import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.repository.chemistry.ReactionRepository;
+import chemlab.repository.game.FlashcardRepository;
+import chemlab.repository.game.QuizRepository;
+import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

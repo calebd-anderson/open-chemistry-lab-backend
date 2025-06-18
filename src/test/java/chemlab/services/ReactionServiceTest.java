@@ -2,12 +2,12 @@ package chemlab.services;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.FlashcardService;
-import chemlab.domain.repository.game.FlashcardRepository;
+import chemlab.repository.game.FlashcardRepository;
 import infrastructure.pubchem.PubChemApiService;
 import chemlab.model.chemistry.Reaction;
-import chemlab.domain.repository.chemistry.ReactionRepository;
-import chemlab.domain.repository.user.RegisteredUserRepository;
-import chemlab.domain.repository.user.UserReactionsRepo;
+import chemlab.repository.chemistry.ReactionRepository;
+import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.UserReactionsRepo;
 import infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.service.chemistry.ReactionServiceImpl;
 import org.junit.jupiter.api.DisplayName;
