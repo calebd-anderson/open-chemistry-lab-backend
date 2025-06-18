@@ -75,8 +75,10 @@ public class ReactionServiceImpl implements ReactionService {
             resultingReaction = pubChemApi.testFormula(formula, reaction);
             resultingReaction.setDiscoveredWhen(Instant.now());
             if (authentication != null && authentication.isAuthenticated()) {
+                log.trace("Setting reaction discovered by: {}", authentication.getName());
                 resultingReaction.setDiscoveredBy(authentication.getName());
             } else {
+                log.trace("Setting reaction discovered by: {}", "anonymous");
                 resultingReaction.setDiscoveredBy("anonymous");
             }
         } else {
@@ -91,17 +93,21 @@ public class ReactionServiceImpl implements ReactionService {
         } else {
             resultingReaction.setLastDiscoveredBy("anonymous");
         }
+        log.trace("Updating reaction with formula: {}", resultingReaction.getFormula());
         resultingReaction = reactionRepo.save(resultingReaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authentication != null && authentication.isAuthenticated()) {
             // need to lookup user by username until able to add userid to JWT
+            log.trace("Querying the db for user with username: {}", authentication.getName());
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
+            log.trace("Saving the {} reaction with the user.", resultingReaction.getFormula());
             userReactionsRepo.saveReactionWithUser(user.getUserId(), resultingReaction);
-
+            log.trace("Creating the reaction quiz.");
             CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
             ReactionQuiz quiz = quizService.createQuiz(quizDto);
             log.trace("Added a quiz for: {}", quiz.getReaction().getFormula());
         }
+        log.trace("Finished validating input.");
         return resultingReaction;
     }
 }
