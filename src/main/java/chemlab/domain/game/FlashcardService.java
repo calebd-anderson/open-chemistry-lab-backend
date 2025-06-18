@@ -1,6 +1,6 @@
 package chemlab.domain.game;
 
-import chemlab.domain.model.game.Flashcard;
+import chemlab.model.game.Flashcard;
 import shared.FlashcardDto;
 
 import java.util.List;

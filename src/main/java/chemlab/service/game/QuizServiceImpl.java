@@ -1,11 +1,11 @@
 package chemlab.service.game;
 
 import chemlab.domain.game.QuizService;
-import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.domain.model.game.QuestionAnswer;
-import chemlab.domain.model.game.ReactionQuiz;
-import chemlab.domain.model.user.User;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
+import chemlab.model.game.QuestionAnswer;
+import chemlab.model.game.ReactionQuiz;
+import chemlab.model.user.User;
 import chemlab.domain.repository.chemistry.ElementRepository;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.QuizRepository;

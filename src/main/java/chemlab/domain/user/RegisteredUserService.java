@@ -1,6 +1,6 @@
 package chemlab.domain.user;
 
-import chemlab.domain.model.user.User;
+import chemlab.model.user.User;
 import chemlab.exceptions.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 import shared.UserRegisterDto;

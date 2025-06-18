@@ -1,7 +1,7 @@
 package chemlab.domain.repository.game;
 
-import chemlab.domain.model.game.Quiz;
-import chemlab.domain.model.game.QuizType;
+import chemlab.model.game.Quiz;
+import chemlab.model.game.QuizType;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

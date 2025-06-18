@@ -2,15 +2,12 @@ package chemlab.service.game;
 
 import chemlab.domain.ServiceInterface;
 import chemlab.domain.game.FlashcardService;
-import chemlab.domain.model.game.Flashcard;
-import chemlab.domain.model.user.User;
+import chemlab.model.game.Flashcard;
+import chemlab.model.user.User;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
-import com.mongodb.MongoException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

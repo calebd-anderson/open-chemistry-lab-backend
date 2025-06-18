@@ -1,8 +1,7 @@
 package chemlab.domain.repository.game;
 
-import chemlab.domain.model.game.Quiz;
-import chemlab.domain.model.game.QuizType;
-import chemlab.domain.model.game.ReactionQuiz;
+import chemlab.model.game.Quiz;
+import chemlab.model.game.ReactionQuiz;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import java.util.ArrayList;
 import java.util.List;
 
-import static chemlab.domain.model.game.QuizType.COMPOUND;
+import static chemlab.model.game.QuizType.COMPOUND;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 

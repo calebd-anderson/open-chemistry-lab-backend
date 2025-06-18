@@ -1,4 +1,4 @@
-package chemlab.domain.model.chemistry;
+package chemlab.model.chemistry;
 
 import lombok.Data;
 import org.bson.types.ObjectId;

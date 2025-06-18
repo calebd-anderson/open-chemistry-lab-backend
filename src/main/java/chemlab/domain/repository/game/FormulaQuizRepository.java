@@ -1,6 +1,6 @@
 package chemlab.domain.repository.game;
 
-import chemlab.domain.model.game.ReactionQuiz;
+import chemlab.model.game.ReactionQuiz;
 
 public interface FormulaQuizRepository {
 //    @Query("{ 'question' : { $regex: ?0 } }")

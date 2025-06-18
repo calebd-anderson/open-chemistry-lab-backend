@@ -1,6 +1,6 @@
 package chemlab.domain.game;
 
-import chemlab.domain.model.game.ReactionQuiz;
+import chemlab.model.game.ReactionQuiz;
 import shared.CreateQuizDto;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package chemlab.repository;
 
-import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.game.ReactionQuiz;
-import chemlab.domain.model.game.QuestionAnswer;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.game.ReactionQuiz;
+import chemlab.model.game.QuestionAnswer;
 import chemlab.domain.repository.game.QuizRepository;
 import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,4 @@
-package chemlab.domain.model.user;
+package chemlab.model.user;
 
 public class UserDAO {
 

@@ -1,7 +1,7 @@
 package presentation.controllers.game;
 
 import chemlab.domain.game.FlashcardService;
-import chemlab.domain.model.game.Flashcard;
+import chemlab.model.game.Flashcard;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

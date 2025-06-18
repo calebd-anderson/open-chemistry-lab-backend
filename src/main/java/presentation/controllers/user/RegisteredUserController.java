@@ -2,7 +2,7 @@ package presentation.controllers.user;
 
 import chemlab.exceptions.ExceptionHandling;
 import chemlab.exceptions.domain.*;
-import chemlab.domain.model.user.User;
+import chemlab.model.user.User;
 import infrastructure.robohash.RoboHashService;
 import shared.UserLoginDto;
 import shared.UserRegisterDto;

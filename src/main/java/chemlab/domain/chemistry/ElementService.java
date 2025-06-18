@@ -1,6 +1,6 @@
 package chemlab.domain.chemistry;
 
-import chemlab.domain.model.chemistry.Element;
+import chemlab.model.chemistry.Element;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 
 import java.util.List;

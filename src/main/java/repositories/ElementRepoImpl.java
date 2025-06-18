@@ -1,10 +1,11 @@
 package repositories;
 
+import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.model.chemistry.Element;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.domain.model.chemistry.Element;
-import chemlab.domain.repository.chemistry.ElementRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 import static chemlab.constants.FileConstants.PERIODIC_TABLE_PATH;
 
 @Repository
+@Slf4j
 public class ElementRepoImpl implements ElementRepository {
 
     @Override
@@ -21,7 +23,7 @@ public class ElementRepoImpl implements ElementRepository {
         ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            return mapper.readValue(pTableData, new TypeReference<List<Element>>() {
+            return mapper.readValue(pTableData, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new FailedToLoadPTException(PERIODIC_TABLE_PATH + " not found.");
@@ -33,7 +35,7 @@ public class ElementRepoImpl implements ElementRepository {
         ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            List<Element> pt = mapper.readValue(pTableData, new TypeReference<List<Element>>() {
+            List<Element> pt = mapper.readValue(pTableData, new TypeReference<>() {
             });
             // lame efficiency search
             for (Element element : pt) {
@@ -42,7 +44,7 @@ public class ElementRepoImpl implements ElementRepository {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }

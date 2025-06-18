@@ -1,4 +1,4 @@
-package chemlab.domain.model.game;
+package chemlab.model.game;
 
 public enum QuizType {
 	ELEMENT, COMPOUND

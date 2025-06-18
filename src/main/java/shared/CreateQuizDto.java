@@ -1,6 +1,5 @@
 package shared;
 
-import chemlab.domain.model.game.QuizType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

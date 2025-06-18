@@ -2,7 +2,7 @@
 package presentation.controllers.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.domain.model.chemistry.Element;
+import chemlab.model.chemistry.Element;
 import chemlab.service.chemistry.ElementServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

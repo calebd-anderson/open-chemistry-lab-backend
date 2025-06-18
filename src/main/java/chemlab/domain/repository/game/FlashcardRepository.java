@@ -1,6 +1,6 @@
 package chemlab.domain.repository.game;
 
-import chemlab.domain.model.game.Flashcard;
+import chemlab.model.game.Flashcard;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

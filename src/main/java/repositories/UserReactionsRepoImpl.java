@@ -1,11 +1,10 @@
 package repositories;
 
-import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.domain.model.user.User;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.repository.user.UserReactionsRepo;
-import org.modelmapper.ModelMapper;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
+import chemlab.model.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

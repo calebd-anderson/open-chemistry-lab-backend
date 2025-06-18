@@ -1,11 +1,11 @@
 package chemlab.controllers;
 
 import chemlab.domain.game.FlashcardService;
-import chemlab.domain.model.user.User;
+import chemlab.model.user.User;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import presentation.controllers.game.FlashcardController;
-import chemlab.domain.model.game.Flashcard;
+import chemlab.model.game.Flashcard;
 import shared.FlashcardDto;
 import chemlab.domain.repository.game.FlashcardRepository;
 import org.junit.jupiter.api.BeforeEach;

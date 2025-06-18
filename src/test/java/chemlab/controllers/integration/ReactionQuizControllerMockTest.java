@@ -2,38 +2,26 @@ package chemlab.controllers.integration;
 
 import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.QuizService;
-import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.game.ReactionQuiz;
-import chemlab.domain.model.game.QuestionAnswer;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import presentation.controllers.game.QuizController;
 
-import java.util.HashMap;
-import java.util.List;
-
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = QuizController.class)

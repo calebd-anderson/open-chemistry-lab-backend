@@ -1,6 +1,6 @@
 package infrastructure.pubchem;
 
-import chemlab.domain.model.chemistry.Reaction;
+import chemlab.model.chemistry.Reaction;
 import infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
 import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.FlashcardService;
-import chemlab.domain.model.game.Flashcard;
+import chemlab.model.game.Flashcard;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.FlashcardRepository;
 import chemlab.domain.repository.game.QuizRepository;

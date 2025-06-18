@@ -1,14 +1,12 @@
-package chemlab.domain.model.user;
+package chemlab.model.user;
 
-import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.domain.model.game.Flashcard;
-import chemlab.domain.model.game.ReactionQuiz;
+import chemlab.model.chemistry.UserReaction;
+import chemlab.model.game.Flashcard;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import shared.UserLoginDto;
 
 import java.io.Serializable;

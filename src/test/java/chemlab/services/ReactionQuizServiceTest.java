@@ -1,17 +1,14 @@
 package chemlab.services;
 
 import chemlab.domain.game.QuizService;
-import chemlab.domain.model.chemistry.Reaction;
-import chemlab.domain.model.game.Quiz;
-import chemlab.domain.model.game.ReactionQuiz;
-import chemlab.domain.model.game.QuestionAnswer;
-import chemlab.domain.model.game.QuizType;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.game.ReactionQuiz;
+import chemlab.model.game.QuestionAnswer;
 import chemlab.domain.repository.chemistry.ElementRepository;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.game.QuizRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.service.game.QuizServiceImpl;
-import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import shared.CreateQuizDto;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

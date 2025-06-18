@@ -1,4 +1,4 @@
 <persistence>
 	<persistence-unit>
-		<Flashcard>chemlab.domain.model.game.Flashcard</Flashcard>
+		<Flashcard>chemlab.model.game.Flashcard</Flashcard>
 		<Game>chemlab.domain.model.game.Game</Game></persistence-unit></persistence>

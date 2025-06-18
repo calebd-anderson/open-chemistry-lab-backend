@@ -1,32 +1,21 @@
 package chemlab.repository.chemistry;
 
-import chemlab.domain.game.FlashcardService;
-import chemlab.domain.game.QuizService;
-import chemlab.domain.model.chemistry.Reaction;
+import chemlab.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
-import chemlab.domain.repository.game.FlashcardRepository;
-import chemlab.domain.repository.game.QuizRepository;
-import chemlab.domain.repository.user.RegisteredUserRepository;
-import chemlab.domain.repository.user.UserReactionsRepo;
-import auth.config.CorsProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

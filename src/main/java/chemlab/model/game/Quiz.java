@@ -1,4 +1,4 @@
-package chemlab.domain.model.game;
+package chemlab.model.game;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

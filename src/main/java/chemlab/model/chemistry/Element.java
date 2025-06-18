@@ -1,5 +1,5 @@
 // a domain class
-package chemlab.domain.model.chemistry;
+package chemlab.model.chemistry;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

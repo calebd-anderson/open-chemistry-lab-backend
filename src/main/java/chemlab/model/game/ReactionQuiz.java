@@ -1,6 +1,6 @@
-package chemlab.domain.model.game;
+package chemlab.model.game;
 
-import chemlab.domain.model.chemistry.Reaction;
+import chemlab.model.chemistry.Reaction;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;

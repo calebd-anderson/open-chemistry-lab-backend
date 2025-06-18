@@ -4,7 +4,7 @@ import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.FlashcardService;
 import chemlab.domain.repository.game.FlashcardRepository;
 import infrastructure.pubchem.PubChemApiService;
-import chemlab.domain.model.chemistry.Reaction;
+import chemlab.model.chemistry.Reaction;
 import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.repository.user.UserReactionsRepo;

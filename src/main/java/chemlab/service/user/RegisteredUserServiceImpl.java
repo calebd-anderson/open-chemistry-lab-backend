@@ -3,7 +3,7 @@ package chemlab.service.user;
 import auth.user.LoginAttemptService;
 import auth.user.RegisteredUserPrincipal;
 import auth.user.Role;
-import chemlab.domain.model.user.User;
+import chemlab.model.user.User;
 import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
