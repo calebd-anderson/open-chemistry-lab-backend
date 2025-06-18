@@ -1,8 +1,8 @@
 package repositories;
 
-import chemlab.repository.chemistry.ElementRepository;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.Element;
+import chemlab.repository.chemistry.ElementRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import static chemlab.constants.FileConstants.PERIODIC_TABLE_PATH;
-
 @Repository
 @Slf4j
 public class ElementRepoImpl implements ElementRepository {
+
+    private final String PERIODIC_TABLE_PATH = "static/data/all_elements.json";
 
     @Override
     public List<Element> findAll() throws FailedToLoadPTException {

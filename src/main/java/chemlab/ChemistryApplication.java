@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 
-import static chemlab.constants.FileConstants.USER_FOLDER;
+import static chemlab.service.user.config.FileConstants.USER_FOLDER;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"chemlab.model"})

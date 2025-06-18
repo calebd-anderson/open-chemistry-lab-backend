@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
-import static chemlab.constants.FileConstants.*;
+import static chemlab.service.user.config.FileConstants.*;
 import static auth.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
