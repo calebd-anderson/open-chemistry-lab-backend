@@ -45,6 +45,7 @@ public class QuizServiceImpl implements QuizService {
         String a1 = quizDto.getReactionName();
         String q2 = "What is the formula for " + quizDto.getReactionName() + "?";
         String a2 = quizDto.getFormula();
+        log.info("Looking in db for reaction with formula: {}", quizDto.getFormula());
         Reaction r1 = reactionRepository.findReactionByFormula(quizDto.getFormula());
         ReactionQuiz reactionQuiz = new ReactionQuiz(r1);
         reactionQuiz.setQuestionAnswerList(List.of(

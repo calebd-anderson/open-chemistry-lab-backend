@@ -27,6 +27,7 @@ public class PubChemApiServiceImpl implements PubChemApiService {
             PugApiDto pugApiValue = restTemplate.getForObject(pubChemUrl, PugApiDto.class);
             assert pugApiValue != null;
             reaction.setTitle(pugApiValue.getFirstPropertyTitle());
+            log.info("Found reaction: {}", pugApiValue.getFirstPropertyTitle());
             return reaction;
         } catch (HttpStatusCodeException exception) {
             // to do: parse the JSON returned as an error to get a useful response
