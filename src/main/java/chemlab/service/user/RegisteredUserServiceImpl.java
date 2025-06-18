@@ -36,7 +36,7 @@ import java.util.List;
 
 import static auth.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
-import static chemlab.service.user.UserImplementationConstant.*;
+import static chemlab.service.user.config.UserImplementationConstant.*;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
