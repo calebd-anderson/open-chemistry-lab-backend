@@ -65,8 +65,10 @@ public class QuizServiceImpl implements QuizService {
 
     public List<ReactionQuiz> findQuizByUserId(String userId) {
         User user = userRepo.findRegisteredUserByUserId(userId);
+        // go through user discovered reactions
         List<ReactionQuiz> quizzes = new ArrayList<>();
         for(UserReaction reaction : user.getDiscoveredReactions()) {
+            // add formula/reaction quiz to bag
             ReactionQuiz quiz = quizRepo.findQuizByFormula(reaction.getUserDiscoveredReaction().getFormula());
             quizzes.add(quiz);
         }
