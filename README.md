@@ -46,9 +46,11 @@ sops encrypt src/main/resources/application.yml > src/main/resources/application
 ```
 ## Credits
 This project was built with help from:
-- my peers and instructor at Metro State
-- an online tutorial from [Get Arrays](https://www.getarrays.io/)
+- My former peers and capstone instructor at Metro State University
+- An online tutorial from [Get Arrays](https://www.getarrays.io/)
 - [PubChem API](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial)
-  - public chemistry data
+  - public chemistry data service
 - [RoboHash](https://robohash.org/)
   - temporary profile image generator
+- The package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
+  - not true onion architecture in terms of the actual dependency graph
