@@ -73,13 +73,13 @@ public class ReactionServiceImpl implements ReactionService {
         if (!hasCompoundBeenDiscovered(formula)) {
             // try formula with PubChem api
             resultingReaction = pubChemApi.testFormula(formula, reaction);
-            resultingReaction.setDiscoveredWhen(Instant.now());
+            resultingReaction.setFirstDiscoveredWhen(Instant.now());
             if (authentication != null && authentication.isAuthenticated()) {
                 log.info("Setting reaction discovered by: {}", authentication.getName());
-                resultingReaction.setDiscoveredBy(authentication.getName());
+                resultingReaction.setFirstDiscoveredBy(authentication.getName());
             } else {
                 log.info("Setting reaction discovered by: {}", "anonymous");
-                resultingReaction.setDiscoveredBy("anonymous");
+                resultingReaction.setFirstDiscoveredBy("anonymous");
             }
         } else {
             // reaction already discovered

@@ -19,8 +19,8 @@ public class Reaction {
     @Indexed(unique = true)
     private String formula;
     private String title;
-    private Instant discoveredWhen;
-    private String discoveredBy;
+    private Instant firstDiscoveredWhen;
+    private String firstDiscoveredBy;
     private Instant lastDiscoveredWhen;
     private String lastDiscoveredBy;
     private int discoveryCount;

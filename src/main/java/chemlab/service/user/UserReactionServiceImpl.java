@@ -28,14 +28,14 @@ public class UserReactionServiceImpl implements UserReactionService {
             // skip if reaction already saved with user
             for (UserReaction userReaction : userReactions) {
                 if (Objects.equals(userReaction.getUserDiscoveredReaction().getFormula(), reaction.getFormula())) {
-                    userReaction.setLastDiscovered(Instant.now());
+                    userReaction.setLastDiscoveredWhen(Instant.now());
                     userRepo.save(user);
                     return;
                 }
             }
             UserReaction userReaction = new UserReaction(reaction);
-            userReaction.setFirstDiscovered(Instant.now());
-            userReaction.setLastDiscovered(Instant.now());
+            userReaction.setDiscoveredWhen(Instant.now());
+            userReaction.setLastDiscoveredWhen(Instant.now());
             userReactions.add(userReaction);
             userRepo.save(user);
         } catch (Exception e) {
