@@ -9,6 +9,7 @@ import java.time.Instant;
 public class UserReaction {
     @DocumentReference
     private final Reaction userDiscoveredReaction;
-    private Instant discoveredWhen = Instant.EPOCH;
-    private Instant lastDiscoveredWhen = Instant.EPOCH;
+    private Instant userDiscoveredWhen = Instant.EPOCH;
+    private Instant userLastDiscoveredWhen = Instant.EPOCH;
+    private int userDiscoveryCount;
 }

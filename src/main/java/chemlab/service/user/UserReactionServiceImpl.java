@@ -25,17 +25,19 @@ public class UserReactionServiceImpl implements UserReactionService {
         try {
             User user = userRepo.findRegisteredUserByUserId(userId);
             List<UserReaction> userReactions = user.getDiscoveredReactions();
-            // skip if reaction already saved with user
+            // skip add if reaction already saved with user
             for (UserReaction userReaction : userReactions) {
                 if (Objects.equals(userReaction.getUserDiscoveredReaction().getFormula(), reaction.getFormula())) {
-                    userReaction.setLastDiscoveredWhen(Instant.now());
+                    userReaction.setUserLastDiscoveredWhen(Instant.now());
+                    userReaction.setUserDiscoveryCount(userReaction.getUserDiscoveryCount() + 1);
                     userRepo.save(user);
                     return;
                 }
             }
             UserReaction userReaction = new UserReaction(reaction);
-            userReaction.setDiscoveredWhen(Instant.now());
-            userReaction.setLastDiscoveredWhen(Instant.now());
+            userReaction.setUserDiscoveredWhen(Instant.now());
+            userReaction.setUserLastDiscoveredWhen(Instant.now());
+            userReaction.setUserDiscoveryCount(userReaction.getUserDiscoveryCount() + 1);
             userReactions.add(userReaction);
             userRepo.save(user);
         } catch (Exception e) {
@@ -48,5 +50,4 @@ public class UserReactionServiceImpl implements UserReactionService {
         User user = userRepo.findRegisteredUserByUserId(userId);
         return user.getDiscoveredReactions();
     }
-
 }
