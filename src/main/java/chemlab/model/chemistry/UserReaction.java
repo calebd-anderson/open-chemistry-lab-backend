@@ -11,5 +11,5 @@ public class UserReaction {
     private final Reaction userDiscoveredReaction;
     private Instant userDiscoveredWhen = Instant.EPOCH;
     private Instant userLastDiscoveredWhen = Instant.EPOCH;
-    private int userDiscoveryCount;
+    private int userDiscoveredCount;
 }

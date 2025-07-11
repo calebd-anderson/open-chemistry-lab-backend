@@ -9,5 +9,6 @@ import java.util.List;
 public interface ReactionService {
     boolean hasCompoundBeenDiscovered(String formula);
     Reaction validateInput(Reaction reaction) throws PugApiException;
+    List<Reaction> findAllDiscoveredReactions();
     List<UserReaction> getCompoundsByUserId(String userId);
 }

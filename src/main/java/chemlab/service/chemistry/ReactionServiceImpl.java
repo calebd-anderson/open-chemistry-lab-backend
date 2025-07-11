@@ -64,6 +64,10 @@ public class ReactionServiceImpl implements ReactionService {
         return userReactionService.findReactionsByUserId(userId);
     }
 
+    public List<Reaction> findAllDiscoveredReactions() {
+        return reactionRepo.findAll();
+    }
+
     public Reaction validateInput(Reaction reaction) throws PugApiException {
         String formula = reaction.getFormula();
         log.info("Validating: [{}]", formula);

@@ -29,7 +29,7 @@ public class UserReactionServiceImpl implements UserReactionService {
             for (UserReaction userReaction : userReactions) {
                 if (Objects.equals(userReaction.getUserDiscoveredReaction().getFormula(), reaction.getFormula())) {
                     userReaction.setUserLastDiscoveredWhen(Instant.now());
-                    userReaction.setUserDiscoveryCount(userReaction.getUserDiscoveryCount() + 1);
+                    userReaction.setUserDiscoveredCount(userReaction.getUserDiscoveredCount() + 1);
                     userRepo.save(user);
                     return;
                 }
@@ -37,7 +37,7 @@ public class UserReactionServiceImpl implements UserReactionService {
             UserReaction userReaction = new UserReaction(reaction);
             userReaction.setUserDiscoveredWhen(Instant.now());
             userReaction.setUserLastDiscoveredWhen(Instant.now());
-            userReaction.setUserDiscoveryCount(userReaction.getUserDiscoveryCount() + 1);
+            userReaction.setUserDiscoveredCount(userReaction.getUserDiscoveredCount() + 1);
             userReactions.add(userReaction);
             userRepo.save(user);
         } catch (Exception e) {

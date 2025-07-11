@@ -25,6 +25,11 @@ public class ReactionController {
         return reactionService.validateInput(reaction);
     }
 
+    @GetMapping(value = "getAllDiscoveries")
+    public List<Reaction> getAllDiscoveredReactions() {
+        return reactionService.findAllDiscoveredReactions();
+    }
+
     @GetMapping(value = "getByUserId")
     public List<UserReaction> getByUserId(@RequestParam String userId) {
         return reactionService.getCompoundsByUserId(userId);
