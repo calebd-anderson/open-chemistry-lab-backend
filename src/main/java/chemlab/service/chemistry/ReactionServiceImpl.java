@@ -86,7 +86,7 @@ public class ReactionServiceImpl implements ReactionService {
             resultingReaction = retrieveCompoundFromRepo(formula);
         }
         resultingReaction.setLastDiscoveredWhen(Instant.now());
-        resultingReaction.setDiscoveryCount(resultingReaction.getDiscoveryCount() + 1);
+        resultingReaction.setDiscoveredCount(resultingReaction.getDiscoveredCount() + 1);
         // set last discovered by
         if (authentication != null && authentication.isAuthenticated()) {
             resultingReaction.setLastDiscoveredBy(authentication.getName());

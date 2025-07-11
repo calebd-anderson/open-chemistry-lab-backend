@@ -23,7 +23,7 @@ public class Reaction {
     private String firstDiscoveredBy;
     private Instant lastDiscoveredWhen;
     private String lastDiscoveredBy;
-    private int discoveryCount;
+    private int discoveredCount;
 
     public Reaction() {
     }

@@ -143,7 +143,7 @@ class ReactionServiceTest {
         elements.put("O", 1);
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
-        int initialDiscoveryCount = r1.getDiscoveryCount();
+        int initialDiscoveryCount = r1.getDiscoveredCount();
         // create list of reactions
 //        List<Reaction> reactions = new ArrayList<>();
 //        reactions.add(r1);
@@ -177,6 +177,6 @@ class ReactionServiceTest {
         // reaction discovered for first time so PubChem api called
         verify(pubChemApi, atLeastOnce()).testFormula(formula, r1);
         // after discovery (validateInput) the reaction discovery count is incremented by 1
-        assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveryCount());
+        assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveredCount());
     }
 }
