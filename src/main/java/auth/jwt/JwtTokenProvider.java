@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static auth.config.SecurityConstants.*;
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static java.util.Arrays.stream;
 
 @Component
@@ -32,10 +32,13 @@ public class JwtTokenProvider {
     // generate the token
     public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
         String[] claims = getClaimsFromUser(userPrincipal);
+        String userRole = getRoleFromUser(userPrincipal);
         return JWT.create().withIssuer(issuer)
 //                .withAudience("administration")
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
-                .withArrayClaim(AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withArrayClaim(AUTHORITIES, claims)
+                .withClaim("role", userRole)
+                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
 
@@ -73,7 +76,10 @@ public class JwtTokenProvider {
     // claims from token
     private String[] getClaimsFromToken(String token, String issuer) {
         JWTVerifier verifier = getJWTVerifier(issuer);
-        return verifier.verify(token).getClaim(AUTHORITIES).asArray(String.class);
+        List<String> claims = verifier.verify(token).getClaim(AUTHORITIES).asList(String.class);
+        String role = verifier.verify(token).getClaim("role").asString();
+        claims.add(role);
+        return claims.toArray(new String[0]);
     }
 
     // claims from user
@@ -84,6 +90,11 @@ public class JwtTokenProvider {
             authorities.add(grantedAuthority.getAuthority());
         }
         return authorities.toArray(new String[0]); // return as String array
+    }
+
+    // role from user
+    private String getRoleFromUser(RegisteredUserPrincipal userPrincipal) {
+        return userPrincipal.getRole();
     }
 
     private JWTVerifier getJWTVerifier(String issuer) {

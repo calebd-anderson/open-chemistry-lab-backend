@@ -1,15 +1,13 @@
 package presentation.controllers.user;
 
+import auth.http.HttpResponse;
+import auth.jwt.JwtTokenProvider;
+import auth.user.RegisteredUserPrincipal;
+import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.ExceptionHandling;
 import chemlab.exceptions.domain.*;
 import chemlab.model.user.User;
 import infrastructure.robohash.RoboHashService;
-import shared.UserLoginDto;
-import shared.UserRegisterDto;
-import auth.jwt.JwtTokenProvider;
-import auth.user.RegisteredUserPrincipal;
-import auth.http.HttpResponse;
-import chemlab.domain.user.RegisteredUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -24,6 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import shared.UserLoginDto;
+import shared.UserRegisterDto;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,8 +31,9 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
-import static chemlab.service.user.config.FileConstants.*;
 import static auth.config.SecurityConstants.JWT_TOKEN_HEADER;
+import static chemlab.service.user.config.FileConstants.FORWARD_SLASH;
+import static chemlab.service.user.config.FileConstants.USER_FOLDER;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;

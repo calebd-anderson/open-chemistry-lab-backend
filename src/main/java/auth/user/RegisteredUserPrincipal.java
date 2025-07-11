@@ -24,6 +24,10 @@ public class RegisteredUserPrincipal implements UserDetails {
 		return stream(this.user.getAuthorities()).map(SimpleGrantedAuthority::new).collect(toList());
 	}
 
+	public String getRole() {
+		return user.getRole();
+	}
+
 	@Override
 	public String getPassword() {
 		return user.getPassword();
