@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-
 @Component
 public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
     @Override
