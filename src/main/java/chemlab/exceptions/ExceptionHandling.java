@@ -1,8 +1,8 @@
 package chemlab.exceptions;
 
+import auth.http.HttpResponse;
 import chemlab.exceptions.domain.*;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import auth.http.HttpResponse;
 import infrastructure.pubchem.exceptions.PugApiException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.io.IOException;
 import java.util.*;
@@ -37,6 +38,7 @@ public class ExceptionHandling implements ErrorController {
     private static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration.";
     private static final String ERROR_PROCESSING_FILE = "Error occurred while processing file.";
     private static final String NOT_ENOUGH_PERMISSION = "You do not have enough permission.";
+    private static final String NOT_FOUND_ERROR_MSG = "The requested resource was not found.";
     public static final String ERROR_PATH = "/error";
 
     @ExceptionHandler(DisabledException.class)
@@ -100,6 +102,12 @@ public class ExceptionHandling implements ErrorController {
     public ResponseEntity<HttpResponse> methodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
         HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
         return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<HttpResponse> notFoundErrorException(Exception exception) {
+        log.error(exception.getMessage());
+        return createHttpResponse(NOT_FOUND, NOT_FOUND_ERROR_MSG);
     }
 
     @ExceptionHandler(Exception.class)

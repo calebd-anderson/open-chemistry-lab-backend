@@ -34,7 +34,7 @@ public class JwtTokenProvider {
         String[] claims = getClaimsFromUser(userPrincipal);
         String userRole = getRoleFromUser(userPrincipal);
         return JWT.create().withIssuer(issuer)
-//                .withAudience("administration")
+                .withAudience("open-chem-lab")
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
                 .withArrayClaim(AUTHORITIES, claims)
                 .withClaim("role", userRole)
@@ -101,6 +101,7 @@ public class JwtTokenProvider {
         JWTVerifier verifier;
         try {
             Algorithm algorithm = HMAC512(secret);
+//            verifier = JWT.require(algorithm).withIssuer(issuer).withAudience().build();
             verifier = JWT.require(algorithm).withIssuer(issuer).build();
         } catch (JWTVerificationException exception) {
             // hide actual exception

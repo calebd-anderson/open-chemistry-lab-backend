@@ -7,7 +7,6 @@ import java.util.Date;
 
 public class HttpResponse
 {
-
     private int httpStatusCode; // 200, 201 (ok), 400 (client error) 500 (server error)
     private HttpStatus httpStatus;
     private String reason;
