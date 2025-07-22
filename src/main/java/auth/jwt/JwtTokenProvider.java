@@ -39,6 +39,7 @@ public class JwtTokenProvider {
                 .withArrayClaim(AUTHORITIES, claims)
                 .withClaim("role", userRole)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+//                .withExpiresAt(new Date(System.currentTimeMillis() + 300))
                 .sign(HMAC512(secret.getBytes()));
     }
 

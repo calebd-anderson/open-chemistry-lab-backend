@@ -4,7 +4,7 @@ import chemlab.domain.game.FlashcardService;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import org.springframework.security.test.context.support.WithMockUser;
-import presentation.controllers.game.FlashcardController;
+import presentation.controllers.api.game.FlashcardController;
 import chemlab.model.game.Flashcard;
 import shared.FlashcardDto;
 import chemlab.repository.game.flashcard.FlashcardRepository;

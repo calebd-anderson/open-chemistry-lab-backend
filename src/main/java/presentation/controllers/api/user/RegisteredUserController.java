@@ -1,4 +1,4 @@
-package presentation.controllers.user;
+package presentation.controllers.api.user;
 
 import auth.http.HttpResponse;
 import auth.jwt.JwtTokenProvider;

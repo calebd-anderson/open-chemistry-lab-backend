@@ -1,4 +1,4 @@
-package presentation.controllers.chemistry;
+package presentation.controllers.api.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.model.chemistry.Reaction;

@@ -1,4 +1,4 @@
-package presentation.controllers.game;
+package presentation.controllers.api.game;
 
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;

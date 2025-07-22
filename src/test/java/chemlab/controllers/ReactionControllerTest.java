@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import presentation.controllers.chemistry.ReactionController;
+import presentation.controllers.api.chemistry.ReactionController;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ReactionController.class)
