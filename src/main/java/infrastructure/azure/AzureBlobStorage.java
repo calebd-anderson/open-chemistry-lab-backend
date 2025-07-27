@@ -18,8 +18,8 @@ public class AzureBlobStorage {
     private String connection;
     @Value("${azure.sasToken}")
     private String sasToken;
-
-    private String containerName = "chemlab-profile-images";
+    @Value("${azure.containerName}")
+    private String containerName;
 
     public String saveImage(String userId, String filename, InputStream img) {
         /* Create a new BlobServiceClient with a SAS Token */
