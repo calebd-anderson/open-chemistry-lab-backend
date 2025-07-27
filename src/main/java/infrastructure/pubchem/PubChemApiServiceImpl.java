@@ -37,6 +37,9 @@ public class PubChemApiServiceImpl implements PubChemApiService {
                 throw new PugApiException("404 error from PubChem API url: " + pubChemUrl);
             } else
                 throw new PugApiException("Unexpected PubChem API error");
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw new RuntimeException("Unexpected PubChem API error");
         }
     }
 }

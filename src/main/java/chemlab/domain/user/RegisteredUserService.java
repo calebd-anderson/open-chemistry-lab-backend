@@ -49,6 +49,8 @@ public interface RegisteredUserService {
 
     void resetPassword(String email) throws EmailNotFoundException;
 
+    byte[] getProfileImage(String userId, String filename);
+
     User updateProfileImage(String username,
                             MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 

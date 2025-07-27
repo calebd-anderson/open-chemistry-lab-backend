@@ -7,6 +7,7 @@ import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
+import infrastructure.azure.AzureBlobStorage;
 import infrastructure.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -37,7 +38,6 @@ import java.util.List;
 import static auth.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
 import static chemlab.service.user.config.UserImplementationConstant.*;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
 
@@ -53,6 +53,8 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     private LoginAttemptService loginAttemptService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private AzureBlobStorage azureBlobStorage;
 
     @Override
     public User register(UserRegisterDto userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
@@ -268,8 +270,8 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     }
 
     private String generateUserId() {
-        // return random number length 10
-        return RandomStringUtils.secure().next(10);
+        // return secure random number length 10
+        return RandomStringUtils.secure().next(10, false, true);
     }
 
     private String generatePassword() {
@@ -288,24 +290,27 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
             Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
             if (!Files.exists(userFolder)) {
                 Files.createDirectories(userFolder);
-                log.info(DIRECTORY_CREATED + userFolder);
+                log.info("{}", DIRECTORY_CREATED + userFolder);
             }
             // calculate file hash
             String md5Hash = createMD5HashImg(profileImg);
             String filename = md5Hash + "_" + user.getUsername();
 //			Files.deleteIfExists(Paths.get(userFolder + filename + DOT + JPG_EXTENSION));
-            log.info("image hash: " + md5Hash);
-            Files.copy(profileImg.getInputStream(), userFolder.resolve(filename + DOT + JPG_EXTENSION), REPLACE_EXISTING);
-            user.setProfileImgUrl(setProfileImgURL(user.getUsername(), md5Hash));
+            log.info("image hash: {}", md5Hash);
+            String imageBlobPath = azureBlobStorage.saveImage(user.getUserId(), filename + DOT + JPG_EXTENSION, profileImg.getInputStream());
+            user.setProfileImgUrl(generateProfileImgUrl(imageBlobPath));
             userRepo.save(user);
-            log.info(FILE_SAVED_IN_FILE_SYSTEM + profileImg.getOriginalFilename());
+            log.info("{}", FILE_SAVED_IN_FILE_SYSTEM + profileImg.getOriginalFilename());
         }
     }
 
-    private String setProfileImgURL(String username, String hash) {
-        log.info("image hash: " + hash);
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + username + FORWARD_SLASH
-                + hash + "_" + username + DOT + JPG_EXTENSION).toUriString();
+    private String generateProfileImgUrl(String blobPath) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + blobPath).toUriString();
+    }
+
+    public byte[] getProfileImage(String userId, String fileName) {
+        String blobPath = userId + "/" + fileName;
+        return azureBlobStorage.getImage(blobPath);
     }
 
     private String createMD5HashImg(final MultipartFile input) {
