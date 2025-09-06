@@ -1,6 +1,11 @@
 jwt:
   secret: 0000000000
 
+azure:
+  connectionString: localhost
+  sasToken: 0000
+  containerName: ""
+
 spring:
   data:
     mongodb:
