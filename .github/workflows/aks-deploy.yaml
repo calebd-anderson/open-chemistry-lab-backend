@@ -1,0 +1,80 @@
+name: build_deploy_aks
+env:
+  JAVA_VERSION: '17'                  # set this to the Java version to use
+  DISTRIBUTION: corretto              # set this to the Java distribution
+on:
+  push:
+    branches:
+        - 'kubernetes'
+    # paths:
+    #   - "kubernetes"
+    #   - "src"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code 
+        uses: actions/checkout@v4
+
+      - name: Setup SOPS
+        uses: nhedger/setup-sops@v2
+        with:
+          version: 3.7.3
+
+      - name: Setup age
+        uses: alessiodionisi/setup-age-action@v1.3.0
+
+      - name: Run SOPS
+        env:
+          SOPS_AGE_KEY: ${{ secrets.AGE_SECRET_KEY }}
+        run: sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
+
+      - name: Set up Java version
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.DISTRIBUTION }}
+          cache: 'maven'
+      - name: Build with Maven
+        run: mvn clean package && ls /home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend
+
+      - name: ACR build
+        id: build-push-acr
+        uses: azure/acr-build@v1
+        with:
+          service_principal: ${{ secrets.service_principal }}
+          service_principal_password: ${{ secrets.service_principal_password }}
+          tenant: ${{ secrets.tenant }}
+          registry: ${{ secrets.registry }}
+          repository: ${{ secrets.repository }}
+          image: chemlab
+          # folder: "/home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend"
+          dockerfile: "/home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend/Dockerfile"
+          branch: kubernetes
+          tag: ${{ github.sha }}
+      - name: Azure login
+        id: login
+        uses: azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Set AKS context
+        id: set-context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: '${{ secrets.resource_group }}' 
+          cluster-name: '${{ secrets.cluster_name }}'
+      - name: Setup kubectl
+        id: install-kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Deploy to AKS
+        id: deploy-aks
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: 'development'
+          manifests: |
+            deployment.yaml
+            ingress.yaml
+            namespace.yaml
+            service.yaml
+          images: '${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}'
+          pull-images: false

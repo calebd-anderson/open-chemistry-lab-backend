@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chemlab-deployment
+  namespace: development
+  labels:
+    app: chemlab
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chemlab
+  template:
+    metadata:
+      labels:
+        app: chemlab
+    spec:
+      containers:
+        - name: chemlab-container
+          image: calebprojects.azurecr.io/chemlab:latest
+          ports:
+          - containerPort: 8080

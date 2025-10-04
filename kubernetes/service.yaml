@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chemlab-service
+  namespace: development
+  annotations:
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/projects-cert
+spec:
+  selector:
+    app: chemlab
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8443
+  type: LoadBalancer
