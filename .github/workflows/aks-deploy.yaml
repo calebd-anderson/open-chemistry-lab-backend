@@ -68,9 +68,9 @@ jobs:
         with:
           namespace: 'development'
           manifests: |
-            deployment.yaml
-            ingress.yaml
-            namespace.yaml
-            service.yaml
+            kubernetes/deployment.yaml
+            kubernetes/ingress.yaml
+            kubernetes/namespace.yaml
+            kubernetes/service.yaml
           images: '${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}'
           pull-images: false
