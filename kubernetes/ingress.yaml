@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/projects-cert
-  name: chemlab
+  name: chemlab-ingress
   namespace: development
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
@@ -21,4 +21,4 @@ spec:
   tls:
   - hosts:
     - chemlabapi.calebdanderson.dev
-    secretName: keyvault-chemlab
+    secretName: keyvault-chemlab-ingress
