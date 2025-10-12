@@ -36,7 +36,7 @@ jobs:
           distribution: ${{ env.DISTRIBUTION }}
           cache: 'maven'
       - name: Build with Maven
-        run: mvn clean package && ls /home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend
+        run: mvn clean package
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v2
