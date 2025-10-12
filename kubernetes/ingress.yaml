@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/projects-cert
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/chemlabapi
   name: chemlab-ingress
   namespace: development
 spec:

@@ -5,7 +5,7 @@ metadata:
   name: chemlab-service
   namespace: development
   annotations:
-    kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/projects-cert
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://projects-keys.vault.azure.net/certificates/chemlabapi
 spec:
   selector:
     app: chemlab
