@@ -38,25 +38,21 @@ jobs:
       - name: Build with Maven
         run: mvn clean package && ls /home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend
 
-      - name: ACR build
-        id: build-push-acr
-        uses: azure/acr-build@v1
-        with:
-          service_principal: ${{ secrets.service_principal }}
-          service_principal_password: ${{ secrets.service_principal_password }}
-          tenant: ${{ secrets.tenant }}
-          registry: ${{ secrets.registry }}
-          repository: ${{ secrets.repository }}
-          image: chemlab
-          # folder: "/home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend"
-          dockerfile: "/home/runner/work/open-chemistry-lab-backend/open-chemistry-lab-backend/Dockerfile"
-          branch: kubernetes
-          tag: ${{ github.sha }}
-      - name: Azure login
-        id: login
-        uses: azure/login@v1.4.3
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: 'Build and push image'
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.registry }}.azurecr.io
+          username: ${{ secrets.service_principal }}
+          password: ${{ secrets.service_principal_password }}
+      - run: |
+          docker build . -t ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
+          docker push ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
+          
       - name: Set AKS context
         id: set-context
         uses: azure/aks-set-context@v3
