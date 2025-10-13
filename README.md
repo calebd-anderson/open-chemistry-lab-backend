@@ -26,13 +26,14 @@
 >Set `JAVA_HOME` to the location where your Java JDK is installed
 
 ### Build system is [Maven](https://maven.apache.org/download.cgi)
-A local maven wrapper is included: `./mvnw`.
+- A local maven wrapper is included: `./mvnw`.
+- [spring-boot-maven-plugin](https://docs.spring.io/spring-boot/maven-plugin/goals.html)
 ```
   $ ./mvnw test
   $ ./mvnw clean package
   $ ./mvnw spring-boot:run
 ```
-### Build Container Images with Docker
+### Manually Build Container Image with Docker
 ```
 docker build -t chemlab .
 docker run --rm -p 8080:8080 chemlab
