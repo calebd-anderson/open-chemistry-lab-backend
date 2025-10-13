@@ -3,11 +3,11 @@ package infrastructure.email;
 import org.springframework.stereotype.Service;
 
 //import com.sun.mail.smtp.SMTPTransport;
-import javax.mail.Transport;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Transport;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
