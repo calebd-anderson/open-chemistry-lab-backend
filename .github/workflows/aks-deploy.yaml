@@ -6,12 +6,11 @@ env:
 on:
   push:
     branches:
-      - 'java25'
+      - 'main'
     paths:
       - "kubernetes/**"
       - "src/**"
       - ".github/workflows/**"
-      - "Dockerfile"
       - "pom.xml"
 
 jobs:
@@ -43,10 +42,10 @@ jobs:
       - name: Build OCI image with Maven
         run: mvn spring-boot:build-image
 
-#      - name: 'Login via Azure CLI'
-#        uses: azure/login@v2
-#        with:
-#          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: 'Tag and push image'
         uses: azure/docker-login@v2
