@@ -1,4 +1,4 @@
-# Interactive Periodic Table Web Application
+# Backend API - Interactive Periodic Table Web Application
 
 <img src="/src/main/resources/static/images/chemistry.png" width="auto" height="95"  alt="chem-icon"/>
 
