@@ -1,18 +1,13 @@
-# Interactive Chemistry Web Application
+# Interactive Periodic Table Web Application
 
 <img src="/src/main/resources/static/images/chemistry.png" width="auto" height="95"  alt="chem-icon"/>
 
-<a href="https://www.flaticon.com/free-icons/chemistry" title="chemistry icons">Chemistry icons created by Freepik - Flaticon</a>
-
 ## Features
 - Interactive periodic table of elements.
-- Elemental experimentation.
-- Real time chemical reaction.
-- Create flash cards.
-- Test your knowledge with a reactionQuiz.
-
-## Angular Front End
-- https://github.com/calebTree/ics499-chem-frontend
+- Experiment with chemistry.
+- Create an account:
+  - Create flash cards.
+  - Test your knowledge with a quiz automatically generated from your discovered compounds.
 
 ## Development
 ### Configure Java SDK 21 LTS
@@ -40,20 +35,20 @@
 # override default dev,local profiles
 ./mvnw spring-boot:run -Dapp.profiles=test
 ```
-### Manually Build Container Image with Docker
+### Manually build container image with Docker
 ```
 docker build -t chemlab .
 docker run --rm -p 8080:8080 chemlab
 ```
-### Configure Local Instance of `MongoDB`
+### Configure a local instance of `MongoDB`
 - download/install
     - [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
 ### Testing
 Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.com/). A container runtime will need to be present before running repository tests.
 ### Secrets kept using `sops` and `age`
 - download/install
-  - [sops](https://github.com/getsops/sops?tab=readme-ov-file#22encrypting-using-age)
-  - [age](https://github.com/FiloSottile/age)
+  - [sops](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age)
+  - [age](https://github.com/FiloSottile/age?tab=readme-ov-file#installation)
 #### decrypt secrets
 ```
 $ sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
@@ -70,9 +65,12 @@ sops updatekeys src/main/resources/application.enc.yml
 ```
 sops encrypt src/main/resources/application.yml > src/main/resources/application.enc.yml
 ```
+## Frontend built with [Angular 20](https://angular.dev/)
+- https://github.com/calebd-anderson/open-chemistry-lab-frontend
+
 ## Credits
 This project was built with help from:
-- My BS capstone project professor and peers at Metro State University
+- My B.S. capstone project professor and peers at Metro State University
 - An online tutorial from [Get Arrays](https://www.getarrays.io/)
 - The [PubChem API](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial)
   - public chemistry data service
@@ -80,3 +78,4 @@ This project was built with help from:
   - temporary profile image generator
 - Package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
   - yet not true onion architecture in terms of the actual dependency graph
+- <a href="https://www.flaticon.com/free-icons/chemistry" title="chemistry icons">Some chemistry icons created by Freepik - Flaticon</a>
