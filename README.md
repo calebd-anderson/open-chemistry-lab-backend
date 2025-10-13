@@ -15,6 +15,16 @@
 - https://github.com/calebTree/ics499-chem-frontend
 
 ## Development
+### Configure Java SDK 21 LTS
+- [sdkman](https://sdkman.io/install/)
+- [temurin](https://adoptium.net/temurin/releases/?version=21&os=any&arch=any)
+
+>[!IMPORTANT]
+>The version of Java used by the project must match the version output by `./mvnw --version`
+
+>[!TIP]
+>Set `JAVA_HOME` to the location where your Java JDK is installed
+
 ### Build system is [Maven](https://maven.apache.org/download.cgi)
 A local maven wrapper is included: `./mvnw`.
 ```
@@ -22,9 +32,7 @@ A local maven wrapper is included: `./mvnw`.
   $ mvn test
   $ mvn spring-boot:run
 ```
-### Configure Java SDK 17
-- [sdkman](https://sdkman.io/install/)
-    - `sdk install java 17.0.0-tem`
+
 ### Configure Local Instance of `MongoDB`
 - download/install
     - [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
