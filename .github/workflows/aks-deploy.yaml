@@ -2,13 +2,18 @@ name: build_deploy_aks
 env:
   JAVA_VERSION: '21'                  # set this to the Java version to use
   DISTRIBUTION: 'temurin'             # set this to the Java distribution
+
 on:
   push:
     branches:
-        - 'main'
-    # paths:
-    #   - "kubernetes"
-    #   - "src"
+      - 'main'
+    paths:
+      - "kubernetes/**"
+      - "src/**"
+      - ".github/workflows/**"
+      - "Dockerfile"
+      - "pom.xml"
+
 jobs:
   build:
     runs-on: ubuntu-latest
