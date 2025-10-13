@@ -28,11 +28,15 @@
 ### Build system is [Maven](https://maven.apache.org/download.cgi)
 A local maven wrapper is included: `./mvnw`.
 ```
-  $ mvn clean install
-  $ mvn test
-  $ mvn spring-boot:run
+  $ ./mvnw test
+  $ ./mvnw clean package
+  $ ./mvnw spring-boot:run
 ```
-
+### Build Container Images with Docker
+```
+docker build -t chemlab .
+docker run --rm -p 8080:8080 chemlab
+```
 ### Configure Local Instance of `MongoDB`
 - download/install
     - [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
