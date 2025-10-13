@@ -48,6 +48,8 @@ docker run --rm -p 8080:8080 chemlab
 ### Configure Local Instance of `MongoDB`
 - download/install
     - [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
+### Testing
+Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.com/). A container runtime will need to be present before running repository tests.
 ### Secrets kept using `sops` and `age`
 - download/install
   - [sops](https://github.com/getsops/sops?tab=readme-ov-file#22encrypting-using-age)
