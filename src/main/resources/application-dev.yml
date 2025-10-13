@@ -9,14 +9,13 @@ spring:
       auto-index-creation: true
 server:
   port: 8080
-logging:
-  level:
-    root: "debug"
+#logging:
+#  level:
+#    root: "debug"
 web:
   cors:
     allowed-origins:
-      - "http://localhost:4200/"
-#    allowed-methods: "HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      - "http://localhost:4200"
     allowed-methods:
       - "GET"
       - "POST"
