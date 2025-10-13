@@ -6,7 +6,7 @@ env:
 on:
   push:
     branches:
-      - 'main'
+      - 'java25'
     paths:
       - "kubernetes/**"
       - "src/**"
@@ -41,7 +41,7 @@ jobs:
           distribution: ${{ env.DISTRIBUTION }}
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -v && mvn clean package
+        run: mvn spring-boot:build-image
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v2
@@ -55,27 +55,27 @@ jobs:
           username: ${{ secrets.service_principal }}
           password: ${{ secrets.service_principal_password }}
       - run: |
-          docker build . -t ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
+          docker tag chemlab ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
           docker push ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
           
-      - name: Set AKS context
-        id: set-context
-        uses: azure/aks-set-context@v3
-        with:
-          resource-group: '${{ secrets.resource_group }}' 
-          cluster-name: '${{ secrets.cluster_name }}'
-      - name: Setup kubectl
-        id: install-kubectl
-        uses: azure/setup-kubectl@v3
-      - name: Deploy to AKS
-        id: deploy-aks
-        uses: Azure/k8s-deploy@v4
-        with:
-          namespace: 'development'
-          manifests: |
-            kubernetes/deployment.yaml
-            kubernetes/ingress.yaml
-            kubernetes/namespace.yaml
-            kubernetes/service.yaml
-          images: '${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}'
-          pull-images: false
+#      - name: Set AKS context
+#        id: set-context
+#        uses: azure/aks-set-context@v3
+#        with:
+#          resource-group: '${{ secrets.resource_group }}'
+#          cluster-name: '${{ secrets.cluster_name }}'
+#      - name: Setup kubectl
+#        id: install-kubectl
+#        uses: azure/setup-kubectl@v3
+#      - name: Deploy to AKS
+#        id: deploy-aks
+#        uses: Azure/k8s-deploy@v4
+#        with:
+#          namespace: 'development'
+#          manifests: |
+#            kubernetes/deployment.yaml
+#            kubernetes/ingress.yaml
+#            kubernetes/namespace.yaml
+#            kubernetes/service.yaml
+#          images: '${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}'
+#          pull-images: false
