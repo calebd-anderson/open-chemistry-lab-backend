@@ -26,12 +26,19 @@
 >Set `JAVA_HOME` to the location where your Java JDK is installed
 
 ### Build system is [Maven](https://maven.apache.org/download.cgi)
-- A local maven wrapper is included: `./mvnw`.
-- [spring-boot-maven-plugin](https://docs.spring.io/spring-boot/maven-plugin/goals.html)
-```
-  $ ./mvnw test
-  $ ./mvnw clean package
-  $ ./mvnw spring-boot:run
+- [Maven Plugin](https://docs.spring.io/spring-boot/maven-plugin/goals.html)
+- A local [Maven wrapper](https://maven.apache.org/tools/wrapper/) is included: `./mvnw`.
+```bash
+# test
+./mvnw test
+# generate a .jar
+./mvnw clean package
+# skip tests
+./mvnw clean package -DskipTests
+# run
+./mvnw spring-boot:run
+# override default dev,local profiles
+./mvnw spring-boot:run -Dapp.profiles=test
 ```
 ### Manually Build Container Image with Docker
 ```
