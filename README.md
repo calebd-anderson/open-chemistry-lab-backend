@@ -12,6 +12,7 @@
 ## Development
 ### Configure Java SDK 21 LTS
 - [sdkman](https://sdkman.io/install/)
+- [jabba](https://github.com/shyiko/jabba)
 - [temurin](https://adoptium.net/temurin/releases/?version=21&os=any&arch=any)
 
 >[!IMPORTANT]
