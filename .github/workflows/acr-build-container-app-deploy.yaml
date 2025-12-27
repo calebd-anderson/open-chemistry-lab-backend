@@ -38,6 +38,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.DISTRIBUTION }}
           cache: 'maven'
+
       - name: Build OCI image with Maven
         run: mvn spring-boot:build-image
 
@@ -55,6 +56,10 @@ jobs:
       - run: |
           docker tag chemlab:0.0.1-SNAPSHOT ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
           docker push ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
+
+      - name: 'Purge old images from ACR'
+        run: |
+          az acr run --registry ${{ secrets.registry }} --cmd "acr purge --filter '*:.*' --ago 0d --keep 10 --untagged" /dev/null
 
   deploy:
     runs-on: ubuntu-latest
