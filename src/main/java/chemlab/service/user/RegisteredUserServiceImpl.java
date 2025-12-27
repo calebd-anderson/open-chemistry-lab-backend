@@ -104,7 +104,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
         userRepo.save(user);
         saveProfileImg(user, profileImg);
 //		log.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName, password, email);
+//        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
@@ -167,7 +167,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
         user.setPassword(encodePassword(password));
         userRepo.save(user);
 //		log.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
+//        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
     }
 
     @Override
