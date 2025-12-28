@@ -15,8 +15,8 @@ import static chemlab.service.user.config.FileConstants.USER_FOLDER;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"chemlab.model"})
-@ComponentScan({"chemlab", "auth", "infrastructure", "presentation", "repositories"})
-@EnableMongoRepositories(basePackages = {"repositories", "chemlab.repository"})
+@ComponentScan({"chemlab", "auth", "infrastructure", "presentation"})
+@EnableMongoRepositories(basePackages = {"chemlab.repository"})
 public class ChemistryApplication {
 
     @Bean
