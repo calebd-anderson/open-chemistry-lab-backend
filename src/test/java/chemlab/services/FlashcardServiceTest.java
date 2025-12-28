@@ -9,12 +9,15 @@ import chemlab.service.game.FlashcardServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,6 +34,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 class FlashcardServiceTest {
     @Autowired
@@ -56,22 +60,14 @@ class FlashcardServiceTest {
     private final String answerNo = "no";
 
     @BeforeEach
-    void setUp() {
-
+    void setUp(TestInfo info) {
         String question5 = "This might be unique?";
 
-        when(flashcardRepo.findAll()).thenReturn(
-                Stream.of(new Flashcard(question1, answerYes),
-                                new Flashcard(question2, answerYes),
-                                new Flashcard(question3, answerNo),
-                                new Flashcard(question4, answerNo),
-                                new Flashcard(question5, answerYes))
-                        .collect(Collectors.toList()));
+        if (!info.getDisplayName().equals("it should return the question")) {
+            doReturn(Stream.of(new Flashcard(question1, answerYes), new Flashcard(question2, answerYes), new Flashcard(question3, answerNo), new Flashcard(question4, answerNo), new Flashcard(question5, answerYes)).collect(Collectors.toList())).when(flashcardRepo).findAll();
+        }
 
-        this.mockMvc = MockMvcBuilders
-                .webAppContextSetup(this.context)
-                .apply(springSecurity())
-                .build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).apply(springSecurity()).build();
     }
 
     @Test
@@ -112,6 +108,7 @@ class FlashcardServiceTest {
         returnValue.add(new Flashcard(question2, answerYes));
         returnValue.add(new Flashcard(question3, answerNo));
         returnValue.add(new Flashcard(question4, answerNo));
+
         when(flashcardRepo.findByQuestion(question1)).thenReturn(returnValue);
 
         List<Flashcard> result = flashcardService.queryByQuestion(question1);
@@ -136,5 +133,4 @@ class FlashcardServiceTest {
 
         assertTrue(flashcardService.isValid(fc));
     }
-
 }

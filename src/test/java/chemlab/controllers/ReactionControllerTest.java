@@ -1,28 +1,28 @@
 package chemlab.controllers;
 
-import auth.jwt.JwtTokenProvider;
 import auth.http.JwtAccessDeniedHandler;
 import auth.http.JwtAuthenticationEntryPoint;
+import auth.jwt.JwtTokenProvider;
 import chemlab.domain.game.QuizService;
+import chemlab.domain.user.RegisteredUserService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.flashcard.FlashcardRepository;
 import chemlab.repository.game.quiz.QuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.domain.user.RegisteredUserService;
 import chemlab.service.chemistry.ReactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import presentation.controllers.api.chemistry.ReactionController;
 
@@ -58,7 +58,7 @@ class ReactionControllerTest {
     @MockitoBean
     UserDetailsService userDetailsService;
     @MockitoBean
-    RestTemplateBuilder restTemplateBuilder;
+    RestTemplate restTemplate;
 
     private MockMvc mockMvc;
 

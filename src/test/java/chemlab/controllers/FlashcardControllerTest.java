@@ -1,13 +1,10 @@
 package chemlab.controllers;
 
 import chemlab.domain.game.FlashcardService;
-import chemlab.model.user.User;
-import chemlab.repository.user.RegisteredUserRepository;
-import org.springframework.security.test.context.support.WithMockUser;
-import presentation.controllers.api.game.FlashcardController;
 import chemlab.model.game.Flashcard;
-import shared.FlashcardDto;
+import chemlab.model.user.User;
 import chemlab.repository.game.flashcard.FlashcardRepository;
+import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +12,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
+import presentation.controllers.api.game.FlashcardController;
+import shared.FlashcardDto;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 

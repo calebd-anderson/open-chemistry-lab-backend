@@ -1,16 +1,16 @@
 package chemlab.services;
 
 import auth.user.LoginAttemptService;
-import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.domain.user.RegisteredUserService;
+import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.user.RegisteredUserServiceImpl;
+import infrastructure.email.EmailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import infrastructure.email.EmailService;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

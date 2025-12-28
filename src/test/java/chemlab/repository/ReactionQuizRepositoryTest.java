@@ -1,10 +1,10 @@
 package chemlab.repository;
 
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.game.ReactionQuiz;
-import chemlab.model.game.QuestionAnswer;
-import chemlab.repository.game.quiz.QuizRepository;
 import auth.config.CorsProperties;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.game.QuestionAnswer;
+import chemlab.model.game.ReactionQuiz;
+import chemlab.repository.game.quiz.QuizRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,6 @@ import org.testcontainers.utility.DockerImageName;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
 @SpringBootTest

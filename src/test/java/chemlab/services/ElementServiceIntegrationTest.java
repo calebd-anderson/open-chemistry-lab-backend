@@ -1,8 +1,8 @@
 package chemlab.services;
 
 import chemlab.domain.chemistry.ElementService;
-import chemlab.model.chemistry.Element;
 import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.model.chemistry.Element;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
