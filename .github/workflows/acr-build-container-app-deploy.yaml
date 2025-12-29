@@ -49,7 +49,7 @@ jobs:
           cache: 'maven'
 
       - name: Build OCI image with Maven
-        run: mvn spring-boot:build-image
+        run: mvn spring-boot:build-image -Dspring.profiles.active=test
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v2
