@@ -2,6 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
+import chemlab.model.shared.FlashcardDto;
 import chemlab.model.user.User;
 import chemlab.repository.game.flashcard.FlashcardRepository;
 import chemlab.repository.user.RegisteredUserRepository;
@@ -22,7 +23,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import shared.FlashcardDto;
 
 import java.util.ArrayList;
 import java.util.List;

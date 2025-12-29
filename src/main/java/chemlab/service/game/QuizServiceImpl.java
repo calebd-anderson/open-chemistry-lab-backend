@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import shared.CreateQuizDto;
+import chemlab.model.shared.CreateQuizDto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,9 @@
 package chemlab.controllers;
 
-import auth.http.JwtAccessDeniedHandler;
-import auth.http.JwtAuthenticationEntryPoint;
-import auth.jwt.JwtTokenProvider;
+import chemlab.auth.http.JwtAccessDeniedHandler;
+import chemlab.auth.http.JwtAuthenticationEntryPoint;
+import chemlab.auth.jwt.JwtTokenProvider;
+import chemlab.controller.api.chemistry.ReactionController;
 import chemlab.domain.game.QuizService;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.repository.chemistry.ReactionRepository;
@@ -24,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
-import presentation.controllers.api.chemistry.ReactionController;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ReactionController.class)

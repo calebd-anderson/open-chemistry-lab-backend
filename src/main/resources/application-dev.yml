@@ -2,11 +2,13 @@ jwt:
   secret: 0000000000
 
 spring:
+  mongodb:
+    uri: mongodb://localhost:27017
+    database: chem-lab
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
-      database: chem-lab
       auto-index-creation: true
+
 server:
   port: 8080
 #logging:

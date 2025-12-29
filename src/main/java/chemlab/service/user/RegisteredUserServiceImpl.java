@@ -1,14 +1,14 @@
 package chemlab.service.user;
 
-import auth.user.LoginAttemptService;
-import auth.user.RegisteredUserPrincipal;
-import auth.user.Role;
+import chemlab.auth.user.LoginAttemptService;
+import chemlab.auth.user.RegisteredUserPrincipal;
+import chemlab.auth.user.Role;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
-import infrastructure.azure.AzureBlobStorage;
-import infrastructure.email.EmailService;
+import chemlab.infrastructure.azure.AzureBlobStorage;
+import chemlab.infrastructure.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import shared.UserRegisterDto;
+import chemlab.model.shared.UserRegisterDto;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static auth.user.Role.ROLE_USER;
+import static chemlab.auth.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
 import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;

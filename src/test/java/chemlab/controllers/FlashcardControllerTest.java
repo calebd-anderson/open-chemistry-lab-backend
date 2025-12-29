@@ -1,7 +1,9 @@
 package chemlab.controllers;
 
+import chemlab.controller.api.game.FlashcardController;
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
+import chemlab.model.shared.FlashcardDto;
 import chemlab.model.user.User;
 import chemlab.repository.game.flashcard.FlashcardRepository;
 import chemlab.repository.user.RegisteredUserRepository;
@@ -15,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
-import presentation.controllers.api.game.FlashcardController;
-import shared.FlashcardDto;
 
 import java.util.ArrayList;
 

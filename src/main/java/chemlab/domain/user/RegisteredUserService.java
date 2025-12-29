@@ -3,7 +3,7 @@ package chemlab.domain.user;
 import chemlab.model.user.User;
 import chemlab.exceptions.domain.*;
 import org.springframework.web.multipart.MultipartFile;
-import shared.UserRegisterDto;
+import chemlab.model.shared.UserRegisterDto;
 
 import java.io.IOException;
 import java.util.Date;

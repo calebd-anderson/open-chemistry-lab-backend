@@ -1,10 +1,10 @@
 package chemlab.services;
 
-import auth.user.LoginAttemptService;
+import chemlab.auth.user.LoginAttemptService;
 import chemlab.domain.user.RegisteredUserService;
+import chemlab.infrastructure.email.EmailService;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.user.RegisteredUserServiceImpl;
-import infrastructure.email.EmailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

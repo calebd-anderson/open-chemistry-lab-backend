@@ -1,6 +1,6 @@
 package chemlab.repository;
 
-import auth.config.CorsProperties;
+import chemlab.auth.config.CorsProperties;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.game.QuestionAnswer;
 import chemlab.model.game.ReactionQuiz;

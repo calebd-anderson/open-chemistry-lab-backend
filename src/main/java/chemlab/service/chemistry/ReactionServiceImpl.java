@@ -9,14 +9,14 @@ import chemlab.model.game.ReactionQuiz;
 import chemlab.model.user.User;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import infrastructure.pubchem.PubChemApiService;
-import infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.infrastructure.pubchem.PubChemApiService;
+import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import shared.CreateQuizDto;
+import chemlab.model.shared.CreateQuizDto;
 
 import java.time.Instant;
 import java.util.List;

@@ -1,6 +1,7 @@
 package chemlab.controllers.integration;
 
-import auth.jwt.JwtTokenProvider;
+import chemlab.auth.jwt.JwtTokenProvider;
+import chemlab.controller.api.game.QuizController;
 import chemlab.domain.game.QuizService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.flashcard.FlashcardRepository;
@@ -17,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
-import presentation.controllers.api.game.QuizController;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = QuizController.class)

@@ -1,6 +1,6 @@
 package chemlab.repository.chemistry;
 
-import auth.config.CorsProperties;
+import chemlab.auth.config.CorsProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

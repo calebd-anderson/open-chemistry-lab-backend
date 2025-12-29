@@ -1,9 +1,9 @@
 package chemlab.exceptions;
 
-import auth.http.HttpResponse;
+import chemlab.auth.http.HttpResponse;
 import chemlab.exceptions.domain.*;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.webmvc.error.ErrorController;

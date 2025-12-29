@@ -4,6 +4,7 @@ import chemlab.domain.game.QuizService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.game.QuestionAnswer;
 import chemlab.model.game.ReactionQuiz;
+import chemlab.model.shared.CreateQuizDto;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.quiz.QuizRepository;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import shared.CreateQuizDto;
 
 import java.util.HashMap;
 import java.util.List;
