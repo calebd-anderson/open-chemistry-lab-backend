@@ -21,11 +21,12 @@ public class ElementRepoImpl implements ElementRepository {
     public List<Element> findAll() throws FailedToLoadPTException {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            return mapper.readValue(pTableData, new TypeReference<>() {
-            });
+            InputStream pTableData = Element.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
+            return mapper.readValue(pTableData, new TypeReference<>() {});
         } catch (IOException e) {
             throw new FailedToLoadPTException(PERIODIC_TABLE_PATH + " not found.");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
