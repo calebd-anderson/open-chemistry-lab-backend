@@ -1,6 +1,7 @@
 package chemlab.auth.jwt;
 
 import chemlab.auth.config.SecurityConstants;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,8 +59,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 } else {
                     SecurityContextHolder.clearContext();
                 }
-            } catch (Exception e) {
-                log.debug("Authorization: {}; invalid.", authorizationHeader);
+            } catch (TokenExpiredException e) {
+                log.warn("Authorization expired: {}.", authorizationHeader);
+                SecurityContextHolder.clearContext();
+            }
+            catch (Exception e) {
+                log.debug("Authorization invalid: {} .", authorizationHeader);
                 SecurityContextHolder.clearContext();
                 throw new ServletException(e);
             }
