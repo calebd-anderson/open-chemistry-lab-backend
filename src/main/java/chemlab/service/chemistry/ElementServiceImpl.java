@@ -23,7 +23,7 @@ public class ElementServiceImpl implements ElementService {
     }
 
     public List<Element> getAllElements() throws FailedToLoadPTException {
-        log.info("populating periodic table");
+        log.trace("populating periodic table");
         return elmRepo.findAll();
     }
 
@@ -31,5 +31,4 @@ public class ElementServiceImpl implements ElementService {
     public Element getElementBySymbol(String symbol) {
         return elmRepo.findElementBySymbol(symbol);
     }
-
 }
