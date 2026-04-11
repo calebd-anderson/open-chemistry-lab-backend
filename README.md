@@ -66,7 +66,7 @@ sops updatekeys src/main/resources/application.enc.yml
 ```
 sops encrypt src/main/resources/application.yml > src/main/resources/application.enc.yml
 ```
-## Frontend built with [Angular 20](https://angular.dev/)
+## Frontend built with [Angular](https://angular.dev/)
 - https://github.com/calebd-anderson/open-chemistry-lab-frontend
 
 ## Credits
