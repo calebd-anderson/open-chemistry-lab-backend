@@ -31,8 +31,8 @@ public class ReactionRepositoryTest {
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("spring.data.mongodb.database", () -> "testdb");
+        registry.add("spring.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("spring.mongodb.database", () -> "testdb");
 //        registry.add("spring.data.mongodb.auto-index-creation", () -> true);
     }
 
