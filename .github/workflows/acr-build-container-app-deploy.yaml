@@ -68,7 +68,7 @@ jobs:
 
       - name: 'Purge old images from ACR'
         run: |
-          az acr run --registry ${{ secrets.registry }} --cmd "acr purge --filter '*:.*' --ago 0d --keep 10 --untagged" /dev/null
+          az acr run --registry ${{ secrets.registry }} --cmd "acr purge --filter '*:.*' --ago 0d --keep 5 --untagged" /dev/null
 
   deploy:
     runs-on: ubuntu-latest
