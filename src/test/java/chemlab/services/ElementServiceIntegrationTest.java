@@ -26,12 +26,12 @@ class ElementServiceIntegrationTest {
         assertEquals(118, allElements.size());
     }
 
-//	@Test
-//	@DisplayName("should equal H (hydrogen)")
-//	void testFindBySymbol() {
-//		Element elm = elmService.getElementBySymbol("H");
-//		assertEquals(elm.getSymbol(), "H");
-//	}
+	@Test
+	@DisplayName("should equal H (hydrogen)")
+	void testFindBySymbol() {
+		Element elm = elmService.getElementBySymbol("H");
+		assertEquals("H", elm.getSymbol());
+	}
 
     @Test
     @DisplayName("should fail to find element by symbol D")
