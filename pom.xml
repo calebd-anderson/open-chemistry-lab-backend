@@ -140,9 +140,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.4</version>
                 <configuration>
-                    <argLine>
-                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
-                    </argLine>
+                    <!--
+                      Disable Class Data Sharing (CDS) when launching the test JVM.
+                      Without this option the JVM may print a warning like:
+                      "Sharing is only supported for boot loader classes because bootstrap classpath has been appended"
+                      This happens when a javaagent appends to the bootstrap classpath; disabling CDS suppresses the warning.
+                    -->
+                    <argLine>-Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
                 </configuration>
             </plugin>
 
@@ -151,9 +155,11 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.5.4</version>
                 <configuration>
-                    <argLine>
-                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
-                    </argLine>
+                    <!--
+                      See note above: disable CDS to avoid bootstrap classpath warnings when loading Mockito as a javaagent.
+                      Mockito agent instructions: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+                    -->
+                    <argLine>-Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
                 </configuration>
             </plugin>
 
