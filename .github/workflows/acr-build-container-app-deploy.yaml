@@ -26,7 +26,7 @@ jobs:
           - 27017:27017
     steps:
       - name: Checkout source code 
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup SOPS
         uses: nhedger/setup-sops@v2
@@ -34,7 +34,7 @@ jobs:
           version: 3.7.3
 
       - name: Setup age
-        uses: alessiodionisi/setup-age-action@v1.3.0
+        uses: alessiodionisi/setup-age-action@v1.4.0
 
       - name: Run SOPS
         env:
@@ -52,7 +52,7 @@ jobs:
         run: mvn spring-boot:build-image -Dspring.profiles.active=test
 
       - name: 'Login via Azure CLI'
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
@@ -78,7 +78,7 @@ jobs:
 
     steps:
       - name: 'Login via Azure CLI'
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
