@@ -284,23 +284,14 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
 
     private void saveProfileImg(User user, MultipartFile profileImg) throws IOException, NotAnImageFileException {
         if (profileImg != null) {
-            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE).contains(profileImg.getContentType())) {
-                throw new NotAnImageFileException(profileImg.getOriginalFilename() + " is not an image file. Please upload an image.");
-            }
-            Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-            if (!Files.exists(userFolder)) {
-                Files.createDirectories(userFolder);
-                log.info("{}", DIRECTORY_CREATED + userFolder);
-            }
             // calculate file hash
             String md5Hash = createMD5HashImg(profileImg);
             String filename = md5Hash + "_" + user.getUsername();
-//			Files.deleteIfExists(Paths.get(userFolder + filename + DOT + JPG_EXTENSION));
             log.info("image hash: {}", md5Hash);
             String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + DOT + JPG_EXTENSION, profileImg.getInputStream());
             user.setProfileImgUrl(generateProfileImgUrl(imageBlobPath));
             userRepo.save(user);
-            log.info("{}", FILE_SAVED_IN_FILE_SYSTEM + profileImg.getOriginalFilename());
+            log.trace("Successfully updated user profile image.");
         }
     }
 

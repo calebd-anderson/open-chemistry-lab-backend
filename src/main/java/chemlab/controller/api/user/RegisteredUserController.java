@@ -163,7 +163,7 @@ public class RegisteredUserController extends ExceptionHandling {
         }
 
         String extension = getFileExtension(file.getOriginalFilename());
-        if (!extension.matches(".*\\.(jpg|jpeg|png|gif|webp)$")) {
+        if (!extension.matches("(jpg|jpeg|png|gif|webp)$")) {
             throw new NotAnImageFileException(parameterName + " has an invalid file type.");
         }
     }
