@@ -39,7 +39,7 @@ jobs:
       - name: Run SOPS
         env:
           SOPS_AGE_KEY: ${{ secrets.AGE_SECRET_KEY }}
-        run: sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
+        run: sops -d src/main/resources/application-prod.enc.yml > src/main/resources/application-prod.yml
 
       - name: Set up Java version
         uses: actions/setup-java@v5

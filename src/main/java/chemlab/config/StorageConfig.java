@@ -18,7 +18,7 @@ public class StorageConfig {
     private AzureBlobStorage azureBlobStorage;
 
     @Bean(name = "imageStorageService")
-    @Profile("dev")
+    @Profile("!prod")
     public ImageStorageService localImageStorage(
             @Value("${storage.local.path:storage/uploads}") String storagePath
     ) throws IOException {
@@ -26,7 +26,7 @@ public class StorageConfig {
     }
 
     @Bean(name = "imageStorageService")
-    @Profile("!dev")
+    @Profile("prod")
     public ImageStorageService imageStorage() {
         if (azureBlobStorage != null) {
             return azureBlobStorage;

@@ -50,9 +50,9 @@ Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.
 - download/install
   - [sops](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age)
   - [age](https://github.com/FiloSottile/age?tab=readme-ov-file#installation)
-#### decrypt secrets
+#### decrypt prod secrets
 ```
-$ sops -d src/main/resources/application.enc.yml > src/main/resources/application.yml
+$ sops -d src/main/resources/application-prod.enc.yml > src/main/resources/application-prod.yml
 ```
 #### add recipient
 1. generate an age key pair: `age-keygen -o key.txt`
@@ -60,11 +60,11 @@ $ sops -d src/main/resources/application.enc.yml > src/main/resources/applicatio
 3. add the `age` public key to `.sops.yaml`
 4. run `updatekeys`:
 ```
-sops updatekeys src/main/resources/application.enc.yml
+sops updatekeys src/main/resources/application-prod.enc.yml
 ```
-#### encrypt secrets after changes to `application.yml`
+#### encrypt prod secrets after changes to `application-prod.yml`
 ```
-sops encrypt src/main/resources/application.yml > src/main/resources/application.enc.yml
+sops encrypt src/main/resources/application-prod.yml > src/main/resources/application-prod.enc.yml
 ```
 ## Frontend built with [Angular](https://angular.dev/)
 - https://github.com/calebd-anderson/open-chemistry-lab-frontend
