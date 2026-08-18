@@ -39,3 +39,6 @@ src/main/resources/application-local.yml
 
 ### encrypted files ####
 src/main/resources/application.yml
+
+# dev storage
+storage

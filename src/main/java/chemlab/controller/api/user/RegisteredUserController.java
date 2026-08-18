@@ -6,8 +6,10 @@ import chemlab.auth.user.RegisteredUserPrincipal;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.ExceptionHandling;
 import chemlab.exceptions.domain.*;
-import chemlab.model.user.User;
 import chemlab.infrastructure.robohash.RoboHashService;
+import chemlab.model.shared.UserLoginDto;
+import chemlab.model.shared.UserRegisterDto;
+import chemlab.model.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -22,17 +24,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import chemlab.model.shared.UserLoginDto;
-import chemlab.model.shared.UserRegisterDto;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static chemlab.auth.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/user")
@@ -87,6 +88,12 @@ public class RegisteredUserController extends ExceptionHandling {
                                            @RequestParam("isNonLocked") String isNonLocked,    // boolean
                                            @RequestParam("role") String role,
                                            @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        if (profileImg != null) {
+            validateMultipartFile("profileImg", profileImg);
+            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+                throw new NotAnImageFileException("Invalid content type for profile image.");
+            }
+        }
         User newUser = userService.addNewUser(firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(newUser, OK);
@@ -102,6 +109,12 @@ public class RegisteredUserController extends ExceptionHandling {
                                        @RequestParam("isActive") String isActive,            // boolean
                                        @RequestParam("isNonLocked") String isNonLocked,    // boolean
                                        @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        if (profileImg != null) {
+            validateMultipartFile("profileImg", profileImg);
+            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+                throw new NotAnImageFileException("Invalid content type for profile image.");
+            }
+        }
         User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(updatedUser, OK);
@@ -117,15 +130,52 @@ public class RegisteredUserController extends ExceptionHandling {
                                      @RequestParam("isActive") String isActive,               // boolean
                                      @RequestParam("isNonLocked") String isNonLocked,         // boolean
                                      @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        if (profileImg != null) {
+            validateMultipartFile("profileImg", profileImg);
+            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+                throw new NotAnImageFileException("Invalid content type for profile image.");
+            }
+        }
         User updatedUser = userService.editUser(userId, firstName, lastName, username, email, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
     @PostMapping("/updateprofileimg")
-    public ResponseEntity<User> update(@RequestParam("username") String username, @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+    public ResponseEntity<User> update(@RequestParam("username") String username,
+                                       @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        validateMultipartFile("profileImg", profileImg);
+        // Check file size (max 5MB)
+        if (profileImg.getSize() > 5 * 1024 * 1024) {
+            throw new NotAnImageFileException("Profile image is too large. Maximum size is 5MB.");
+        }
+        // Validate content type is a real image (not just saying it's a jpg but being a shell script)
+        if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+            throw new NotAnImageFileException("Invalid content type for profile image.");
+        }
         User user = userService.updateProfileImage(username, profileImg);
         return new ResponseEntity<>(user, OK);
+    }
+
+    private void validateMultipartFile(String parameterName, MultipartFile file) throws NotAnImageFileException {
+        if (file == null || file.isEmpty()) {
+            return; // Let caller handle empty case
+        }
+
+        String extension = getFileExtension(file.getOriginalFilename());
+        if (!extension.matches(".*\\.(jpg|jpeg|png|gif|webp)$")) {
+            throw new NotAnImageFileException(parameterName + " has an invalid file type.");
+        }
+    }
+
+    private String getFileExtension(String filename) {
+        if (filename != null) {
+            int lastDot = filename.lastIndexOf('.');
+            if (lastDot > 0 && lastDot < filename.length() - 1) {
+                return filename.substring(lastDot + 1).toLowerCase();
+            }
+        }
+        return "";
     }
 
     // validate
