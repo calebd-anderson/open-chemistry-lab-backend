@@ -56,7 +56,7 @@ $ sops -d src/main/resources/application.enc.yml > src/main/resources/applicatio
 ```
 #### add recipient
 1. generate an age key pair: `age-keygen -o key.txt`
-2. add the key pair to [a location where sops will find it](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age)
+2. add the key pair to [a location where sops will find it](https://getsops.io/docs/usage/identities/age/)
 3. add the `age` public key to `.sops.yaml`
 4. run `updatekeys`:
 ```
