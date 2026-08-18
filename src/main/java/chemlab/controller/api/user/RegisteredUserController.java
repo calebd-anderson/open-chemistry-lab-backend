@@ -160,7 +160,7 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)
-    public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) {
+    public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) throws IOException {
         return userService.getProfileImage(userId, fileName);
     }
 

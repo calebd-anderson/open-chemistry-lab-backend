@@ -308,7 +308,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
         return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + blobPath).toUriString();
     }
 
-    public byte[] getProfileImage(String userId, String fileName) {
+    public byte[] getProfileImage(String userId, String fileName) throws IOException {
         String blobPath = userId + "/" + fileName;
         return imageStorageService.getImage(blobPath);
     }

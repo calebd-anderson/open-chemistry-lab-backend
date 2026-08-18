@@ -1,8 +1,6 @@
 package chemlab.infrastructure.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,13 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-@Service
 @Slf4j
 public class LocalFileSystemStorage implements ImageStorageService {
 
     private final Path storageLocation;
 
-    public LocalFileSystemStorage(@Value("${storage.local.path:storage/uploads}") String storagePath) throws IOException {
+    public LocalFileSystemStorage(String storagePath) throws IOException {
         this.storageLocation = Paths.get(storagePath).toAbsolutePath().normalize();
         Files.createDirectories(this.storageLocation);
         log.info("Local storage initialized at: {}", this.storageLocation);

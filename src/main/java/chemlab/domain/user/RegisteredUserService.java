@@ -49,7 +49,7 @@ public interface RegisteredUserService {
 
     void resetPassword(String email) throws EmailNotFoundException;
 
-    byte[] getProfileImage(String userId, String filename);
+    byte[] getProfileImage(String userId, String filename) throws IOException;
 
     User updateProfileImage(String username,
                             MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;

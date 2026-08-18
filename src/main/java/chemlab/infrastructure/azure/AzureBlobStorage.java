@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service
 @Slf4j
 public class AzureBlobStorage implements ImageStorageService {
     @Value("${azure.connectionString}")
@@ -23,7 +22,7 @@ public class AzureBlobStorage implements ImageStorageService {
     private String containerName;
 
     @Override
-    public String saveImage(String userId, String filename, InputStream img) throws IOException {
+    public String saveImage(String userId, String filename, InputStream img) {
         /* Create a new BlobServiceClient with a SAS Token */
         BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                 .endpoint(connection)
@@ -50,7 +49,8 @@ public class AzureBlobStorage implements ImageStorageService {
             /* Upload the file to the container */
             String blobName = userId + "/" + filename;
             BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-            blobClient.upload(img, null); // Use the overload that takes InputStream
+            // Using the version that works
+            blobClient.upload(img, 0);
             return blobName;
         } catch (BlobStorageException ex) {
             log.error(ex.getMessage());
@@ -72,7 +72,7 @@ public class AzureBlobStorage implements ImageStorageService {
                 .buildClient();
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            blobClient.downloadStream(outputStream);
+            blobClient.download(outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
