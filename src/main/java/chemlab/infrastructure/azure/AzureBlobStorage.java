@@ -1,5 +1,6 @@
 package chemlab.infrastructure.azure;
 
+import chemlab.infrastructure.storage.ImageStorageService;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.BlobErrorCode;
 import com.azure.storage.blob.models.BlobStorageException;
@@ -13,7 +14,7 @@ import java.io.InputStream;
 
 @Service
 @Slf4j
-public class AzureBlobStorage {
+public class AzureBlobStorage implements ImageStorageService {
     @Value("${azure.connectionString}")
     private String connection;
     @Value("${azure.sasToken}")
@@ -21,7 +22,8 @@ public class AzureBlobStorage {
     @Value("${azure.containerName}")
     private String containerName;
 
-    public String saveImage(String userId, String filename, InputStream img) {
+    @Override
+    public String saveImage(String userId, String filename, InputStream img) throws IOException {
         /* Create a new BlobServiceClient with a SAS Token */
         BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
                 .endpoint(connection)
@@ -48,7 +50,7 @@ public class AzureBlobStorage {
             /* Upload the file to the container */
             String blobName = userId + "/" + filename;
             BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-            blobClient.upload(img);
+            blobClient.upload(img, null); // Use the overload that takes InputStream
             return blobName;
         } catch (BlobStorageException ex) {
             log.error(ex.getMessage());
@@ -60,6 +62,7 @@ public class AzureBlobStorage {
         }
     }
 
+    @Override
     public byte[] getImage(String blobName) {
         BlobClient blobClient = new BlobClientBuilder()
                 .endpoint(connection)
@@ -69,7 +72,7 @@ public class AzureBlobStorage {
                 .buildClient();
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            blobClient.download(outputStream);
+            blobClient.downloadStream(outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);

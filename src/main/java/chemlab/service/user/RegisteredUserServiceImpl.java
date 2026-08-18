@@ -7,7 +7,7 @@ import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.domain.*;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.infrastructure.azure.AzureBlobStorage;
+import chemlab.infrastructure.storage.ImageStorageService;
 import chemlab.infrastructure.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -54,7 +54,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     @Autowired
     private EmailService emailService;
     @Autowired
-    private AzureBlobStorage azureBlobStorage;
+    private ImageStorageService imageStorageService;
 
     @Override
     public User register(UserRegisterDto userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
@@ -297,7 +297,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
             String filename = md5Hash + "_" + user.getUsername();
 //			Files.deleteIfExists(Paths.get(userFolder + filename + DOT + JPG_EXTENSION));
             log.info("image hash: {}", md5Hash);
-            String imageBlobPath = azureBlobStorage.saveImage(user.getUserId(), filename + DOT + JPG_EXTENSION, profileImg.getInputStream());
+            String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + DOT + JPG_EXTENSION, profileImg.getInputStream());
             user.setProfileImgUrl(generateProfileImgUrl(imageBlobPath));
             userRepo.save(user);
             log.info("{}", FILE_SAVED_IN_FILE_SYSTEM + profileImg.getOriginalFilename());
@@ -310,7 +310,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
 
     public byte[] getProfileImage(String userId, String fileName) {
         String blobPath = userId + "/" + fileName;
-        return azureBlobStorage.getImage(blobPath);
+        return imageStorageService.getImage(blobPath);
     }
 
     private String createMD5HashImg(final MultipartFile input) {
