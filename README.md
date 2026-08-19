@@ -41,9 +41,13 @@
 docker build -t chemlab .
 docker run --rm -p 8080:8080 chemlab
 ```
-### Configure a local instance of `MongoDB`
-- download/install
-    - [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
+### Configure a local `MongoDB` instance 
+Download, install [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
+- MongoDB w/ Docker:
+```sh
+docker pull mongo:7.0.40-jammy
+docker run --name mongodb -p 27017:27017 -d mongo:7.0.40-jammy
+```
 ### Testing
 Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.com/). A container runtime will need to be present before running repository tests.
 ### Secrets kept using `sops` and `age`

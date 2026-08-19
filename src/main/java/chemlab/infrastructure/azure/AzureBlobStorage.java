@@ -7,12 +7,15 @@ import com.azure.storage.blob.models.BlobStorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
+@Service
+@Profile("prod")
 public class AzureBlobStorage implements ImageStorageService {
     @Value("${azure.connectionString}")
     private String connection;
