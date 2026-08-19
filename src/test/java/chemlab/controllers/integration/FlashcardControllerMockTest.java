@@ -75,7 +75,7 @@ class FlashcardControllerMockTest {
         when(flashcardService.list())
                 .thenReturn(List.of(new Flashcard("is this correct?", "no")));
 
-        mockMvc.perform(get("/flashcards/all")
+        mockMvc.perform(get("/api/flashcards/all")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8"))
                 .andExpect(status().isOk())

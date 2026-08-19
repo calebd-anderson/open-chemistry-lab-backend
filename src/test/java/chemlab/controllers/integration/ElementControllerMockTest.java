@@ -31,12 +31,20 @@ class ElementControllerMockTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private org.springframework.context.ApplicationContext applicationContext;
+
     @MockitoBean
     private ElementServiceImpl elmServiceMock;
     @MockitoBean
     private CorsProperties corsProperties;
 
     private MockMvc mockMvc;
+
+    @Test
+    public void testCheckControllerExists() {
+        assertThat(applicationContext.containsBean("elementViewController")).isTrue();
+    }
 
     @BeforeEach
     public void setUp() {
@@ -62,7 +70,7 @@ class ElementControllerMockTest {
     public void testList() throws Exception {
         assertThat(this.elmServiceMock).isNotNull();
         assertThat(this.mockMvc).isNotNull();
-        mockMvc.perform(get("/elements/list")
+        mockMvc.perform(get("/api/elements/list")
                         .header("Authorization", "Bearer null")
                         .header("Access-Control-Request-Method", "GET")
 //                        .header("Origin", "http://localhost:4200/")

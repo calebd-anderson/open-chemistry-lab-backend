@@ -55,21 +55,21 @@ public class RegisteredUserControllerMockTest {
     @WithMockUser(roles = "USER", authorities = {"user:read", "user:create", "user:delete"})
     @DisplayName("role USER not authorized enumerate all users")
     public void enumerateUsersFail() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/list")).andExpect(status().isUnauthorized()).andExpect(authenticated());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/list")).andExpect(status().isUnauthorized()).andExpect(authenticated());
     }
 
     @Test
     @WithMockUser(authorities = {"user:read", "user:create", "user:update"})
     @DisplayName("authority user:update is able to enumerate all users")
     public void enumerateUsersSuccess() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/list")).andExpect(status().isOk()).andExpect(authenticated());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/list")).andExpect(status().isOk()).andExpect(authenticated());
     }
 
     @Test
     @WithMockUser(authorities = "user:update")
     @DisplayName("enumerate all users contains result")
     void shouldReturnAllUsers() throws Exception {
-        this.mockMvc.perform(get("/user/list").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(content().contentType("application/json")).andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1)).andExpect(MockMvcResultMatchers.jsonPath("$[0].username").value("jimbo")).andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("jimbo@mail.com")).andDo(print());
+        this.mockMvc.perform(get("/api/user/list").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(content().contentType("application/json")).andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(1)).andExpect(MockMvcResultMatchers.jsonPath("$[0].username").value("jimbo")).andExpect(MockMvcResultMatchers.jsonPath("$[0].email").value("jimbo@mail.com")).andDo(print());
         verify(registeredUserService).getUsers();
     }
 }

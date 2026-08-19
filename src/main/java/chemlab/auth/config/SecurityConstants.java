@@ -10,6 +10,6 @@ public class SecurityConstants {
     public static final String JWT_TOKEN_HEADER = "Jwt-Token";
     public static final String TOKEN_CANNOT_BE_VERIFIED = "cannot be verified";
     // array of open/public routes
-    public static final String[] PUBLIC_URLS = {"/", "/styles/**", "/elements/**", "/user/login", "/user/register", "/user/image/**", "/compound/validate/**"};
+    public static final String[] PUBLIC_URLS = {"/", "/elements", "/styles/**", "/api/elements/**", "/api/user/login", "/api/user/register", "/api/user/image/**", "/api/compound/validate/**"};
     // public static final String[] PUBLIC_URLS = {"**"};
 }
