@@ -1,0 +1,90 @@
+# ============================================================================
+# LOCAL DEVELOPMENT OVERRIDES - EXAMPLE/TEMPLATE
+# ============================================================================
+# IMPORTANT: This is an EXAMPLE file tracked in git to help team members.
+#
+# TO USE THIS FILE:
+#   1. Copy this file: cp application-local.yml.example application-local.yml
+#   2. Edit application-local.yml with YOUR local settings
+#   3. application-local.yml is in .gitignore - your changes won't be committed
+#
+# WHEN TO USE LOCAL OVERRIDES:
+#   - Different MongoDB location (remote host, Docker)
+#   - Custom ports
+#   - Local services (mail, storage, etc.)
+#   - Enabling extra logging for debugging
+#   - Alternative frontend origins
+#
+# Profile activation:
+#   Spring automatically loads "application-dev.yml" + "application-local.yml"
+#   Order of precedence: application-local.yml > application-dev.yml > application.yml
+# ============================================================================
+
+# ---- EXAMPLE 1: Remote MongoDB Host ----
+# Uncomment and modify if your MongoDB is not on localhost:
+# spring:
+#   mongodb:
+#     uri: mongodb://192.168.1.100:27017
+#     database: chem-lab-dev
+
+# ---- EXAMPLE 2: Docker MongoDB ----
+# spring:
+#   mongodb:
+#     uri: mongodb://host.docker.internal:27017
+#     database: chem-lab-dev
+
+# ---- EXAMPLE 3: Custom Server Port ----
+# server:
+#   port: 9090
+
+# ---- EXAMPLE 4: Enable Debug Logging ----
+# logging:
+#   level:
+#     root: "DEBUG"
+#     org.springframework.data.mongodb: "DEBUG"
+
+# ---- EXAMPLE 5: Additional CORS Origins ----
+# web:
+#   cors:
+#     allowed-origins:
+#       - "http://localhost:4200"
+#       - "http://192.168.1.50:4200"
+#       - "http://mylocal.dev:4200"
+#     max-age: 7200
+
+# ---- EXAMPLE 6: Azure Storage Emulator (Azurite) ----
+# azure:
+#   connectionString: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OtQ2Ejh60w==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
+#   containerName: uploads
+
+# ---- EXAMPLE 7: JWT Secret Override ----
+# jwt:
+#   secret: "your-local-test-secret-here"
+
+# ---- EXAMPLE 8: Composite Example - Remote Dev Environment ----
+# spring:
+#   mongodb:
+#     uri: mongodb://dev-mongo.company.internal:27017
+#     database: chem-lab-dev
+# server:
+#   port: 8090
+# logging:
+#   level:
+#     root: "INFO"
+#     chemlab: "DEBUG"
+# web:
+#   cors:
+#     allowed-origins:
+#       - "http://localhost:4200"
+#       - "http://dev.local:4200"
+
+# ---- EXAMPLE 9: Local storage override (optional) ----
+# The application already defaults to a `storage/uploads` directory in the
+# project root when `storage.local.path` is NOT set. You only need to set
+# this property if you want a different location on your machine.
+#
+# storage:
+#   local:
+#     # Absolute or project-root-relative path. If omitted, default is
+#     # "storage/uploads" and no configuration is required.
+#     path: "C:/Users/you/my-uploads"   # or "storage/uploads" (relative)

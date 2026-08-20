@@ -1,3 +1,52 @@
+# ============================================================================
+# TEST ENVIRONMENT CONFIGURATION
+# ============================================================================
+# This file contains test-specific configuration for:
+#   - Unit tests (JUnit)
+#   - Integration tests
+#   - CI/CD pipeline testing
+#   - Test containers/test databases
+#
+# This file is tracked in git - safe to commit.
+# ============================================================================
+
+jwt:
+  secret: "test-secret-key-unsafe"
+
 spring:
   mongodb:
-    database: test
+    # Use test database
+    database: chem-lab-test
+    # Can use MongoDB test containers if configured
+  data:
+    mongodb:
+      # Auto-index during tests for quick setup
+      auto-index-creation: true
+
+logging:
+  level:
+    root: "WARN"
+    org.springframework: "INFO"
+    chemlab: "INFO"
+
+server:
+  port: 0  # Random port for test isolation
+
+# Minimal CORS for tests
+web:
+  cors:
+    allowed-origins:
+      - "http://localhost:4200"
+    allowed-methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+    allow-credentials: false
+
+# Disable some management endpoints for tests
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"

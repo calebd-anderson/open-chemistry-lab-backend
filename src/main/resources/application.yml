@@ -1,2 +1,60 @@
+# ============================================================================
+# SPRING BOOT APPLICATION CONFIGURATION - BASE (COMMON DEFAULTS)
+# ============================================================================
+# This file contains defaults for ALL profiles (dev, prod, test, local)
+# Profile-specific overrides are in: application-{profile}.yml
+#
+# PROFILE SELECTION:
+#   - Development:  application-dev.yml (tracked in git)
+#   - Production:   application-prod.enc.yml (encrypted in git)
+#   - Testing:      application-test.yml (tracked in git)
+#   - Local Dev:    application-local.yml (NOT tracked - .gitignore)
+#
+# Runtime profile activation:
+#   java -jar app.jar --spring.profiles.active=prod
+#   SPRING_PROFILES_ACTIVE=dev
+# ============================================================================
+
+# Default JWT Secret (UNSAFE - override in all environments!)
 jwt:
-  secret: 0000000000
+  secret: "${JWT_SECRET:0000000000}"
+
+# Spring Framework Defaults
+spring:
+  application:
+    name: chemlab
+  # MongoDB configuration (override in profile-specific files)
+  data:
+    mongodb:
+      auto-index-creation: false  # Override to true in dev/test only
+
+  # Logging defaults
+logging:
+  level:
+    root: "INFO"
+    org.springframework: "INFO"
+    chemlab: "INFO"
+
+# Server configuration defaults
+#server:
+#  servlet:
+#    context-path: /api
+
+# CORS defaults (very restrictive - override for each environment)
+web:
+  cors:
+    allowed-origins: []
+    allowed-methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allow-credentials: false
+
+# Actuator for health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"

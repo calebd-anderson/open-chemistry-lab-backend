@@ -35,9 +35,14 @@ build/
 .vscode/
 
 ### local configuration ###
+# Personal developer overrides - never commit
 src/main/resources/application-local.yml
+# But DO commit the example template
+!src/main/resources/application-local.yml.example
 
 ### encrypted files ####
+# Production config is encrypted with SOPS before commit
+# Only the .enc version should be in git
 src/main/resources/application-prod.yml
 
 # local storage
