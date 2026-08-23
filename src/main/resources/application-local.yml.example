@@ -54,8 +54,8 @@
 
 # ---- EXAMPLE 6: Azure Storage Emulator (Azurite) ----
 # azure:
-#   connectionString: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OtQ2Ejh60w==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
 #   containerName: uploads
+#   storageAccountName: my_account_name
 
 # ---- EXAMPLE 7: JWT Secret Override ----
 # jwt:

@@ -266,7 +266,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     }
 
     private String getTemporaryProfileImageUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(DEFAULT_USER_IMAGE_PATH + username).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/" + DEFAULT_USER_IMAGE_PATH + username).toUriString();
     }
 
     private String generateUserId() {
@@ -296,7 +296,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     }
 
     private String generateProfileImgUrl(String blobPath) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PATH + blobPath).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/api" + USER_IMAGE_PATH + blobPath).toUriString();
     }
 
     public byte[] getProfileImage(String userId, String fileName) throws IOException {

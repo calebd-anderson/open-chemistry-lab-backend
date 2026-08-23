@@ -36,8 +36,7 @@ logging:
 #  pattern:
 #    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
-#server:
-#  port: 8080
+# Spring default port is 8080, but you can override it in application-local.yml if needed.
 
 # Development-friendly CORS settings
 web:
@@ -82,3 +81,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+# storage:
+#   local:
+#     # Absolute or project-root-relative path. If omitted, default is
+#     # "storage/uploads" and no configuration is required.
+#     path: "C:/Users/you/my-uploads"   # or "storage/uploads" (relative)

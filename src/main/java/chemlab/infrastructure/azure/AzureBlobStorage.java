@@ -1,8 +1,12 @@
 package chemlab.infrastructure.azure;
 
 import chemlab.infrastructure.storage.ImageStorageService;
-import com.azure.storage.blob.*;
-import com.azure.storage.blob.models.BlobErrorCode;
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
@@ -10,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,68 +22,64 @@ import java.io.InputStream;
 @Service
 @Profile("prod")
 public class AzureBlobStorage implements ImageStorageService {
-    @Value("${azure.connectionString}")
-    private String connection;
-    @Value("${azure.sasToken}")
-    private String sasToken;
+    private final BlobServiceClient blobServiceClient;
+
     @Value("${azure.containerName}")
     private String containerName;
 
+    public AzureBlobStorage(@Value("${azure.storageAccountName}") String storageAccountName) {
+        DefaultAzureCredential credential =
+                new DefaultAzureCredentialBuilder().build();
+        String accountEndpoint = String.format("https://%1$s.blob.core.windows.net/", storageAccountName);
+        this.blobServiceClient = new BlobServiceClientBuilder()
+                .endpoint(accountEndpoint)
+                .credential(credential)
+                .buildClient();
+    }
+
     @Override
     public String saveImage(String userId, String filename, InputStream img) {
-        /* Create a new BlobServiceClient with a SAS Token */
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .endpoint(connection)
-                .sasToken(sasToken)
-                .buildClient();
+        BlobContainerClient container =
+                blobServiceClient.getBlobContainerClient(containerName);
 
-        /* Create a new container client */
-        BlobContainerClient blobContainerClient = new BlobContainerClientBuilder()
-                .endpoint(connection)
-                .sasToken(sasToken)
-                .containerName(containerName)
-                .buildClient();
+        container.createIfNotExists();
+
+        String blobName = userId + "/" + filename;
+        BlobClient blobClient = container.getBlobClient(blobName);
 
         try {
-            blobContainerClient = blobServiceClient.createBlobContainer(containerName);
-        } catch (BlobStorageException ex) {
-            log.error(ex.getMessage());
-            // The container may already exist, so don't throw an error
-            if (!ex.getErrorCode().equals(BlobErrorCode.CONTAINER_ALREADY_EXISTS)) {
-                throw ex;
+            byte[] bytes = img.readAllBytes();
+            try (ByteArrayInputStream dataStream =
+                         new ByteArrayInputStream(bytes)) {
+                blobClient.upload(dataStream, bytes.length, true);
             }
-        }
-        try {
-            /* Upload the file to the container */
-            String blobName = userId + "/" + filename;
-            BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-            // Using the version that works
-            blobClient.upload(img, 0);
             return blobName;
-        } catch (BlobStorageException ex) {
-            log.error(ex.getMessage());
-            // throw if the blob already exists
-            if (ex.getErrorCode().equals(BlobErrorCode.BLOB_ALREADY_EXISTS)) {
-                throw ex;
-            }
-            throw ex;
+        } catch (IOException e) {
+            log.error("Failed to read image data for user {} and filename {}: {}", userId, filename, e.getMessage());
+            throw new RuntimeException("Failed to read image data", e);
+        } catch(BlobStorageException e) {
+            log.error("Failed to upload image to Azure Blob Storage for user {} and filename {}: {}", userId, filename, e.getMessage());
+            throw new RuntimeException("Failed to upload image to Azure Blob Storage", e);
         }
     }
 
     @Override
     public byte[] getImage(String blobName) {
-        BlobClient blobClient = new BlobClientBuilder()
-                .endpoint(connection)
-                .sasToken(sasToken)
-                .containerName(containerName)
-                .blobName(blobName)
-                .buildClient();
+        BlobContainerClient container =
+                blobServiceClient.getBlobContainerClient(containerName);
 
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        BlobClient blobClient = container.getBlobClient(blobName);
+
+        try (ByteArrayOutputStream outputStream =
+                     new ByteArrayOutputStream()) {
             blobClient.download(outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to download image for blob {}: {}", blobName, e.getMessage());
+            throw new RuntimeException("Failed to download image", e);
+        } catch (BlobStorageException e) {
+            log.error("Failed to download image from Azure Blob Storage for blob {}: {}", blobName, e.getMessage());
+            throw new RuntimeException("Failed to download image from Azure Blob Storage", e);
         }
     }
 }
