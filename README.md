@@ -82,5 +82,4 @@ This project was built with help from:
 - [RoboHash](https://robohash.org/)
   - temporary profile image generator
 - Package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
-  - yet not true onion architecture in terms of the actual dependency graph
 - <a href="https://www.flaticon.com/free-icons/chemistry" title="chemistry icons">Some chemistry icons created by Freepik - Flaticon</a>
