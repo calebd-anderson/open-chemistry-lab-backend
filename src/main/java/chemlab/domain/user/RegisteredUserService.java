@@ -4,6 +4,9 @@ import chemlab.model.user.User;
 import chemlab.exceptions.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 import chemlab.model.shared.UserRegisterDto;
+import chemlab.model.game.UserFlashcardDocument;
+import chemlab.model.chemistry.UserReactionDocument;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
 import java.util.Date;
@@ -55,4 +58,8 @@ public interface RegisteredUserService {
                             MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     void saveLastLogin(Date date, String username);
+
+    Page<UserFlashcardDocument> getUserFlashcards(String userId, int page, int size);
+
+    Page<UserReactionDocument> getUserReactions(String userId, int page, int size);
 }

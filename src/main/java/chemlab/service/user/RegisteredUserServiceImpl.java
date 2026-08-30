@@ -41,6 +41,15 @@ import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.MediaType.*;
 
+import chemlab.repository.chemistry.UserReactionRepository;
+import chemlab.repository.game.flashcard.UserFlashcardRepository;
+import chemlab.model.game.UserFlashcardDocument;
+import chemlab.model.chemistry.UserReactionDocument;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 @Service
 @Slf4j
 public class RegisteredUserServiceImpl implements RegisteredUserService, UserDetailsService {
@@ -55,6 +64,12 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     private EmailService emailService;
     @Autowired
     private ImageStorageService imageStorageService;
+
+    @Autowired
+    private UserReactionRepository userReactionRepo;
+
+    @Autowired
+    private UserFlashcardRepository userFlashcardRepo;
 
     @Override
     public User register(UserRegisterDto userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
@@ -329,5 +344,17 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
             hexText = "0".concat(hexText);
         }
         return hexText;
+    }
+
+    @Override
+    public Page<UserFlashcardDocument> getUserFlashcards(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(0, page), Math.max(1, size), Sort.by(Sort.Direction.DESC, "createdAt"));
+        return userFlashcardRepo.findByUserId(userId, pageable);
+    }
+
+    @Override
+    public Page<UserReactionDocument> getUserReactions(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(0, page), Math.max(1, size), Sort.by(Sort.Direction.DESC, "userDiscoveredWhen"));
+        return userReactionRepo.findByUserId(userId, pageable);
     }
 }
