@@ -196,21 +196,26 @@ public class RegisteredUserServiceImpl implements RegisteredUserService, UserDet
     }
 
     private User validateNewUsernameAndEmail(String currentUsername, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        User userByNewUsername = findUserByUsername(newUsername);
-        User userByNewEmail = findUserByEmail(newEmail);
+        // Only look up by newUsername/newEmail if they are provided to avoid unnecessary DB calls and NPEs
+        User userByNewUsername = StringUtils.isNotBlank(newUsername) ? findUserByUsername(newUsername) : null;
+        User userByNewEmail = StringUtils.isNotBlank(newEmail) ? findUserByEmail(newEmail) : null;
+
         if (StringUtils.isNotBlank(currentUsername)) {
+            // Update scenario: ensure the current user exists and any found user for the new
+            // username/email is either null or the same as the current user
             User currentUser = findUserByUsername(currentUsername);
             if (currentUser == null) {
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentUsername);
             }
-            if (userByNewUsername != null && !currentUser.getUsername().equals(userByNewUsername.getId())) {
+            if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null && !currentUser.getEmail().equals(userByNewEmail.getId())) {
+            if (userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
             return currentUser;
         } else {
+            // Create scenario: new username/email must not already exist
             if (userByNewUsername != null) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
