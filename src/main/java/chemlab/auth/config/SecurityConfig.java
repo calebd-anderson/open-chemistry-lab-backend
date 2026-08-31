@@ -43,11 +43,12 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             // "/api/v1/auth/**"
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/user/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
+//                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+//                .requestMatchers("/api/user/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
 //                    .hasAnyAuthority("user:update")
-                .requestMatchers(SecurityConstants.PUBLIC_URLS)
-                    .permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers(SecurityConstants.PUBLIC_URLS).permitAll()
+                    .requestMatchers("/api/auth/**").permitAll() // Allow access to auth endpoints
+                    .anyRequest().authenticated()
             ).anonymous(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

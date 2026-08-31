@@ -1,37 +1,22 @@
 package chemlab.controller.api.user;
 
-import chemlab.auth.http.HttpResponse;
-import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.auth.user.RegisteredUserPrincipal;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.exceptions.ExceptionHandling;
-import chemlab.exceptions.domain.*;
+import chemlab.exceptions.domain.EmailExistException;
+import chemlab.exceptions.domain.NotAnImageFileException;
+import chemlab.exceptions.domain.UserNotFoundException;
+import chemlab.exceptions.domain.UsernameExistException;
 import chemlab.infrastructure.robohash.RoboHashService;
-import chemlab.model.shared.UserLoginDto;
-import chemlab.model.shared.UserRegisterDto;
 import chemlab.model.user.User;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import static chemlab.auth.config.SecurityConstants.JWT_TOKEN_HEADER;
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.*;
 
@@ -39,44 +24,24 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/user")
 public class RegisteredUserController extends ExceptionHandling {
 
-    public static final String EMAIL_SENT = "Email with new password sent to: ";
-    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully.";
     private final RegisteredUserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
-
     private final RoboHashService roboHashService;
 
-    @Autowired
-    public RegisteredUserController(RegisteredUserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, RoboHashService roboHashService) {
+    public RegisteredUserController(RegisteredUserService userService, RoboHashService roboHashService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
         this.roboHashService = roboHashService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody UserLoginDto user, HttpServletRequest req) {
-        Authentication auth = authenticate(user.getUsername(), user.getPassword());
-        if (auth.isAuthenticated()) {
-            userService.saveLastLogin(new Date(), user.getUsername());
-            User loginUser = userService.findUserByUsername(user.getUsername());
-            RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser);
-            String issuer = ServletUriComponentsBuilder.fromRequestUri(req)
-                    .replacePath(null)
-                    .build()
-                    .toUriString();
-            HttpHeaders jwtHeader = getJwtHeader(userPrincipal, issuer);
-            return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterDto user) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        // might want validation
-        User newUser = userService.register(user);
-        return new ResponseEntity<>(newUser, CREATED);
+    @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getUsers();
+        return new ResponseEntity<>(users, OK);
+//		return ResponseEntity.ok().body(userService
+//				.getUsers()
+//				.stream()
+//				.map(mapper::toDao)
+//				.collect(Collectors.toList()));
     }
 
     @PostMapping("/add")
@@ -141,6 +106,13 @@ public class RegisteredUserController extends ExceptionHandling {
         return new ResponseEntity<>(updatedUser, OK);
     }
 
+    @DeleteMapping("/delete/{username}")
+    @PreAuthorize("hasAnyAuthority('user:delete')")
+    public ResponseEntity<String> deleteUser(@PathVariable("username") String username) throws IOException {
+        userService.deleteUser(username);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/updateprofileimg")
     public ResponseEntity<User> update(@RequestParam("username") String username,
                                        @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
@@ -185,31 +157,6 @@ public class RegisteredUserController extends ExceptionHandling {
         return new ResponseEntity<>(user, OK);
     }
 
-    @GetMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getUsers();
-        return new ResponseEntity<>(users, OK);
-//		return ResponseEntity.ok().body(userService
-//				.getUsers()
-//				.stream()
-//				.map(mapper::toDao)
-//				.collect(Collectors.toList()));
-    }
-
-    @GetMapping("/resetpassword/{email}")
-    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email) throws EmailNotFoundException {
-        userService.resetPassword(email);
-        return response(OK, EMAIL_SENT + email);
-    }
-
-    @DeleteMapping("/delete/{username}")
-    @PreAuthorize("hasAnyAuthority('user:delete')")
-    public ResponseEntity<HttpResponse> deleteUser(@PathVariable("username") String username) throws IOException {
-        userService.deleteUser(username);
-        return response(OK, USER_DELETED_SUCCESSFULLY);
-    }
-
     @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)
     public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) throws IOException {
         return userService.getProfileImage(userId, fileName);
@@ -219,25 +166,4 @@ public class RegisteredUserController extends ExceptionHandling {
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
         return roboHashService.getProfileImage(username);
     }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(),
-                message.toUpperCase()), httpStatus);
-    }
-
-    private Authentication authenticate(String username, String password) {
-        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-    }
-
-    private HttpHeaders getJwtHeader(RegisteredUserPrincipal userPrincipal, String issuer) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal, issuer));
-        return headers;
-    }
-}
-
-@Data
-class RoleToUserForm {
-    private String username;
-    private String roleName;
 }
