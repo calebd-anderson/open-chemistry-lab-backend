@@ -1,4 +1,4 @@
-package chemlab.repository.game.flashcard;
+package chemlab.repository.user;
 
 import chemlab.model.game.Flashcard;
 import org.springframework.data.mongodb.repository.MongoRepository;

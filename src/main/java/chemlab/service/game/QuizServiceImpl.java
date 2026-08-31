@@ -1,10 +1,10 @@
 package chemlab.service.game;
 
 import chemlab.domain.game.QuizService;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
 import chemlab.model.game.UserQuiz;
-import chemlab.model.shared.CreateQuizDto;
 import chemlab.model.user.User;
-import chemlab.repository.game.quiz.UserQuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,39 +18,33 @@ import java.util.List;
 public class QuizServiceImpl implements QuizService {
 
     @Autowired
-    private UserQuizRepository quizRepo;
-
-    @Autowired
     UserReactionRepository userReactionRepo;
 
     @Autowired
     RegisteredUserRepository userRepo;
 
-    public void createQuiz(CreateQuizDto quizDto, User user) {
-        String q1 = "What is the name of this molecule: " + quizDto.getFormula() + "?";
-        String a1 = quizDto.getReactionName();
+    private List<UserQuiz> generateQuizzes(String userId) {
+        User user = userRepo.findRegisteredUserByUserId(userId);
+        if (user != null) {
+            List<UserReaction> userReactions = userReactionRepo.findByUserId(userId);
+            List<UserQuiz> userQuizzes = new java.util.ArrayList<>();
+            for(UserReaction userReaction : userReactions) {
+                Reaction reaction = userReaction.getReaction();
 
-        String q2 = "What is the formula for " + quizDto.getReactionName() + "?";
-        String a2 = quizDto.getFormula();
+                String q1 = "What is the name of this molecule: " + reaction.getFormula() + "?";
+                String a1 = reaction.getTitle();
+                userQuizzes.add(new UserQuiz(q1, a1));
 
-        UserQuiz userQuiz1 = new UserQuiz();
-        UserQuiz userQuiz2 = new UserQuiz();
-
-        userQuiz1.setUserId(user.getUserId());
-        userQuiz2.setUserId(user.getUserId());
-
-        userQuiz1.setQuestion(q1);
-        userQuiz1.setAnswer(a1);
-
-        userQuiz2.setQuestion(q2);
-        userQuiz2.setAnswer(a2);
-
-        quizRepo.save(userQuiz1);
-        quizRepo.save(userQuiz2);
+                String q2 = "What is the formula for " + reaction.getTitle() + "?";
+                String a2 = reaction.getFormula();
+                userQuizzes.add(new UserQuiz(q2, a2));
+            }
+            return userQuizzes;
+        }
+        return new java.util.ArrayList<>(); // Return an empty list if user is not present
     }
 
     public List<UserQuiz> findQuizByUserId(String userId) {
-        List<UserQuiz> userQuizzes = quizRepo.findByUserId(userId);
-        return userQuizzes;
+        return generateQuizzes(userId);
     }
 }

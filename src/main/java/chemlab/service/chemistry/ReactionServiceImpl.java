@@ -7,8 +7,6 @@ import chemlab.infrastructure.pubchem.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
-import chemlab.model.game.UserQuiz;
-import chemlab.model.shared.CreateQuizDto;
 import chemlab.model.user.User;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
@@ -106,10 +104,6 @@ public class ReactionServiceImpl implements ReactionService {
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
             log.info("Saving the {} reaction with the user.", resultingReaction.getFormula());
             userReactionService.saveReactionWithUser(user.getUserId(), resultingReaction);
-            // create quiz with user
-            log.info("Creating the reaction quiz.");
-            CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
-            quizService.createQuiz(quizDto, user);
         }
         log.info("Finished validating input.");
         return resultingReaction;

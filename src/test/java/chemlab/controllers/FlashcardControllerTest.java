@@ -5,7 +5,7 @@ import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
 import chemlab.model.shared.FlashcardDto;
 import chemlab.model.user.User;
-import chemlab.repository.game.flashcard.FlashcardRepository;
+import chemlab.repository.user.FlashcardRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

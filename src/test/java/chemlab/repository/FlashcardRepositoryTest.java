@@ -2,7 +2,7 @@ package chemlab.repository;
 
 import chemlab.auth.config.CorsProperties;
 import chemlab.model.game.Flashcard;
-import chemlab.repository.game.flashcard.FlashcardRepository;
+import chemlab.repository.user.FlashcardRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
