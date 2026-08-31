@@ -85,10 +85,4 @@ class FlashcardControllerTest {
                 )).andExpect(status().isBadRequest());
         verifyNoInteractions(flashcardService);
     }
-
-//    @Test
-//    void returnsNotFoundWhenFlashcardDoesNotExist() throws Exception {
-//        when(flashcardService.findById(99L)).thenThrow(new FlashcardNotFoundException(99L));
-//        mockMvc.perform(get("/api/flashcards/99")).andExpect(status().isNotFound());
-//    }
 }

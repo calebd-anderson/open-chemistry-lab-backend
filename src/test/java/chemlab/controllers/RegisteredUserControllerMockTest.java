@@ -1,4 +1,4 @@
-package chemlab.controllers.integration;
+package chemlab.controllers;
 
 import chemlab.auth.config.CorsProperties;
 import chemlab.domain.user.RegisteredUserService;

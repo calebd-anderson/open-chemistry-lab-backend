@@ -1,6 +1,7 @@
-package chemlab.repository.chemistry;
+package chemlab.repository;
 
 import chemlab.model.chemistry.Reaction;
+import chemlab.repository.chemistry.ReactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
