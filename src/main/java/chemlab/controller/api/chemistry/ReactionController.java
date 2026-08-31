@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import chemlab.model.shared.ReactionDto;
+import chemlab.model.shared.ReactionRequest;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ReactionController {
     private ReactionService reactionService;
 
     @PostMapping(value = "validate")
-    public Reaction validate(@RequestBody ReactionDto payload) throws PugApiException {
+    public Reaction validate(@RequestBody ReactionRequest payload) throws PugApiException {
         Reaction reaction = new Reaction(payload.getMappedPayload());
         log.trace("Controller received formula: {}", reaction.getFormula());
         return reactionService.validateInput(reaction);

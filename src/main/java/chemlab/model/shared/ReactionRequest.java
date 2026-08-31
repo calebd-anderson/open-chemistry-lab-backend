@@ -1,5 +1,6 @@
 package chemlab.model.shared;
 
+import chemlab.model.chemistry.Element;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 
@@ -8,12 +9,12 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Data
-public class ReactionDto {
+public class ReactionRequest {
     private ArrayList<Element> elements;
     private String userId;
 
     @JsonCreator
-    public ReactionDto(ArrayList<Element> elements, String userId) {
+    public ReactionRequest(ArrayList<Element> elements, String userId) {
         this.elements = elements;
         this.userId = userId;
     }
@@ -28,17 +29,5 @@ public class ReactionDto {
             molecule.put(d.getSymbol(), d.getNumberOfAtoms());
         }
         return molecule;
-    }
-
-    @lombok.Data
-    public static class Element {
-        private String symbol;
-        private int numberOfAtoms;
-
-        @JsonCreator
-        public Element(String symbol, int numberOfAtoms) {
-            this.symbol = symbol;
-            this.numberOfAtoms = numberOfAtoms;
-        }
     }
 }

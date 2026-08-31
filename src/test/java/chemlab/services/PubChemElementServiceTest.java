@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
+import chemlab.model.chemistry.PubChemElement;
 import chemlab.repository.chemistry.ElementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class ElementServiceTest {
+class PubChemElementServiceTest {
 
     @Autowired
     private ElementService elmService;
@@ -28,11 +28,11 @@ class ElementServiceTest {
     @MockitoBean
     private ElementRepository elmRepo;
 
-    private Element elm;
+    private PubChemElement elm;
 
     @BeforeEach
     public void setupMock() {
-        elm = mock(Element.class);
+        elm = mock(PubChemElement.class);
     }
 
     @Test
@@ -45,18 +45,18 @@ class ElementServiceTest {
     @DisplayName("should list all elements")
     void testListAll() throws FailedToLoadPTException {
         // Arrange
-        Element elm1 = new Element();
+        PubChemElement elm1 = new PubChemElement();
         elm1.setAtomicNumber("1");
         elm1.setAtomicMass("4.5");
-        Element elm2 = new Element();
+        PubChemElement elm2 = new PubChemElement();
         elm2.setAtomicNumber("2");
         elm2.setAtomicMass("10.3");
         // define what will happen
         when(elmRepo.findAll()).thenReturn(asList(elm1, elm2));
         // Act
-        List<Element> allElements = elmService.getAllElements();
+        List<PubChemElement> allPubChemElements = elmService.getAllElements();
         // Assert
-        assertThat(allElements).containsExactly(elm1, elm2);
+        assertThat(allPubChemElements).containsExactly(elm1, elm2);
         verify(elmRepo).findAll();
     }
 
@@ -64,11 +64,11 @@ class ElementServiceTest {
     @DisplayName("should find Element with symbol of H")
     void testFindBySymbol() {
         // Arrange
-        Element testElm = new Element();
+        PubChemElement testElm = new PubChemElement();
         testElm.setSymbol("H");
         when(elmRepo.findElementBySymbol("H")).thenReturn(testElm);
         // Act
-        Element actualElm = elmService.getElementBySymbol("H");
+        PubChemElement actualElm = elmService.getElementBySymbol("H");
         // Assert
         assertEquals(testElm.getSymbol(), actualElm.getSymbol());
         verify(elmRepo).findElementBySymbol("H");

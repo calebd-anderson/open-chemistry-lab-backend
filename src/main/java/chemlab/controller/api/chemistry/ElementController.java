@@ -1,9 +1,8 @@
-// the controller class has model view features, end-point config, and error handling
 package chemlab.controller.api.chemistry;
 
+import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
-import chemlab.service.chemistry.ElementServiceImpl;
+import chemlab.model.chemistry.PubChemElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,15 +16,15 @@ import java.util.List;
 public class ElementController {
 
     @Autowired
-    private ElementServiceImpl elmService;
+    private ElementService elmService;
 
     @GetMapping(value = "/list")
-    public List<Element> list() throws FailedToLoadPTException {
+    public List<PubChemElement> list() throws FailedToLoadPTException {
         return elmService.getAllElements();
     }
 
     @GetMapping("/symbol/{symbol}")
-    public Element findElementBySymbol(@PathVariable("symbol") String symbol) {
+    public PubChemElement findElementBySymbol(@PathVariable("symbol") String symbol) {
         return elmService.getElementBySymbol(symbol);
     }
 }

@@ -1,4 +1,4 @@
-package chemlab.controllers;
+package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.controller.api.game.QuizController;
@@ -35,11 +35,6 @@ public class QuizControllerTests {
     @Test
     void shouldReturnUserQuizzes() throws Exception {
         // Arrange
-        HashMap<String, Integer> elements = new HashMap<>();
-        elements.put("H", 2);
-        elements.put("O", 1);
-        Reaction r1 = new Reaction(elements);
-
         UserQuiz userQuiz = new UserQuiz("Is this correct?", "no");
 
         when(quizService.findQuizByUserId("12345"))

@@ -1,7 +1,7 @@
 package chemlab.repository.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
+import chemlab.model.chemistry.PubChemElement;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ public class ElementRepoImpl implements ElementRepository {
     private final String PERIODIC_TABLE_PATH = "static/data/all_elements.json";
 
     @Override
-    public List<Element> findAll() throws FailedToLoadPTException {
+    public List<PubChemElement> findAll() throws FailedToLoadPTException {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            InputStream pTableData = Element.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
+            InputStream pTableData = PubChemElement.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
             return mapper.readValue(pTableData, new TypeReference<>() {});
         } catch (IOException e) {
             throw new FailedToLoadPTException(PERIODIC_TABLE_PATH + " not found.");
@@ -31,16 +31,16 @@ public class ElementRepoImpl implements ElementRepository {
     }
 
     @Override
-    public Element findElementBySymbol(String symbol) {
+    public PubChemElement findElementBySymbol(String symbol) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            List<Element> pt = mapper.readValue(pTableData, new TypeReference<>() {
+            List<PubChemElement> pt = mapper.readValue(pTableData, new TypeReference<>() {
             });
             // lame efficiency search
-            for (Element element : pt) {
-                if (element.getSymbol().equalsIgnoreCase(symbol)) {
-                    return element;
+            for (PubChemElement pubChemElement : pt) {
+                if (pubChemElement.getSymbol().equalsIgnoreCase(symbol)) {
+                    return pubChemElement;
                 }
             }
         } catch (IOException e) {

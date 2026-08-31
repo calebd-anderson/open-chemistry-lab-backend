@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
+import chemlab.model.chemistry.PubChemElement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
-class ElementServiceIntegrationTest {
+class PubChemElementServiceIntegrationTest {
 
     @Autowired
     ElementService elmService;
@@ -22,21 +22,21 @@ class ElementServiceIntegrationTest {
     @Test
     @DisplayName("should list all 118 elements from database")
     void testListAll() throws FailedToLoadPTException {
-        List<Element> allElements = elmService.getAllElements();
-        assertEquals(118, allElements.size());
+        List<PubChemElement> allPubChemElements = elmService.getAllElements();
+        assertEquals(118, allPubChemElements.size());
     }
 
 	@Test
 	@DisplayName("should equal H (hydrogen)")
 	void testFindBySymbol() {
-		Element elm = elmService.getElementBySymbol("H");
+		PubChemElement elm = elmService.getElementBySymbol("H");
 		assertEquals("H", elm.getSymbol());
 	}
 
     @Test
     @DisplayName("should fail to find element by symbol D")
     void testFailToFindBySymbol() {
-        Element elm = elmService.getElementBySymbol("D");
+        PubChemElement elm = elmService.getElementBySymbol("D");
         assertNull(elm);
     }
 

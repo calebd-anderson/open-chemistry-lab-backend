@@ -19,10 +19,6 @@ public class ChemistryApplicationTests {
 	@MockitoBean
 	private CorsProperties corsProperties;
 	
-	@Test
-	void contextLoads() {
-	}
-	
 	@Autowired
 	private MockMvc mockMvc;
 

@@ -2,10 +2,9 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.Element;
+import chemlab.model.chemistry.PubChemElement;
 import chemlab.repository.chemistry.ElementRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,21 +13,20 @@ import java.util.List;
 @Slf4j
 public class ElementServiceImpl implements ElementService {
 
-    @Autowired
+//    @Autowired
     private final ElementRepository elmRepo;
 
-    @Autowired
     public ElementServiceImpl(ElementRepository elmRepo) {
         this.elmRepo = elmRepo;
     }
 
-    public List<Element> getAllElements() throws FailedToLoadPTException {
+    public List<PubChemElement> getAllElements() throws FailedToLoadPTException {
         log.trace("populating periodic table");
         return elmRepo.findAll();
     }
 
     // 2. Get item by symbol
-    public Element getElementBySymbol(String symbol) {
+    public PubChemElement getElementBySymbol(String symbol) {
         return elmRepo.findElementBySymbol(symbol);
     }
 }

@@ -43,8 +43,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             // "/api/v1/auth/**"
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/user/list")
-                    .hasAnyAuthority("user:update")
+                .requestMatchers("/api/user/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
+//                    .hasAnyAuthority("user:update")
                 .requestMatchers(SecurityConstants.PUBLIC_URLS)
                     .permitAll()
                 .anyRequest().authenticated()

@@ -1,4 +1,4 @@
-package chemlab.controllers;
+package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.controller.api.game.FlashcardController;

@@ -186,6 +186,7 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getUsers();
         return new ResponseEntity<>(users, OK);
