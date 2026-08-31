@@ -2,12 +2,13 @@ package chemlab.controller.api.game;
 
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
+import chemlab.model.shared.FlashcardDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import chemlab.model.shared.FlashcardDto;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -47,7 +48,14 @@ public class FlashcardController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> create(@RequestBody FlashcardDto flashcardDto) throws Exception {
-        return flashcardService.create(flashcardDto) != null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+//    @ResponseBody
+    public ResponseEntity<List<Flashcard>> create(@RequestBody FlashcardDto flashcardDto) throws Exception {
+        List<Flashcard> userFlashcards = flashcardService.create(flashcardDto);
+        if (userFlashcards != null && !userFlashcards.isEmpty()) {
+            URI location = URI.create(String.format("/api/flashcards/userflashcards/%s", flashcardDto.getUserId()));
+            return ResponseEntity.created(location).body(userFlashcards);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

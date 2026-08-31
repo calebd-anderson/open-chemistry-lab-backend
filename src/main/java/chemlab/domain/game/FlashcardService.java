@@ -16,5 +16,5 @@ public interface FlashcardService {
 
     List<Flashcard> queryByAnswer(String answer);
 
-    boolean isValid(Flashcard obj);
+//    boolean isValid(Flashcard obj);
 }

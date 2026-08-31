@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class FlashcardServiceImpl implements ServiceInterface<Flashcard>, FlashcardService {
+public class FlashcardServiceImpl implements FlashcardService {
 
     @Autowired
     private FlashcardRepository flashcardRepo;
@@ -50,15 +50,13 @@ public class FlashcardServiceImpl implements ServiceInterface<Flashcard>, Flashc
         if (!Objects.equals(flashcard.getUserId(), user.getUserId())) {
             throw new Exception();
         }
-        // I don't know what this is for
-        boolean validFlashcard = isValid(newFlashcard);
 
         log.trace("add flashcard to user");
         List<Flashcard> userFlashcards = user.getUserFlashcards();
         userFlashcards.add(newFlashcard);
         user.setUserFlashcards(userFlashcards);
-        userRepo.save(user);
-        return user.getUserFlashcards();
+//        return userRepo.save(user).getUserFlashcards();
+        return userFlashcards;
     }
 
     public List<Flashcard> queryByQuestion(String question) {
@@ -67,13 +65,5 @@ public class FlashcardServiceImpl implements ServiceInterface<Flashcard>, Flashc
 
     public List<Flashcard> queryByAnswer(String answer) {
         return flashcardRepo.findByAnswer(answer);
-    }
-
-    @Override
-    public boolean isValid(Flashcard obj) {
-        List<Flashcard> result = list();
-        return result.stream()
-                .filter(fc -> fc.getQuestion().equalsIgnoreCase(obj.getQuestion()))
-                .filter(fc -> fc.getAnswer().equalsIgnoreCase(obj.getAnswer())).toList().size() <= 0;
     }
 }
