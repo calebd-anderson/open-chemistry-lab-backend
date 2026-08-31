@@ -4,7 +4,6 @@ import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.controller.api.game.QuizController;
 import chemlab.domain.game.QuizService;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.user.FlashcardRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +33,6 @@ public class ReactionQuizControllerMockTest {
     private RegisteredUserRepository registeredUserRepository;
     @MockitoBean
     private ReactionRepository reactionRepository;
-    @MockitoBean
-    private FlashcardRepository flashcardRepository;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
     @MockitoBean

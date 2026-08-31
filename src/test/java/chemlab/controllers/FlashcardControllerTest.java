@@ -4,7 +4,7 @@ import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.controller.api.game.FlashcardController;
 import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
-import chemlab.model.shared.FlashcardDto;
+import chemlab.model.shared.CreateFlashcardRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = FlashcardController.class)
 class FlashcardControllerTest {
@@ -30,17 +30,14 @@ class FlashcardControllerTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
-    @DisplayName("It should insert the flashcard into the db")
-//    @WithMockUser(username = "testuser", roles = {"USER", "ADMIN"})
-//    @WithMockUser(username = "alice")
-    void testCreate() throws Exception {
+    @DisplayName("It should add the flashcard to the list of user flashcards")
+    void addUserFlashcard() throws Exception {
         // Arrange
-
         // FlashcardDto flashcardDto = new FlashcardDto("12345", "Make me unique?", "yes");
-
-        when(flashcardService.create(any(FlashcardDto.class)))
+        when(flashcardService.create(any(CreateFlashcardRequest.class)))
                 .thenReturn(List.of(new Flashcard("Make me unique?", "yes")));
 
+        // Act & Assert
         mockMvc.perform(post("/api/flashcards/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -55,20 +52,43 @@ class FlashcardControllerTest {
                 .andExpect(jsonPath("$[0].question")
                         .value("Make me unique?"));
 
-        verify(flashcardService).create(any(FlashcardDto.class));
+        verify(flashcardService).create(any(CreateFlashcardRequest.class));
+    }
+
+    @Test
+    @DisplayName("It should return a list of user flashcards when the userId is valid")
+    void getUserFlashcards() throws Exception {
+        when(flashcardService.listUserFlashcards("12345"))
+                .thenReturn(List.of(new Flashcard("Make me unique?", "yes")));
+
+        mockMvc.perform(get("/api/flashcards/userflashcards/12345"))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].question").value("Make me unique?"))
+                .andExpect(jsonPath("$[0].answer").value("yes"));
+
+        verify(flashcardService).listUserFlashcards("12345");
+    }
+
+    @Test
+    void rejectsInvalidRequest() throws Exception {
+        mockMvc.perform(post("/api/flashcards/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                        "userId": "",
+                        "question": "",
+                        "answer": ""
+                    }
+                """
+                )).andExpect(status().isBadRequest());
+        verifyNoInteractions(flashcardService);
     }
 
 //    @Test
-//    @DisplayName("It should request findByQuestion when queryQuestion called")
-//    void testQueryQuestion() {
-//        flashcardController.queryQuestions(question);
-//        verify(flashcardRepo, times(1)).findByQuestion(question);
-//    }
-//
-//    @Test
-//    @DisplayName("It should return a list of questions from the db")
-//    void testQueryAnswers() {
-//        flashcardController.queryAnswers(answer);
-//        verify(flashcardRepo, times(1)).findByAnswer(answer);
+//    void returnsNotFoundWhenFlashcardDoesNotExist() throws Exception {
+//        when(flashcardService.findById(99L)).thenThrow(new FlashcardNotFoundException(99L));
+//        mockMvc.perform(get("/api/flashcards/99")).andExpect(status().isNotFound());
 //    }
 }

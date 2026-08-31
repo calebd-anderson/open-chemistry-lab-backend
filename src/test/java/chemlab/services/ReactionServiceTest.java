@@ -7,7 +7,6 @@ import chemlab.infrastructure.pubchem.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.model.chemistry.Reaction;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.user.FlashcardRepository;
 import chemlab.service.chemistry.ReactionServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,6 @@ class ReactionServiceTest {
     private UserReactionService userReactionService;
     @Mock
     FlashcardService flashcardService;
-    @Mock
-    FlashcardRepository flashcardRepository;
 
     @Mock
     private PubChemApiService pubChemApi;
