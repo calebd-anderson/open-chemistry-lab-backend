@@ -45,7 +45,7 @@ public class User implements Serializable {
     private int highScore;
     // reaction information
     // @BsonProperty(value = "reactions")
-    private List<UserReaction> discoveredReactions = new ArrayList<>();
+//    private List<UserReaction> discoveredReactions = new ArrayList<>();
     private List<Flashcard> userFlashcards = new ArrayList<>();
 
     public User(UserLoginDto userDTO) {

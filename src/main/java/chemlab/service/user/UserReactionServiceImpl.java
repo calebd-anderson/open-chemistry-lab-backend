@@ -3,15 +3,14 @@ package chemlab.service.user;
 import chemlab.domain.user.UserReactionService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
-import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -20,26 +19,21 @@ public class UserReactionServiceImpl implements UserReactionService {
     @Autowired
     RegisteredUserRepository userRepo;
 
+    @Autowired
+    UserReactionRepository userReactionRepo;
+
     @Override
     public void saveReactionWithUser(String userId, Reaction reaction) {
         try {
-            User user = userRepo.findRegisteredUserByUserId(userId);
-            List<UserReaction> userReactions = user.getDiscoveredReactions();
-            // skip add if reaction already saved with user
-            for (UserReaction userReaction : userReactions) {
-                if (Objects.equals(userReaction.getUserDiscoveredReaction().getFormula(), reaction.getFormula())) {
-                    userReaction.setUserLastDiscoveredWhen(Instant.now());
-                    userReaction.setUserDiscoveredCount(userReaction.getUserDiscoveredCount() + 1);
-                    userRepo.save(user);
-                    return;
-                }
+            UserReaction userReaction = userReactionRepo.findByUserIdAndReaction(userId, reaction);
+            if (userReaction == null) {
+                userReaction = new UserReaction(reaction);
+                userReaction.setUserId(userId);
+                userReaction.setUserDiscoveredWhen(Instant.now());
             }
-            UserReaction userReaction = new UserReaction(reaction);
-            userReaction.setUserDiscoveredWhen(Instant.now());
             userReaction.setUserLastDiscoveredWhen(Instant.now());
             userReaction.setUserDiscoveredCount(userReaction.getUserDiscoveredCount() + 1);
-            userReactions.add(userReaction);
-            userRepo.save(user);
+            userReactionRepo.save(userReaction);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -47,7 +41,7 @@ public class UserReactionServiceImpl implements UserReactionService {
 
     @Override
     public List<UserReaction> findReactionsByUserId(String userId) {
-        User user = userRepo.findRegisteredUserByUserId(userId);
-        return user.getDiscoveredReactions();
+        List<UserReaction> userReactions = userReactionRepo.findByUserId(userId);
+        return userReactions;
     }
 }

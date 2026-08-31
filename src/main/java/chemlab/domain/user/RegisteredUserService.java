@@ -2,6 +2,7 @@ package chemlab.domain.user;
 
 import chemlab.model.user.User;
 import chemlab.exceptions.domain.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import chemlab.model.shared.UserRegisterDto;
 

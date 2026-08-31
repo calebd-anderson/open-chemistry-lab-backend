@@ -5,16 +5,16 @@ import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
 import chemlab.model.game.QuestionAnswer;
 import chemlab.model.game.ReactionQuiz;
-import chemlab.model.user.User;
+import chemlab.model.shared.CreateQuizDto;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.quiz.QuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import chemlab.model.shared.CreateQuizDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,8 @@ public class QuizServiceImpl implements QuizService {
     ReactionRepository reactionRepository;
     @Autowired
     private RegisteredUserRepository userRepo;
+    @Autowired
+    UserReactionRepository userReactionRepo;
 
     public ReactionQuiz getQuizByFormula(String formula) {
         throw new NotImplementedException();
@@ -64,13 +66,17 @@ public class QuizServiceImpl implements QuizService {
     }
 
     public List<ReactionQuiz> findQuizByUserId(String userId) {
-        User user = userRepo.findRegisteredUserByUserId(userId);
         // go through user discovered reactions
         List<ReactionQuiz> quizzes = new ArrayList<>();
-        for(UserReaction reaction : user.getDiscoveredReactions()) {
+        for(UserReaction userReaction : userReactionRepo.findByUserId(userId)) {
             // add formula/reaction quiz to bag
-            ReactionQuiz quiz = quizRepo.findQuizByFormula(reaction.getUserDiscoveredReaction().getFormula());
-            quizzes.add(quiz);
+            Reaction reaction = userReaction.getReaction();
+            if(reaction != null) {
+                ReactionQuiz quiz = quizRepo.findQuizByFormula(reaction.getFormula());
+                if (quiz != null) {
+                    quizzes.add(quiz);
+                }
+            }
         }
         return quizzes;
     }

@@ -1,0 +1,14 @@
+package chemlab.repository.user;
+
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.chemistry.UserReaction;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserReactionRepository extends MongoRepository<UserReaction, String> {
+    List<UserReaction> findByUserId(String userId);
+    UserReaction findByUserIdAndReaction(String userId, Reaction reaction);
+}

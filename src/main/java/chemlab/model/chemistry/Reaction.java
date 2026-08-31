@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 public class Reaction {
     @MongoId
-    private ObjectId Id;
+    private ObjectId id;
     private HashMap<String, Integer> elements;
     @Indexed(unique = true)
     private String formula;

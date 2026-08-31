@@ -32,9 +32,14 @@ public class FormulaQuizRepositoryImpl implements FormulaQuizRepository {
             .getReactionQuizzes();
 
         for (ReactionQuiz rquiz : reactionQuizzes) {
-            if (rquiz.getReaction().getFormula().equals(formula)) {
-                return rquiz;
+            if (rquiz.getReaction() != null) {
+                if (rquiz.getReaction().getFormula().equals(formula)) {
+                    return rquiz;
+                }
+            } else {
+                log.warn("ReactionQuiz with null reaction found in database. Skipping.");
             }
+
         }
         return null;
     }
@@ -67,6 +72,7 @@ public class FormulaQuizRepositoryImpl implements FormulaQuizRepository {
 
         if (reactionQuizzes != null && !reactionQuizzes.isEmpty()) {
             log.info("Checking if reaction already exists on non-empty reactionQuizzes.");
+            // Cannot invoke "chemlab.model.chemistry.Reaction.getFormula()" because the return value of "chemlab.model.game.ReactionQuiz.getReaction()" is null
             for (ReactionQuiz rquiz : reactionQuizzes) {
                 if (rquiz.getReaction().getFormula().equals(reactionQuiz.getReaction().getFormula())) {
                     log.warn("Formula quiz already exists with formula: {}", reactionQuiz.getReaction().getFormula());

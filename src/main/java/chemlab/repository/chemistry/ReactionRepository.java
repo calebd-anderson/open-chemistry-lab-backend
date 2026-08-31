@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ReactionRepository extends MongoRepository<Reaction, String> {
     Reaction findReactionByFormula(String formula);
+//    Reaction findReactionById(String id);
 }
