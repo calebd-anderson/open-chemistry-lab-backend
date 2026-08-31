@@ -3,20 +3,20 @@ package chemlab.service.chemistry;
 import chemlab.domain.chemistry.ReactionService;
 import chemlab.domain.game.QuizService;
 import chemlab.domain.user.UserReactionService;
+import chemlab.infrastructure.pubchem.PubChemApiService;
+import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
-import chemlab.model.game.ReactionQuiz;
+import chemlab.model.game.UserQuiz;
+import chemlab.model.shared.CreateQuizDto;
 import chemlab.model.user.User;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.infrastructure.pubchem.PubChemApiService;
-import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import chemlab.model.shared.CreateQuizDto;
 
 import java.time.Instant;
 import java.util.List;
@@ -106,10 +106,10 @@ public class ReactionServiceImpl implements ReactionService {
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
             log.info("Saving the {} reaction with the user.", resultingReaction.getFormula());
             userReactionService.saveReactionWithUser(user.getUserId(), resultingReaction);
+            // create quiz with user
             log.info("Creating the reaction quiz.");
             CreateQuizDto quizDto = new CreateQuizDto(resultingReaction.getFormula(), resultingReaction.getTitle());
-            ReactionQuiz quiz = quizService.createQuiz(quizDto);
-            log.info("Added a quiz for: {}", quiz.getReaction().getFormula());
+            quizService.createQuiz(quizDto, user);
         }
         log.info("Finished validating input.");
         return resultingReaction;

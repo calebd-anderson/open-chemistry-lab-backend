@@ -9,7 +9,7 @@ import chemlab.domain.user.RegisteredUserService;
 import chemlab.model.game.Flashcard;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.flashcard.FlashcardRepository;
-import chemlab.repository.game.quiz.QuizRepository;
+import chemlab.repository.game.quiz.UserQuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +50,7 @@ class FlashcardControllerMockTest {
     @MockitoBean
     private RegisteredUserRepository registeredUserRepository;
     @MockitoBean
-    private QuizRepository quizRepository;
+    private UserQuizRepository quizRepository;
     @MockitoBean
     private FlashcardRepository flashcardRepository;
 

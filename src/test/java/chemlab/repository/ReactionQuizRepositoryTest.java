@@ -2,9 +2,8 @@ package chemlab.repository;
 
 import chemlab.auth.config.CorsProperties;
 import chemlab.model.chemistry.Reaction;
-import chemlab.model.game.QuestionAnswer;
-import chemlab.model.game.ReactionQuiz;
-import chemlab.repository.game.quiz.QuizRepository;
+import chemlab.model.game.UserQuiz;
+import chemlab.repository.game.quiz.UserQuizRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 @Testcontainers
 @SpringBootTest
@@ -28,7 +25,7 @@ public class ReactionQuizRepositoryTest {
     public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0.0"));
 
     @Autowired
-    private QuizRepository quizRepo;
+    private UserQuizRepository quizRepo;
     @MockitoBean
     private CorsProperties corsProperties;
 
@@ -54,21 +51,17 @@ public class ReactionQuizRepositoryTest {
         elements.put("O", 1);
         Reaction r1 = new Reaction(elements);
 
-        ReactionQuiz fq1 = new ReactionQuiz(r1);
+        UserQuiz q1 = new UserQuiz();
+        q1.setUserId("test-user-id"); // set the userId
+        q1.setQuestion("Is this the first still?");
+        q1.setAnswer("no");
 
-        fq1.setQuestionAnswerList(List.of(
-                new QuestionAnswer("Is this the first still?", "no"),
-                new QuestionAnswer("Is this the first?", "yes")
-        ));
-        ReactionQuiz fq2 = new ReactionQuiz(r1);
-        fq2.setQuestionAnswerList(List.of(
-                new QuestionAnswer("non-test", "no"),
-                new QuestionAnswer("still-testing", "yes")
-        ));
+        UserQuiz q2 = new UserQuiz();
+        q2.setUserId("test-user-id"); // set the userId
+        q2.setQuestion("non-test");
+        q2.setAnswer("no");
 
-        List<ReactionQuiz> reactionQuizzes = Arrays.asList(fq1, fq2);
-        for (ReactionQuiz fq : reactionQuizzes) {
-            quizRepo.createFormulaQuiz(fq);
-        }
+        quizRepo.save(q1);
+        quizRepo.save(q2);
     }
 }

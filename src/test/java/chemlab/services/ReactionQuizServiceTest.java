@@ -2,12 +2,12 @@ package chemlab.services;
 
 import chemlab.domain.game.QuizService;
 import chemlab.model.chemistry.Reaction;
-import chemlab.model.game.QuestionAnswer;
-import chemlab.model.game.ReactionQuiz;
+import chemlab.model.game.UserQuiz;
 import chemlab.model.shared.CreateQuizDto;
+import chemlab.model.user.User;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.game.quiz.QuizRepository;
+import chemlab.repository.game.quiz.UserQuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.game.QuizServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 class ReactionQuizServiceTest {
 
     @Mock
-    private QuizRepository quizRepo;
+    private UserQuizRepository quizRepo;
     @Mock
     private ElementRepository elementRepo;
     @Mock
@@ -40,6 +40,7 @@ class ReactionQuizServiceTest {
 
     @Test
     @DisplayName("it should insert a new quiz into the repo")
+    @WithMockUser(username = "testuser", roles = {"USER", "ADMIN"}, password = "abc123")
     void createQuiz_success() {
         // Arrange
         HashMap<String, Integer> elements = new HashMap<>();
@@ -48,9 +49,6 @@ class ReactionQuizServiceTest {
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
         r1.setTitle("Water");
-//        // create list of reactions
-//        List<Reaction> reactions = new ArrayList<>();
-//        reactions.add(r1);
 
         String formula = "H2O";
 
@@ -61,21 +59,12 @@ class ReactionQuizServiceTest {
         String q2 = "What is the formula for " + quizDto.getReactionName() + "?";
         String a2 = quizDto.getFormula();
 
-        ReactionQuiz reactionQuiz = new ReactionQuiz(r1);
-        reactionQuiz.setQuestionAnswerList(List.of(
-                new QuestionAnswer(q1, a1),
-                new QuestionAnswer(q2, a2)
-        ));
-
-//        reactionQuiz.setId(new ObjectId());
-
-        // stub in the repo finds the reaction
-//        when(quizRepo.save(isA(Quiz.class))).thenReturn(isA(Quiz.class));
+//        UserQuiz userQuiz = new UserQuiz(new User());
 
         // Act
-        quizService.createQuiz(quizDto);
+        quizService.createQuiz(quizDto, new User());
 
         // Assert
-        verify(quizRepo, atLeastOnce()).createFormulaQuiz(isA(ReactionQuiz.class));
+        verify(quizRepo, atLeastOnce()).save(isA(UserQuiz.class));
     }
 }

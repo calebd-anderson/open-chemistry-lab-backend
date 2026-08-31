@@ -5,7 +5,7 @@ import chemlab.controller.api.game.QuizController;
 import chemlab.domain.game.QuizService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.game.flashcard.FlashcardRepository;
-import chemlab.repository.game.quiz.QuizRepository;
+import chemlab.repository.game.quiz.UserQuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class ReactionQuizControllerMockTest {
     @MockitoBean
     MongoTemplate mongoTemplate;
     @MockitoBean
-    QuizRepository quizRepository;
+    UserQuizRepository quizRepository;
     @MockitoBean
     private QuizService quizService;
     @MockitoBean

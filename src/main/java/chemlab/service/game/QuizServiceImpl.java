@@ -1,22 +1,16 @@
 package chemlab.service.game;
 
 import chemlab.domain.game.QuizService;
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.chemistry.UserReaction;
-import chemlab.model.game.QuestionAnswer;
-import chemlab.model.game.ReactionQuiz;
+import chemlab.model.game.UserQuiz;
 import chemlab.model.shared.CreateQuizDto;
-import chemlab.repository.chemistry.ElementRepository;
-import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.repository.game.quiz.QuizRepository;
+import chemlab.model.user.User;
+import chemlab.repository.game.quiz.UserQuizRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,60 +18,39 @@ import java.util.List;
 public class QuizServiceImpl implements QuizService {
 
     @Autowired
-    private QuizRepository quizRepo;
-    @Autowired
-    private ElementRepository elementRepo;
-    @Autowired
-    ReactionRepository reactionRepository;
-    @Autowired
-    private RegisteredUserRepository userRepo;
+    private UserQuizRepository quizRepo;
+
     @Autowired
     UserReactionRepository userReactionRepo;
 
-    public ReactionQuiz getQuizByFormula(String formula) {
-        throw new NotImplementedException();
-//        if (quizRepo.findByQuizType(QuizType.COMPOUND).isPresent())
-//            return quizRepo.findByQuizType(QuizType.COMPOUND).get();
-//        else
-//            throw new MongoException("Quiz not found");
-    }
+    @Autowired
+    RegisteredUserRepository userRepo;
 
-    public ReactionQuiz createQuiz(CreateQuizDto quizDto) {
-        String q1 = "What is the name of this compound: " + quizDto.getFormula() + "?";
+    public void createQuiz(CreateQuizDto quizDto, User user) {
+        String q1 = "What is the name of this molecule: " + quizDto.getFormula() + "?";
         String a1 = quizDto.getReactionName();
+
         String q2 = "What is the formula for " + quizDto.getReactionName() + "?";
         String a2 = quizDto.getFormula();
-        log.info("Looking in db for reaction with formula: {}", quizDto.getFormula());
-        Reaction r1 = reactionRepository.findReactionByFormula(quizDto.getFormula());
-        ReactionQuiz reactionQuiz = new ReactionQuiz(r1);
-        reactionQuiz.setQuestionAnswerList(List.of(
-                new QuestionAnswer(q1, a1),
-                new QuestionAnswer(q2, a2)
-        ));
-        quizRepo.createFormulaQuiz(reactionQuiz);
-        return reactionQuiz;
+
+        UserQuiz userQuiz1 = new UserQuiz();
+        UserQuiz userQuiz2 = new UserQuiz();
+
+        userQuiz1.setUserId(user.getUserId());
+        userQuiz2.setUserId(user.getUserId());
+
+        userQuiz1.setQuestion(q1);
+        userQuiz1.setAnswer(a1);
+
+        userQuiz2.setQuestion(q2);
+        userQuiz2.setAnswer(a2);
+
+        quizRepo.save(userQuiz1);
+        quizRepo.save(userQuiz2);
     }
 
-    private void createQuizzes(List<ReactionQuiz> reactionQuizList) {
-        log.trace("Create Quiz from list");
-        reactionQuizList.forEach(quiz -> {
-            quizRepo.saveFormulaQuiz(quiz);
-        });
-    }
-
-    public List<ReactionQuiz> findQuizByUserId(String userId) {
-        // go through user discovered reactions
-        List<ReactionQuiz> quizzes = new ArrayList<>();
-        for(UserReaction userReaction : userReactionRepo.findByUserId(userId)) {
-            // add formula/reaction quiz to bag
-            Reaction reaction = userReaction.getReaction();
-            if(reaction != null) {
-                ReactionQuiz quiz = quizRepo.findQuizByFormula(reaction.getFormula());
-                if (quiz != null) {
-                    quizzes.add(quiz);
-                }
-            }
-        }
-        return quizzes;
+    public List<UserQuiz> findQuizByUserId(String userId) {
+        List<UserQuiz> userQuizzes = quizRepo.findByUserId(userId);
+        return userQuizzes;
     }
 }
