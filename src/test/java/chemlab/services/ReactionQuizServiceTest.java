@@ -1,8 +1,8 @@
 package chemlab.services;
 
-import chemlab.domain.game.QuizService;
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.shared.CreateQuizDto;
+import chemlab.domain.service.game.QuizService;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.shared.CreateQuizDto;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;

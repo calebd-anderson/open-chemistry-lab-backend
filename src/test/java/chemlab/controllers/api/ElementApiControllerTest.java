@@ -1,8 +1,8 @@
 package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.controller.api.chemistry.ElementController;
-import chemlab.domain.chemistry.ElementService;
+import chemlab.presentation.api.chemistry.ElementController;
+import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

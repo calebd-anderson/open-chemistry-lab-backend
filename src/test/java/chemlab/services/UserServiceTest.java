@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.auth.user.LoginAttemptService;
-import chemlab.domain.user.RegisteredUserService;
+import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.infrastructure.email.EmailService;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.user.DefaultUserService;

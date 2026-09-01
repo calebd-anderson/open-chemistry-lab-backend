@@ -1,10 +1,10 @@
 package chemlab.service.game;
 
-import chemlab.domain.game.QuizService;
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.chemistry.UserReaction;
-import chemlab.model.game.UserQuiz;
-import chemlab.model.user.User;
+import chemlab.domain.service.game.QuizService;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.model.chemistry.UserReaction;
+import chemlab.domain.model.game.UserQuiz;
+import chemlab.domain.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;

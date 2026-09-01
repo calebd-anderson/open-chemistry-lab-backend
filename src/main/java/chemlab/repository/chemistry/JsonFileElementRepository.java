@@ -1,6 +1,6 @@
 package chemlab.repository.chemistry;
 
-import chemlab.exceptions.domain.FailedToLoadPTException;
+import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -9,6 +9,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("/api", clazz -> clazz.getPackageName().startsWith("chemlab.controller.api"));
+        configurer.addPathPrefix("/api", clazz -> clazz.getPackageName().startsWith("chemlab.presentation.api"));
     }
 }

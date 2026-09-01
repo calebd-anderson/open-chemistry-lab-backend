@@ -1,7 +1,7 @@
 package chemlab.repository.user;
 
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.chemistry.UserReaction;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.model.chemistry.UserReaction;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

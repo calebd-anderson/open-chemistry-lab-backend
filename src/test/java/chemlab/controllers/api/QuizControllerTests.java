@@ -1,10 +1,9 @@
 package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.controller.api.game.QuizController;
-import chemlab.domain.game.QuizService;
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.game.UserQuiz;
+import chemlab.domain.model.game.UserQuiz;
+import chemlab.domain.service.game.QuizService;
+import chemlab.presentation.api.game.QuizController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -12,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.Mockito.verify;

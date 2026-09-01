@@ -1,11 +1,11 @@
 package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.controller.api.chemistry.ReactionController;
-import chemlab.domain.chemistry.ReactionService;
-import chemlab.model.chemistry.Element;
-import chemlab.model.chemistry.Reaction;
-import chemlab.model.shared.ReactionRequest;
+import chemlab.presentation.api.chemistry.ReactionController;
+import chemlab.domain.service.chemistry.ReactionService;
+import chemlab.domain.model.chemistry.Element;
+import chemlab.domain.model.chemistry.Reaction;
+import chemlab.shared.ReactionRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

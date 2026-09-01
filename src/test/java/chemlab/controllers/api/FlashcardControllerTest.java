@@ -1,10 +1,10 @@
 package chemlab.controllers.api;
 
 import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.controller.api.game.FlashcardController;
-import chemlab.domain.game.FlashcardService;
-import chemlab.model.game.Flashcard;
-import chemlab.model.shared.CreateFlashcardRequest;
+import chemlab.presentation.api.game.FlashcardController;
+import chemlab.domain.service.game.FlashcardService;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.shared.CreateFlashcardRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

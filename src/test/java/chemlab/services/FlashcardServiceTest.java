@@ -1,8 +1,8 @@
 package chemlab.services;
 
-import chemlab.model.game.Flashcard;
-import chemlab.model.shared.CreateFlashcardRequest;
-import chemlab.model.user.User;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.shared.CreateFlashcardRequest;
+import chemlab.domain.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;
 import org.junit.jupiter.api.Test;

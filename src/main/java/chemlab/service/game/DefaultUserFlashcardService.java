@@ -1,9 +1,9 @@
 package chemlab.service.game;
 
-import chemlab.domain.game.FlashcardService;
-import chemlab.model.game.Flashcard;
-import chemlab.model.shared.CreateFlashcardRequest;
-import chemlab.model.user.User;
+import chemlab.domain.service.game.FlashcardService;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.shared.CreateFlashcardRequest;
+import chemlab.domain.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
