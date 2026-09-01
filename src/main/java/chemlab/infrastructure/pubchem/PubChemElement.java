@@ -1,5 +1,5 @@
 // a domain class
-package chemlab.model.chemistry;
+package chemlab.infrastructure.pubchem;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

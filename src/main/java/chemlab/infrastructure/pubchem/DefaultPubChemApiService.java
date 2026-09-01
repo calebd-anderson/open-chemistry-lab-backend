@@ -1,20 +1,20 @@
 package chemlab.infrastructure.pubchem;
 
-import chemlab.model.chemistry.Reaction;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.model.chemistry.Reaction;
+import chemlab.model.shared.PugApiDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import chemlab.model.shared.PugApiDto;
 
 import static chemlab.infrastructure.pubchem.PugApiConstants.*;
 
 @Slf4j
 @Service
-public class PubChemApiServiceImpl implements PubChemApiService {
+public class DefaultPubChemApiService implements PubChemApiService {
 
     @Autowired
     private RestTemplate restTemplate;

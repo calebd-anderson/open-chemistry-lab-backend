@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.PubChemElement;
+import chemlab.infrastructure.pubchem.PubChemElement;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.service.chemistry.DefaultElementService;
 import org.junit.jupiter.api.BeforeEach;

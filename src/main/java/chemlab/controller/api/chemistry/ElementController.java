@@ -2,7 +2,7 @@ package chemlab.controller.api.chemistry;
 
 import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.PubChemElement;
+import chemlab.infrastructure.pubchem.PubChemElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

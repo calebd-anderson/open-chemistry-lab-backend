@@ -3,7 +3,7 @@ package chemlab.controllers.api;
 import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.controller.api.chemistry.ElementController;
 import chemlab.domain.chemistry.ElementService;
-import chemlab.model.chemistry.PubChemElement;
+import chemlab.infrastructure.pubchem.PubChemElement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

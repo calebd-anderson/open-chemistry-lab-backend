@@ -1,7 +1,7 @@
 package chemlab.repository.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.PubChemElement;
+import chemlab.infrastructure.pubchem.PubChemElement;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

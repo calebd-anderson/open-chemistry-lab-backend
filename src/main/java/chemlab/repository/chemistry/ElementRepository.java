@@ -1,7 +1,7 @@
 package chemlab.repository.chemistry;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.model.chemistry.PubChemElement;
+import chemlab.infrastructure.pubchem.PubChemElement;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
