@@ -8,7 +8,6 @@ public class SecurityConstants {
     public static final String UNAUTHORIZED_MESSAGE = "You are not authorized.";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String JWT_TOKEN_HEADER = "Jwt-Token";
-    public static final String TOKEN_CANNOT_BE_VERIFIED = "cannot be verified";
     // array of open/public routes
 //    public static final String[] PUBLIC_URLS = {"/", "/elements", "/styles/**", "/api/elements/**", "/api/user/login", "/api/user/register", "/api/user/image/**", "/api/compound/validate/**"};
     public static final String[] PUBLIC_URLS = {"/", "/elements", "/styles/**", "/api/elements/**", "/api/compound/validate/**"};
