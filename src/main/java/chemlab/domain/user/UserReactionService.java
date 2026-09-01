@@ -9,5 +9,4 @@ import java.util.List;
 public interface UserReactionService {
     void saveReactionWithUser(String userId, Reaction reaction);
     List<UserReaction> findReactionsByUserId(String userId);
-//    UserReaction findReactionByUserIdReactionId(String userId, String reactionId);
 }

@@ -1,7 +1,6 @@
 package chemlab.service.chemistry;
 
 import chemlab.domain.chemistry.ReactionService;
-import chemlab.domain.game.QuizService;
 import chemlab.domain.user.UserReactionService;
 import chemlab.infrastructure.pubchem.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
@@ -21,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ReactionServiceImpl implements ReactionService {
+public class PubChemMongoDBReactionService implements ReactionService {
 
     @Autowired
     private ReactionRepository reactionRepo;
@@ -29,8 +28,6 @@ public class ReactionServiceImpl implements ReactionService {
     private RegisteredUserRepository userRepo;
     @Autowired
     private UserReactionService userReactionService;
-    @Autowired
-    private QuizService quizService;
 
     @Autowired
     private PubChemApiService pubChemApi;

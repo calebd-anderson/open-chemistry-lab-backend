@@ -2,7 +2,7 @@
 package chemlab.controller.view;
 
 import chemlab.exceptions.domain.FailedToLoadPTException;
-import chemlab.service.chemistry.ElementServiceImpl;
+import chemlab.service.chemistry.DefaultElementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/elements")
 public class ElementViewController {
 
-    private final ElementServiceImpl elmService;
+    private final DefaultElementService elmService;
 
     @Autowired
-    public ElementViewController(ElementServiceImpl service) {
+    public ElementViewController(DefaultElementService service) {
         this.elmService = service;
     }
 

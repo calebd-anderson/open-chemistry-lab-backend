@@ -3,7 +3,7 @@ package chemlab.services;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.PubChemElement;
 import chemlab.repository.chemistry.ElementRepository;
-import chemlab.service.chemistry.ElementServiceImpl;
+import chemlab.service.chemistry.DefaultElementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class PubChemElementServiceTest {
     private ElementRepository elmRepo;
 
     @InjectMocks
-    private ElementServiceImpl elmService;
+    private DefaultElementService elmService;
 
     private PubChemElement elm;
 

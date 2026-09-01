@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class FlashcardServiceImpl implements FlashcardService {
+public class DefaultUserFlashcardService implements FlashcardService {
 
     @Autowired
     private RegisteredUserRepository userRepo;

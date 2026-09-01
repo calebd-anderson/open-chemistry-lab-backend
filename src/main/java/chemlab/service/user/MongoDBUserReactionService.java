@@ -3,7 +3,6 @@ package chemlab.service.user;
 import chemlab.domain.user.UserReactionService;
 import chemlab.model.chemistry.Reaction;
 import chemlab.model.chemistry.UserReaction;
-import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.repository.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class UserReactionServiceImpl implements UserReactionService {
-
-    @Autowired
-    RegisteredUserRepository userRepo;
+public class MongoDBUserReactionService implements UserReactionService {
 
     @Autowired
     UserReactionRepository userReactionRepo;

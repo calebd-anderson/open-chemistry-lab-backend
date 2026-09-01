@@ -4,7 +4,7 @@ import chemlab.auth.user.LoginAttemptService;
 import chemlab.domain.user.RegisteredUserService;
 import chemlab.infrastructure.email.EmailService;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.service.user.RegisteredUserServiceImpl;
+import chemlab.service.user.DefaultUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ public class UserServiceTest {
     private EmailService emailService;
 
     @InjectMocks
-    private RegisteredUserService userService = new RegisteredUserServiceImpl();
+    private RegisteredUserService userService = new DefaultUserService();
 
     @Test
     void findQuizByUserId() {

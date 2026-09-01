@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class QuizServiceImpl implements QuizService {
+public class DefaultUserQuizService implements QuizService {
 
     @Autowired
     UserReactionRepository userReactionRepo;

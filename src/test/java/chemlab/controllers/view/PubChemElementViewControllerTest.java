@@ -1,7 +1,7 @@
 package chemlab.controllers.view;
 
 import chemlab.auth.config.CorsProperties;
-import chemlab.service.chemistry.ElementServiceImpl;
+import chemlab.service.chemistry.DefaultElementService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class PubChemElementViewControllerTest {
     private org.springframework.context.ApplicationContext applicationContext;
 
     @MockitoBean
-    private ElementServiceImpl elmServiceMock;
+    private DefaultElementService elmServiceMock;
     @MockitoBean
     private CorsProperties corsProperties;
 

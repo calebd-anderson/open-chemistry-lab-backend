@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Slf4j
-public class ElementRepoImpl implements ElementRepository {
+public class JsonFileElementRepository implements ElementRepository {
 
     private final String PERIODIC_TABLE_PATH = "static/data/all_elements.json";
 
@@ -34,7 +34,7 @@ public class ElementRepoImpl implements ElementRepository {
     public PubChemElement findElementBySymbol(String symbol) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            InputStream pTableData = ElementRepoImpl.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
+            InputStream pTableData = JsonFileElementRepository.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
             List<PubChemElement> pt = mapper.readValue(pTableData, new TypeReference<>() {
             });
             // lame efficiency search

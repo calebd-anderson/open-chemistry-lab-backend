@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService, ServiceInterface<User> {
 
 ### 2. Repository Pattern
 - **Interface** (`ElementRepository extends MongoRepository<Element, String>`): Spring Data queries
-- **Custom Implementation** (`ElementRepoImpl`): Complex custom queries via `@Query` or manual operations
+- **Custom Implementation** (`JsonFileElementRepository`): Complex custom queries via `@Query` or manual operations
 - **Injection in Service**: Autowire interface, Spring resolves to implementation
 
 ### 3. Lombok Boilerplate Reduction

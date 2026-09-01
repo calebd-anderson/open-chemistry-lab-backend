@@ -26,12 +26,10 @@ import chemlab.model.shared.UserRegisterDto;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -39,11 +37,10 @@ import static chemlab.auth.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
 import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.springframework.http.MediaType.*;
 
 @Service
 @Slf4j
-public class RegisteredUserServiceImpl implements RegisteredUserService, UserDetailsService {
+public class DefaultUserService implements RegisteredUserService, UserDetailsService {
 
     @Autowired
     private RegisteredUserRepository userRepo;

@@ -2,17 +2,13 @@ package chemlab.services;
 
 import chemlab.domain.game.QuizService;
 import chemlab.model.chemistry.Reaction;
-import chemlab.model.game.UserQuiz;
 import chemlab.model.shared.CreateQuizDto;
-import chemlab.model.user.User;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.service.game.QuizServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.support.WithMockUser;

@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ElementServiceImpl implements ElementService {
+public class DefaultElementService implements ElementService {
 
 //    @Autowired
     private final ElementRepository elmRepo;
 
-    public ElementServiceImpl(ElementRepository elmRepo) {
+    public DefaultElementService(ElementRepository elmRepo) {
         this.elmRepo = elmRepo;
     }
 

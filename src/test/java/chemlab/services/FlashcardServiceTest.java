@@ -4,7 +4,7 @@ import chemlab.model.game.Flashcard;
 import chemlab.model.shared.CreateFlashcardRequest;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.service.game.FlashcardServiceImpl;
+import chemlab.service.game.DefaultUserFlashcardService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ class FlashcardServiceTest {
     @Mock
     RegisteredUserRepository userRepo;
     @InjectMocks
-    private FlashcardServiceImpl flashcardService;
+    private DefaultUserFlashcardService flashcardService;
 
     @Test
     void findsFlashcards() {
