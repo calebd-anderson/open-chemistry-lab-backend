@@ -1,15 +1,16 @@
 package chemlab.services;
 
-import chemlab.domain.chemistry.ElementService;
 import chemlab.exceptions.domain.FailedToLoadPTException;
 import chemlab.model.chemistry.PubChemElement;
 import chemlab.repository.chemistry.ElementRepository;
+import chemlab.service.chemistry.ElementServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
@@ -19,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class PubChemElementServiceTest {
-
-    @Autowired
-    private ElementService elmService;
-
-    @MockitoBean
+    @Mock
     private ElementRepository elmRepo;
+
+    @InjectMocks
+    private ElementServiceImpl elmService;
 
     private PubChemElement elm;
 
