@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Document(collection = "reactions")
 @Data
@@ -47,7 +48,20 @@ public class Reaction {
         return formula.toString();
     }
 
-    public boolean equals(Reaction reaction) {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Reaction reaction = (Reaction) obj;
         return this.formula.equals(reaction.getFormula());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, formula);
     }
 }
