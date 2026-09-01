@@ -1,109 +1,81 @@
 package chemlab.services;
 
-import chemlab.domain.game.FlashcardService;
 import chemlab.model.game.Flashcard;
 import chemlab.model.shared.CreateFlashcardRequest;
 import chemlab.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.game.FlashcardServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
 class FlashcardServiceTest {
-    @Autowired
-    private WebApplicationContext context;
-
     @Mock
-    private RegisteredUserRepository userRepo;
-    @Autowired
-    private MockMvc mockMvc;
-//    @Mock
-//    private AuthenticationManager authenticationManager;
-
+    RegisteredUserRepository userRepo;
     @InjectMocks
-    private FlashcardService flashcardService = new FlashcardServiceImpl();
+    private FlashcardServiceImpl flashcardService;
 
-    private final String question1 = "is this mock value 1?";
-    private final String question2 = "is this mock value 2?";
-    private final String question3 = "is this mock value 3?";
-    private final String question4 = "is this mock value 4?";
-    private final String answerYes = "yes";
-    private final String answerNo = "no";
+    @Test
+    void findsFlashcards() {
+        User user = mock(User.class);
+        when(userRepo.findRegisteredUserByUserId("123456"))
+                .thenReturn(user);
 
-    @BeforeEach
-    void setUp(TestInfo info) {
-//        String question5 = "This might be unique?";
-//
-//        if (!info.getDisplayName().equals("it should return the question")) {
-//            doReturn(Stream.of(new Flashcard(question1, answerYes), new Flashcard(question2, answerYes), new Flashcard(question3, answerNo), new Flashcard(question4, answerNo), new Flashcard(question5, answerYes)).collect(Collectors.toList())).when(flashcardRepo).findAll();
-//        }
-//
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).apply(springSecurity()).build();
+        String answerYes = "yes";
+        String answerNo = "no";
+        when(userRepo.findRegisteredUserByUserId("123456").getUserFlashcards()).thenReturn(List.of(
+                new Flashcard("is this mock value 1?", answerYes),
+                new Flashcard("is this mock value 2?", answerNo),
+                new Flashcard("is this mock value 3?", answerYes),
+                new Flashcard("is this mock value 4?", answerNo)
+        ));
+        List<Flashcard> result = flashcardService.listUserFlashcards("123456");
+        assertEquals(4, result.size());
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"USER", "ADMIN"}, password = "abc123")
-    void test_create_success() throws Exception {
+    void createFlashcardSuccess() throws Exception {
         // Arrange
+        Authentication authentication = mock(Authentication.class);
+
+        when(authentication.getName()).thenReturn("testuser");
+//        when(authentication.isAuthenticated()).thenReturn(true);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+
         // configure a user to hold the flashcard
-//        User user = new User();
-//        user.setUserId("12345");
-//        user.setUsername("testuser");
-//        user.setEmail("test@mail.com");
-//        when(userRepo.findRegisteredUserByUsername("testuser")).thenReturn(user);
-//        // create a flashcard
-//        CreateFlashcardRequest fc = new CreateFlashcardRequest("1234", question1, answerYes);
-//
-//        ModelMapper modelMapper = new ModelMapper();
-//        Flashcard newFlashcard = modelMapper.map(fc, Flashcard.class);
-//
-//        // Act
-//        List<Flashcard> result = flashcardService.create(fc);
-//        // Assert
-//        verify(userRepo, atLeastOnce()).save(user);
-//        assertTrue(result.contains(newFlashcard));
-    }
+        User user = new User();
+        user.setUserId("12345");
+        user.setUsername("testuser");
+        user.setEmail("test@mail.com");
+        // mock the repository to return the user when queried by username
+        when(userRepo.findRegisteredUserByUsername("testuser")).thenReturn(user);
+        when(userRepo.save(user)).thenReturn(user);
+        // create a flashcard
+        CreateFlashcardRequest fc = new CreateFlashcardRequest("12345", "is this mock value 1?", "yes");
+        // map the request to a flashcard
+        ModelMapper modelMapper = new ModelMapper();
+        Flashcard newFlashcard = modelMapper.map(fc, Flashcard.class);
 
-    @Test
-    @DisplayName("it should return false")
-    void isValid_returns_false() {
-        Flashcard fc = new Flashcard(question1, answerYes);
-//        boolean result = flashcardService.isValid(fc);
-//        assertFalse(result);
-    }
-
-    @Test
-    @DisplayName("it should return true")
-    void isValid_returns_true() {
-        String question1 = "Is this a unique value?";
-        String answer1 = "Maybe";
-        Flashcard fc = new Flashcard(question1, answer1);
-
-//        assertTrue(flashcardService.isValid(fc));
+        // Act
+        List<Flashcard> result = flashcardService.create(fc);
+        // Assert
+        assertEquals(List.of(newFlashcard), result);
     }
 }

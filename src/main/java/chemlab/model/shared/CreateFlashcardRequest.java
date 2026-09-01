@@ -1,6 +1,13 @@
 package chemlab.model.shared;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-public record CreateFlashcardRequest(@NotBlank String userId, @NotBlank String question, @NotBlank String answer) {
+@Data
+@RequiredArgsConstructor
+public class CreateFlashcardRequest {
+    @NotBlank final String userId;
+    @NotBlank final String question;
+    @NotBlank final String answer;
 }

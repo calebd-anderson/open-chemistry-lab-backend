@@ -24,9 +24,7 @@ public class FlashcardServiceImpl implements FlashcardService {
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.info("Getting flashcards by userId in service.");
-        User user = userRepo.findRegisteredUserByUserId(userId);
-        List<Flashcard> list = user.getUserFlashcards();
-        return list;
+        return userRepo.findRegisteredUserByUserId(userId).getUserFlashcards();
     }
 
     public List<Flashcard> create(CreateFlashcardRequest flashcard) throws Exception {
@@ -35,9 +33,10 @@ public class FlashcardServiceImpl implements FlashcardService {
         Flashcard newFlashcard = modelMapper.map(flashcard, Flashcard.class);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
         User user = userRepo.findRegisteredUserByUsername(authentication.getName());
 
-        if (!Objects.equals(flashcard.userId(), user.getUserId())) {
+        if (!Objects.equals(flashcard.getUserId(), user.getUserId())) {
             throw new Exception();
         }
 

@@ -31,10 +31,9 @@ public class FlashcardController {
 
     @PostMapping("/add")
     public ResponseEntity<List<Flashcard>> create(@Valid @RequestBody CreateFlashcardRequest createFlashcardRequest) throws Exception {
-//        String username = authentication.getName();
         List<Flashcard> userFlashcards = flashcardService.create(createFlashcardRequest);
         if (userFlashcards != null && !userFlashcards.isEmpty()) {
-            URI location = URI.create(String.format("/api/flashcards/userflashcards/%s", createFlashcardRequest.userId()));
+            URI location = URI.create(String.format("/api/flashcards/userflashcards/%s", createFlashcardRequest.getUserId()));
             return ResponseEntity.created(location).body(userFlashcards);
         } else {
             return ResponseEntity.badRequest().build();
