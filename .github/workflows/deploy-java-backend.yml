@@ -8,9 +8,9 @@ on:
     branches:
       - 'main'
     paths:
-      - "src/**"
-      - ".github/workflows/**"
-      - "pom.xml"
+      - "services/backend-java/src/**"
+      - "services/backend-java/pom.xml"
+      - ".github/workflows/deploy-java-backend.yml"
 
 jobs:
   build:
@@ -47,9 +47,11 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.DISTRIBUTION }}
           cache: 'maven'
+          working-directory: services/backend-java
 
       - name: Build OCI image with Maven
         run: mvn spring-boot:build-image -Dspring.profiles.active=test
+        working-directory: services/backend-java
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v3

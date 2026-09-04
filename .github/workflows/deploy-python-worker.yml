@@ -1,0 +1,12 @@
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'services/worker-python/**' # <--- Only run if Python files change!
+      - '.github/workflows/deploy-python-worker.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
