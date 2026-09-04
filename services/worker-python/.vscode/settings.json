@@ -1,0 +1,8 @@
+{
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "pylint.args": ["--extension-pkg-allow-list=rdkit"],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportAttributeAccessIssue": "warning"
+  }
+}
