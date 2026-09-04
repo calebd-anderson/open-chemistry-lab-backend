@@ -7,7 +7,7 @@ import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.repository.chemistry.ReactionRepository;
-import chemlab.service.chemistry.PubChemMongoDBReactionService;
+import chemlab.service.chemistry.DefaultReactionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class ReactionServiceTest {
     private PubChemApiService pubChemApi;
 
     @InjectMocks
-    private ReactionService reactionService = new PubChemMongoDBReactionService();
+    private ReactionService reactionService = new DefaultReactionService();
 
     @Test
     @DisplayName("compound not yet discovered")

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class CreateQuizDto {
+public class CreateQuizRequest {
     public final String formula;
     public final String reactionName;
 }

@@ -1,12 +1,10 @@
 package chemlab.shared;
 
-import chemlab.domain.model.chemistry.Element;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 @Data
 public class ReactionRequest {
@@ -17,10 +15,6 @@ public class ReactionRequest {
     public ReactionRequest(ArrayList<Element> elements, String userId) {
         this.elements = elements;
         this.userId = userId;
-    }
-
-    public String getConcatPayload() {
-        return getMappedPayload().entrySet().stream().map(entry -> entry.getKey() + entry.getValue()).collect(Collectors.joining());
     }
 
     public HashMap<String, Integer> getMappedPayload() {

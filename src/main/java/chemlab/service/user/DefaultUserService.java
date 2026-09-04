@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import chemlab.shared.UserRegisterDto;
+import chemlab.shared.UserRegisterRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     private ImageStorageService imageStorageService;
 
     @Override
-    public User register(UserRegisterDto userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public User register(UserRegisterRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
         validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
         User user = new User();
         user.setUserId(generateUserId());

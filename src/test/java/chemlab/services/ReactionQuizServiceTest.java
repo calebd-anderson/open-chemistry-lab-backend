@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.service.game.QuizService;
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.shared.CreateQuizDto;
+import chemlab.shared.CreateQuizRequest;
 import chemlab.repository.chemistry.ElementRepository;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
@@ -45,7 +45,7 @@ class ReactionQuizServiceTest {
 
         String formula = "H2O";
 
-        CreateQuizDto quizDto = new CreateQuizDto(formula, r1.getTitle());
+        CreateQuizRequest quizDto = new CreateQuizRequest(formula, r1.getTitle());
 
 //        String q1 = "What is the name of this compound: " + quizDto.getFormula() + "?";
 //        String a1 = quizDto.getReactionName();

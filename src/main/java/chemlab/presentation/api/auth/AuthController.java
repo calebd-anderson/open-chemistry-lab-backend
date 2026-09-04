@@ -9,12 +9,11 @@ import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
-import chemlab.shared.UserLoginDto;
-import chemlab.shared.UserRegisterDto;
+import chemlab.shared.UserLoginRequest;
+import chemlab.shared.UserRegisterRequest;
 import chemlab.domain.model.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +45,7 @@ public class AuthController extends ExceptionHandling {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody UserLoginDto user, HttpServletRequest req) {
+    public ResponseEntity<User> login(@Valid @RequestBody UserLoginRequest user, HttpServletRequest req) {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userService.saveLastLogin(new Date(), user.getUsername());
@@ -63,7 +62,7 @@ public class AuthController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterDto user) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterRequest user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
         User newUser = userService.register(user);
         return new ResponseEntity<>(newUser, CREATED);

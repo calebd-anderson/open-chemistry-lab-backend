@@ -3,7 +3,7 @@ package chemlab.controllers.api;
 import chemlab.auth.jwt.JwtTokenProvider;
 import chemlab.presentation.api.chemistry.ReactionController;
 import chemlab.domain.service.chemistry.ReactionService;
-import chemlab.domain.model.chemistry.Element;
+import chemlab.shared.Element;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.shared.ReactionRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;

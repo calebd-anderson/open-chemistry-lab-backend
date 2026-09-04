@@ -1,4 +1,4 @@
-package chemlab.domain.model.chemistry;
+package chemlab.shared;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;

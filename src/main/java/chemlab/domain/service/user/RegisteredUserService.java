@@ -3,14 +3,14 @@ package chemlab.domain.service.user;
 import chemlab.domain.exceptions.*;
 import chemlab.domain.model.user.User;
 import org.springframework.web.multipart.MultipartFile;
-import chemlab.shared.UserRegisterDto;
+import chemlab.shared.UserRegisterRequest;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 public interface RegisteredUserService {
-    User register(UserRegisterDto userRegisterDto) throws UserNotFoundException, UsernameExistException, EmailExistException;
+    User register(UserRegisterRequest userRegisterRequest) throws UserNotFoundException, UsernameExistException, EmailExistException;
 
     List<User> getUsers();
 

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import chemlab.shared.UserLoginDto;
+import chemlab.shared.UserLoginRequest;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class User implements Serializable {
 //    private List<UserReaction> discoveredReactions = new ArrayList<>();
     private List<Flashcard> userFlashcards = new ArrayList<>();
 
-    public User(UserLoginDto userDTO) {
+    public User(UserLoginRequest userDTO) {
         this.password = userDTO.getPassword();
         this.username = userDTO.getUsername();
     }

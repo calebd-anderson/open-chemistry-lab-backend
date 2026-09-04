@@ -1,12 +1,12 @@
 package chemlab.service.chemistry;
 
-import chemlab.domain.service.chemistry.ReactionService;
-import chemlab.domain.service.user.UserReactionService;
-import chemlab.infrastructure.pubchem.service.PubChemApiService;
-import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.chemistry.ReactionService;
+import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class PubChemMongoDBReactionService implements ReactionService {
+public class DefaultReactionService implements ReactionService {
 
     @Autowired
     private ReactionRepository reactionRepo;
@@ -70,36 +70,35 @@ public class PubChemMongoDBReactionService implements ReactionService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean authenticated = (authentication != null && authentication.isAuthenticated());
 
-        Reaction resultingReaction;
         // new discovery
         if (!hasCompoundBeenDiscovered(formula)) {
             // try formula with PubChem api
-            resultingReaction = pubChemApi.testFormula(formula, reaction);
-            resultingReaction.setFirstDiscoveredWhen(Instant.now());
+            reaction = pubChemApi.testFormula(formula, reaction);
+            reaction.setFirstDiscoveredWhen(Instant.now());
             String name = authenticated ? authentication.getName() : "anonymous";
             log.info("Setting reaction discovered by: {}", name);
-            resultingReaction.setFirstDiscoveredBy(name);
+            reaction.setFirstDiscoveredBy(name);
 
         } else {
             // reaction already discovered
-            resultingReaction = retrieveCompoundFromRepo(formula);
+            reaction = retrieveCompoundFromRepo(formula);
         }
-        resultingReaction.setLastDiscoveredWhen(Instant.now());
-        resultingReaction.setDiscoveredCount(resultingReaction.getDiscoveredCount() + 1);
+        reaction.setLastDiscoveredWhen(Instant.now());
+        reaction.setDiscoveredCount(reaction.getDiscoveredCount() + 1);
         // set last discovered by
         String discoveredBy = authenticated ? authentication.getName() : "anonymous";
-        resultingReaction.setLastDiscoveredBy(discoveredBy);
-        log.info("Updating reaction with formula: {}", resultingReaction.getFormula());
-        resultingReaction = reactionRepo.save(resultingReaction);
+        reaction.setLastDiscoveredBy(discoveredBy);
+        log.info("Updating reaction with formula: {}", reaction.getFormula());
+        reaction = reactionRepo.save(reaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authenticated) {
             // need to lookup user by username until able to add userid to JWT
             log.info("Querying the db for user with username: {}", authentication.getName());
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            log.info("Saving the {} reaction with the user.", resultingReaction.getFormula());
-            userReactionService.saveReactionWithUser(user.getUserId(), resultingReaction);
+            log.info("Saving the {} reaction with the user.", reaction.getFormula());
+            userReactionService.saveReactionWithUser(user.getUserId(), reaction);
         }
         log.info("Finished validating input.");
-        return resultingReaction;
+        return reaction;
     }
 }

@@ -1,7 +1,7 @@
 package chemlab.infrastructure.pubchem.service;
 
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.infrastructure.pubchem.PugApiDto;
+import chemlab.infrastructure.pubchem.PugApiResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class DefaultPubChemApiService implements PubChemApiService {
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT;
         try {
             log.trace("Sending PugAPI url in service: {}", pubChemUrl);
-            PugApiDto pugApiValue = restTemplate.getForObject(pubChemUrl, PugApiDto.class);
+            PugApiResponse pugApiValue = restTemplate.getForObject(pubChemUrl, PugApiResponse.class);
             assert pugApiValue != null;
             reaction.setTitle(pugApiValue.getFirstPropertyTitle());
             log.info("Found reaction: {}", pugApiValue.getFirstPropertyTitle());
