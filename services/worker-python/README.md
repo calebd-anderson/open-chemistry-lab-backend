@@ -11,3 +11,11 @@ uv add --dev httpx2
 ```sh
 uv run pytest
 ```
+
+## CI
+```sh
+uv lock --check
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
+```
