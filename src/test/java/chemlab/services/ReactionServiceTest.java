@@ -80,12 +80,12 @@ class ReactionServiceTest {
         doReturn(r1).when(reactionRepo).save(r1);
 
         // Act
-        Reaction reactionResult = reactionService.validateInput(r1);
+        Reaction reactionResult = reactionService.createReaction(r1);
 
         // Assert
         assertNotNull(reactionResult);
         // PubChem api not called when reaction already discovered
-        verify(pubChemApi, never()).testFormula(formula);
+        verify(pubChemApi, never()).getFormulaProperties(formula);
     }
 
     @Test
@@ -114,17 +114,17 @@ class ReactionServiceTest {
         doReturn(null).when(reactionRepo).findReactionByFormula(formula);
         // stub in the api return
         FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
-        doReturn(pugApiResponse).when(pubChemApi).testFormula(formula);
+        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(formula);
         // stub in the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
 
         // Act
-        Reaction reactionResult = reactionService.validateInput(r1);
+        Reaction reactionResult = reactionService.createReaction(r1);
 
         // Assert
         assertNotNull(reactionResult);
         // PubChem api called when reaction not yet discovered
-        verify(pubChemApi, atLeastOnce()).testFormula(formula);
+        verify(pubChemApi, atLeastOnce()).getFormulaProperties(formula);
         verify(reactionRepo, atLeastOnce()).save(r1);
 
         // TODO: setup the game stuff again
@@ -151,7 +151,7 @@ class ReactionServiceTest {
 //        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
         // stub in the api return
         FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
-        doReturn(pugApiResponse).when(pubChemApi).testFormula(formula);
+        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(formula);
         // stub in the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
 
@@ -171,11 +171,11 @@ class ReactionServiceTest {
         // lasterDiscoveredBy
 
         // Act
-        Reaction reactionResult = reactionService.validateInput(r1);
+        Reaction reactionResult = reactionService.createReaction(r1);
 
         // Assert
         // reaction discovered for first time so PubChem api called
-        verify(pubChemApi, atLeastOnce()).testFormula(formula);
+        verify(pubChemApi, atLeastOnce()).getFormulaProperties(formula);
         // after discovery (validateInput) the reaction discovery count is incremented by 1
         assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveredCount());
     }

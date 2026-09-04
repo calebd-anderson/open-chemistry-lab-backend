@@ -26,7 +26,7 @@ public class FastformulaPropertiesResponse {
 	
 	@Getter
 	static class Properties {
-		private final int CID;
+		public final int CID;
 		private final String MolecularFormula;
 		private final String MolecularWeight;
 		private final String Title;
@@ -49,4 +49,8 @@ public class FastformulaPropertiesResponse {
 	public String getFirstPropertyTitle() {
 		return this.propertyTableObj.properties.getFirst().getTitle();
 	}
+
+//	public int getCid() {
+//		return this.propertyTableObj.properties.getFirst().CID;
+//	}
 }

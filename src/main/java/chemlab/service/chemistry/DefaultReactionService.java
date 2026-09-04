@@ -5,6 +5,7 @@ import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaCidsResponse;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
@@ -64,7 +65,7 @@ public class DefaultReactionService implements ReactionService {
         return reactionRepo.findAll();
     }
 
-    public Reaction validateInput(Reaction reaction) throws PugApiException {
+    public Reaction createReaction(Reaction reaction) throws PugApiException {
         String formula = reaction.getFormula();
         log.info("Validating: [{}]", formula);
 
@@ -74,8 +75,48 @@ public class DefaultReactionService implements ReactionService {
         // new discovery
         if (!hasCompoundBeenDiscovered(formula)) {
             // try formula with PubChem api
-            FastformulaPropertiesResponse pugApiResponse = pubChemApi.testFormula(formula);
+            FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(formula);
             reaction.setTitle(pugApiResponse.getFirstPropertyTitle());
+            reaction.setFirstDiscoveredWhen(Instant.now());
+            String name = authenticated ? authentication.getName() : "anonymous";
+            log.info("Setting reaction discovered by: {}", name);
+            reaction.setFirstDiscoveredBy(name);
+
+        } else {
+            // reaction already discovered
+            reaction = retrieveCompoundFromRepo(formula);
+        }
+        reaction.setLastDiscoveredWhen(Instant.now());
+        reaction.setDiscoveredCount(reaction.getDiscoveredCount() + 1);
+        // set last discovered by
+        String discoveredBy = authenticated ? authentication.getName() : "anonymous";
+        reaction.setLastDiscoveredBy(discoveredBy);
+        log.info("Updating reaction with formula: {}", reaction.getFormula());
+        reaction = reactionRepo.save(reaction);
+        // if user is logged in; create game data and save reaction from discovered reaction with the user
+        if (authenticated) {
+            // need to lookup user by username until able to add userid to JWT
+            log.info("Querying the db for user with username: {}", authentication.getName());
+            User user = userRepo.findRegisteredUserByUsername(authentication.getName());
+            log.info("Saving the {} reaction with the user.", reaction.getFormula());
+            userReactionService.saveReactionWithUser(user.getUserId(), reaction);
+        }
+        log.info("Finished validating input.");
+        return reaction;
+    }
+
+    public Reaction analyzeFormula(Reaction reaction) throws PugApiException {
+        String formula = reaction.getFormula();
+        log.info("Analyzing formula: [{}]", formula);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean authenticated = (authentication != null && authentication.isAuthenticated());
+
+        // new discovery
+        if (!hasCompoundBeenDiscovered(formula)) {
+            // try formula with PubChem api
+            FastformulaCidsResponse pugApiResponse = pubChemApi.getFormulaCids(formula);
+            int[] cids = pugApiResponse.getCids();
             reaction.setFirstDiscoveredWhen(Instant.now());
             String name = authenticated ? authentication.getName() : "anonymous";
             log.info("Setting reaction discovered by: {}", name);

@@ -1,5 +1,8 @@
 package chemlab.infrastructure.pubchem.PugApiResponse;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 //{
 //        "IdentifierList": {
 //        "CID": [
@@ -20,6 +23,21 @@ package chemlab.infrastructure.pubchem.PugApiResponse;
 //    }
 //}
 public class FastformulaCidsResponse {
-    FastformulaCidsResponse(IdentifiersList identifierList) { }
-    record IdentifiersList(int[] CID) { }
+    private final IdentifierList identifierList;
+
+    @JsonCreator
+    FastformulaCidsResponse(@JsonProperty("IdentifierList") IdentifierList identifierList) {
+        this.identifierList = identifierList;
+    }
+
+    record IdentifierList(int[] CID) {
+        @JsonCreator
+        IdentifierList(@JsonProperty("CID") int[] CID) {
+            this.CID = CID;
+        }
+    }
+
+    public int[] getCids() {
+        return this.identifierList.CID;
+    }
 }

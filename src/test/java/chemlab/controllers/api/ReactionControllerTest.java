@@ -45,7 +45,7 @@ public class ReactionControllerTest {
         ReactionRequest reactionRequest = new ReactionRequest(elementList, "12345");
         Reaction reaction = new Reaction(reactionRequest.getMappedPayload());
 
-        when(reactionService.validateInput(any(Reaction.class)))
+        when(reactionService.createReaction(any(Reaction.class)))
                 .thenReturn(reaction);
 
         // Serialize ReactionRequest to JSON string
@@ -59,6 +59,6 @@ public class ReactionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.formula").value("H2O"));
 
-        verify(reactionService).validateInput(any(Reaction.class));
+        verify(reactionService).createReaction(any(Reaction.class));
     }
 }

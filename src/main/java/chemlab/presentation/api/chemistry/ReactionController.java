@@ -23,7 +23,7 @@ public class ReactionController {
     public Reaction validate(@RequestBody ReactionRequest payload) throws PugApiException {
         Reaction reaction = new Reaction(payload.getMappedPayload());
         log.trace("Controller received formula: {}", reaction.getFormula());
-        return reactionService.validateInput(reaction);
+        return reactionService.createReaction(reaction);
     }
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
