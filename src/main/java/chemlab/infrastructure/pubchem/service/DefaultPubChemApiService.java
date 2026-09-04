@@ -19,16 +19,15 @@ public class DefaultPubChemApiService implements PubChemApiService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public Reaction testFormula(String formula, Reaction reaction) throws PugApiException {
+    public FastformulaPropertiesResponse testFormula(String formula) throws PugApiException {
         log.info("Calling PubChem API with molecular formula: {}", formula);
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_OPERATION + PUG_OUTPUT;
         try {
             log.trace("Sending PugAPI url in service: {}", pubChemUrl);
             FastformulaPropertiesResponse pugApiValue = restTemplate.getForObject(pubChemUrl, FastformulaPropertiesResponse.class);
             assert pugApiValue != null;
-            reaction.setTitle(pugApiValue.getFirstPropertyTitle());
             log.info("Found reaction: {}", pugApiValue.getFirstPropertyTitle());
-            return reaction;
+            return pugApiValue;
         } catch (HttpStatusCodeException exception) {
             log.warn("Received {} error response from PUG API: {}", exception.getStatusCode(), exception.getResponseBodyAsString());
             if (exception.getStatusCode() == HttpStatus.NOT_FOUND) {

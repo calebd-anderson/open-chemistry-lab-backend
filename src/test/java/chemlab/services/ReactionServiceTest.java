@@ -3,6 +3,7 @@ package chemlab.services;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.game.FlashcardService;
 import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
@@ -84,7 +85,7 @@ class ReactionServiceTest {
         // Assert
         assertNotNull(reactionResult);
         // PubChem api not called when reaction already discovered
-        verify(pubChemApi, never()).testFormula(formula, r1);
+        verify(pubChemApi, never()).testFormula(formula);
     }
 
     @Test
@@ -112,7 +113,8 @@ class ReactionServiceTest {
         // stub in the repo will not find the reaction
         doReturn(null).when(reactionRepo).findReactionByFormula(formula);
         // stub in the api return
-        doReturn(r1).when(pubChemApi).testFormula(formula, r1);
+        FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
+        doReturn(pugApiResponse).when(pubChemApi).testFormula(formula);
         // stub in the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
 
@@ -122,7 +124,7 @@ class ReactionServiceTest {
         // Assert
         assertNotNull(reactionResult);
         // PubChem api called when reaction not yet discovered
-        verify(pubChemApi, atLeastOnce()).testFormula(formula, r1);
+        verify(pubChemApi, atLeastOnce()).testFormula(formula);
         verify(reactionRepo, atLeastOnce()).save(r1);
 
         // TODO: setup the game stuff again
@@ -148,7 +150,8 @@ class ReactionServiceTest {
         // stub in the repo finds the reaction
 //        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
         // stub in the api return
-        doReturn(r1).when(pubChemApi).testFormula(formula, r1);
+        FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
+        doReturn(pugApiResponse).when(pubChemApi).testFormula(formula);
         // stub in the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
 
@@ -172,7 +175,7 @@ class ReactionServiceTest {
 
         // Assert
         // reaction discovered for first time so PubChem api called
-        verify(pubChemApi, atLeastOnce()).testFormula(formula, r1);
+        verify(pubChemApi, atLeastOnce()).testFormula(formula);
         // after discovery (validateInput) the reaction discovery count is incremented by 1
         assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveredCount());
     }

@@ -5,6 +5,7 @@ import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.repository.chemistry.ReactionRepository;
@@ -73,7 +74,8 @@ public class DefaultReactionService implements ReactionService {
         // new discovery
         if (!hasCompoundBeenDiscovered(formula)) {
             // try formula with PubChem api
-            reaction = pubChemApi.testFormula(formula, reaction);
+            FastformulaPropertiesResponse pugApiResponse = pubChemApi.testFormula(formula);
+            reaction.setTitle(pugApiResponse.getFirstPropertyTitle());
             reaction.setFirstDiscoveredWhen(Instant.now());
             String name = authenticated ? authentication.getName() : "anonymous";
             log.info("Setting reaction discovered by: {}", name);
