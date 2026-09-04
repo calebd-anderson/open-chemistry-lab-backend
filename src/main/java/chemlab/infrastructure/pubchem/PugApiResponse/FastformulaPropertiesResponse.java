@@ -1,4 +1,4 @@
-package chemlab.infrastructure.pubchem;
+package chemlab.infrastructure.pubchem.PugApiResponse;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,25 +9,18 @@ import java.util.ArrayList;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PugApiResponse {
-	private final PropertyTableObj PropertyTable;
+public class FastformulaPropertiesResponse {
+	private final PropertyTableObj propertyTableObj;
 
 	@JsonCreator
-	PugApiResponse(@JsonProperty("PropertyTable") PropertyTableObj PropertyTable) {
-		this.PropertyTable = PropertyTable;
+	FastformulaPropertiesResponse(@JsonProperty("PropertyTable") PropertyTableObj propertyTableObj) {
+		this.propertyTableObj = propertyTableObj;
 	}
 
-    public String getFirstPropertyTitle() {
-		return this.PropertyTable.Properties.getFirst().getTitle();
-	}
-
-	@Getter
-    static class PropertyTableObj {
-		private final ArrayList<Properties> Properties;
-		
+	record PropertyTableObj(ArrayList<Properties> properties) {
 		@JsonCreator
-		public PropertyTableObj (@JsonProperty("Properties") ArrayList<Properties> Properties) {
-			this.Properties = Properties;
+		PropertyTableObj(@JsonProperty("Properties") ArrayList<Properties> properties) {
+			this.properties = properties;
 		}
 	}
 	
@@ -51,5 +44,9 @@ public class PugApiResponse {
 			this.MolecularWeight = MolecularWeight;
 			this.Title = Title;
 		}
+	}
+
+	public String getFirstPropertyTitle() {
+		return this.propertyTableObj.properties.getFirst().getTitle();
 	}
 }
