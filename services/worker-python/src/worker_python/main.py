@@ -1,16 +1,17 @@
 from fastapi import FastAPI
-from rdkit import Chem, DataStructs
-from rdkit.Chem import AllChem
+
+from model.pubchem_request import PubChemFastformulaPropertiesResponse
 
 app = FastAPI()
 
 
 @app.get("/")
 async def root():
-    ms = [Chem.MolFromSmiles('CCOC'), Chem.MolFromSmiles('CCO'), Chem.MolFromSmiles('COC')]
-    fpgen = AllChem.GetRDKitFPGenerator() # noqa
-    fps = [fpgen.GetFingerprint(x) for x in ms]
-    # DataStructs.TanimotoSimilarity(fps[0],fps[1])
-    # DataStructs.TanimotoSimilarity(fps[0],fps[2])
-    # DataStructs.TanimotoSimilarity(fps[1],fps[2])
-    return {"message": "Hello World", "smiles": DataStructs.TanimotoSimilarity(fps[1],fps[2])}
+    return {"message": "Hello World"}
+
+
+@app.post("/transform/")
+async def transform(item: PubChemFastformulaPropertiesResponse):
+    
+    return item
+

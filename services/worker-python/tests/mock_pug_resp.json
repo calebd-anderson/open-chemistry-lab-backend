@@ -1,0 +1,136 @@
+{
+    "PropertyTable": {
+        "Properties": [
+            {
+                "CID": 977,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "31.999",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-UHFFFAOYSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen"
+            },
+            {
+                "CID": 5359597,
+                "MolecularFormula": "O2-",
+                "MolecularWeight": "31.999",
+                "ConnectivitySMILES": "[O-][O]",
+                "InChIKey": "OUUQCZGPVNCOIJ-UHFFFAOYSA-M",
+                "Charge": -1,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Superoxide"
+            },
+            {
+                "CID": 10313042,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "35.99831922",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-XPULMUKRSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen-18O2"
+            },
+            {
+                "CID": 10197606,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "33.99826351",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-ZDOIIHCHSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen O-17"
+            },
+            {
+                "CID": 5460605,
+                "MolecularFormula": "O2+",
+                "MolecularWeight": "31.999",
+                "ConnectivitySMILES": "O=[O+]",
+                "InChIKey": "KMHJKRGRIJONSV-UHFFFAOYSA-N",
+                "Charge": 1,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Dioxygen(.1+)"
+            },
+            {
+                "CID": 11170911,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "31.989829239",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-ZCWHFVSRSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygene"
+            },
+            {
+                "CID": 5289087,
+                "MolecularFormula": "O2-4",
+                "MolecularWeight": "31.999",
+                "ConnectivitySMILES": "[O-2].[O-2]",
+                "InChIKey": "NECFWXCJYBOBDE-UHFFFAOYSA-N",
+                "Charge": -4,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "CID 5289087"
+            },
+            {
+                "CID": 73357760,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "38.00716",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-RCXJJWPZSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen, isotope of mass 19, at."
+            },
+            {
+                "CID": 10197605,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "33.999",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-NJFSPNSNSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "CID 10197605"
+            },
+            {
+                "CID": 10290726,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "30.00613",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-BHBJOZJASA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen, labeled with oxygen-15"
+            },
+            {
+                "CID": 16225401,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "32.999",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-OUBTZVSYSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "CID 16225401"
+            },
+            {
+                "CID": 16225402,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "34.998291368",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-RGIGPVFXSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "CID 16225402"
+            },
+            {
+                "CID": 24996038,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "31.002",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-BJUDXGSMSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "CID 24996038"
+            }
+        ]
+    }
+}
