@@ -10,10 +10,10 @@
   - Test your knowledge with a quiz automatically generated from your discovered compounds.
 
 ## Development
-### Configure Java SDK 21 LTS
+### Configure JDK 25 LTS
 - [sdkman](https://sdkman.io/install/)
 - [jabba](https://github.com/shyiko/jabba)
-- [temurin](https://adoptium.net/temurin/releases/?version=21&os=any&arch=any)
+- [temurin](https://adoptium.net/temurin/releases/?version=25&os=any&arch=any)
 
 >[!IMPORTANT]
 >The version of Java used by the project must match the version output by `./mvnw --version`

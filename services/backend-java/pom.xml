@@ -16,8 +16,8 @@
     <description>Machine Processing Chemistry Education</description>
 
     <properties>
-        <java.version>21</java.version>
-        <lombok.version>1.18.36</lombok.version>
+        <java.version>25</java.version>
+        <lombok.version>1.18.44</lombok.version>
     </properties>
 
     <dependencies>
@@ -169,6 +169,25 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <!-- compile to the Java release you declared earlier -->
+                    <release>${java.version}</release>
+                    <!-- ensure Lombok's annotation processor is used reliably -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <!-- optional: fork compiler for isolation and to add extra args -->
+                    <!-- <fork>true</fork>-->
+                </configuration>
+            </plugin>
             <!-- Configure Mockito as a Java agent for inline mock maker support -->
             <!-- See: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3 -->
             <plugin>

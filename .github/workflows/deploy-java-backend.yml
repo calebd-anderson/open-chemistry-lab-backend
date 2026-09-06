@@ -1,6 +1,6 @@
 name: build_deploy_azure_container_app
 env:
-  JAVA_VERSION: '21'                  # set this to the Java version to use
+  JAVA_VERSION: '25'                  # set this to the Java version to use
   DISTRIBUTION: 'temurin'             # set this to the Java distribution
 
 on:
