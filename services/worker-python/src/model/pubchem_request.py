@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_pascal
 
-JSON_DATA = '''{
+JSON_DATA = ''' {
     "PropertyTable": {
         "Properties": [
             {
@@ -13,6 +13,26 @@ JSON_DATA = '''{
                 "Charge": 0,
                 "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
                 "Title": "Oxygen"
+            },
+            {
+                "CID": 5359597,
+                "MolecularFormula": "O2-",
+                "MolecularWeight": "31.999",
+                "ConnectivitySMILES": "[O-][O]",
+                "InChIKey": "OUUQCZGPVNCOIJ-UHFFFAOYSA-M",
+                "Charge": -1,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Superoxide"
+            },
+            {
+                "CID": 10313042,
+                "MolecularFormula": "O2",
+                "MolecularWeight": "35.99831922",
+                "ConnectivitySMILES": "O=O",
+                "InChIKey": "MYMOFIZGZYHOMD-XPULMUKRSA-N",
+                "Charge": 0,
+                "Fingerprint2D": "AAADcQAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+                "Title": "Oxygen-18O2"
             }
         ]
     }
@@ -48,4 +68,4 @@ class PubChemFastformulaCidProperties(BaseModel):
     fingerprint_2d: str
     title: str
 
-print(PubChemFastformulaPropertiesResponse.model_validate_json(JSON_DATA))
+# print(PubChemFastformulaPropertiesResponse.model_validate_json(JSON_DATA))

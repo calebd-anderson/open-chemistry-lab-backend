@@ -70,16 +70,5 @@ class DataTransformer:
             vector = np.concatenate(cid_obj)
             self.X_data[cid_idx] = vector
 
-        # self.X_data = np.array(self.X_data)
-
-data_transformer = DataTransformer(
-    PubChemFastformulaPropertiesResponse.model_validate_json(JSON_DATA)
-)
-
-# print(type(data_transformer.X_data))
-data_transformer.create_topology()
-data_transformer.create_composition()
-data_transformer.create_charge_indicators()
-data_transformer.create_mass()
-data_transformer.reduce_to_vectors()
-print(data_transformer.X_data)
+        # finally, serialize the matrix of vectors
+        self.X_data = np.array(self.X_data).tolist()
