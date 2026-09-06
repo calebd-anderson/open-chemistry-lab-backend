@@ -138,6 +138,34 @@
             <artifactId>azure-storage-blob</artifactId>
             <version>12.35.0</version>
         </dependency>
+        <!-- SMILE ML -->
+        <!-- Core ML algorithms -->
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>6.3.0</version>
+        </dependency>
+
+<!--        &lt;!&ndash; Deep learning + LLMs (requires LibTorch) &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.haifengl</groupId>-->
+<!--            <artifactId>smile-deep</artifactId>-->
+<!--            <version>6.3.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Natural language processing &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.haifengl</groupId>-->
+<!--            <artifactId>smile-nlp</artifactId>-->
+<!--            <version>6.3.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Data visualization &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.haifengl</groupId>-->
+<!--            <artifactId>smile-plot</artifactId>-->
+<!--            <version>6.3.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
