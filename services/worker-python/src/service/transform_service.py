@@ -1,12 +1,10 @@
-from typing import Any, TypeAlias
-
 import numpy as np
 from numpy.typing import NDArray
 from pydantic import TypeAdapter
-from rdkit import Chem
+from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem
 
-from model.pubchem_features_response import CidMetadata, CompoundResponse
+from model.pubchem_features_response import CompoundResponse, TransientMetadata
 from model.pubchem_request import (
     PubChemFastformulaCidProperties,
     PubChemFastformulaPropertiesRequest,
@@ -27,10 +25,13 @@ class DataTransformer:
 
     def initialize_metadata(self):
         for cid_idx, cid in enumerate(self.cids):
+            self.responses[cid_idx].cid = cid.cid
+            self.responses[cid_idx].title = cid.title
+            self.responses[cid_idx].in_ch_i_key = cid.in_ch_i_key
+            self.responses[cid_idx].features_vector = []
+
             self.partial_metadata[cid.cid] = {
-                "title": cid.title,
-                "in_ch_i_key": cid.in_ch_i_key,
-                "features_vector": np.array([])
+                "stateless_ref_cid": self.cids[0].cid
             }
 
 
@@ -42,6 +43,13 @@ class DataTransformer:
             # Convert the bit-string to a numpy array of bits
             fp_bits = np.array(list(current_fp.ToBitString()), dtype=np.int8)
             self.feature_vectors[cid_idx].append(fp_bits)
+
+            ref_mol = Chem.MolFromSmiles(self.cids[0].connectivity_smiles)
+            ref_fp = fpgen.GetFingerprint(ref_mol)
+
+            chem_similarity = DataStructs.TanimotoSimilarity(ref_fp, current_fp)
+            self.partial_metadata[cid.cid]["stateless_tanimoto"] = chem_similarity
+
 
 
     def create_composition(self):
@@ -64,14 +72,23 @@ class DataTransformer:
 
     def create_charge_indicators(self):
         for cid_idx, cid in enumerate(self.cids):
-            target_cid_charge_indicators = self.get_charge_indicators(float(cid.charge))
+            current_cid_charge = float(cid.charge)
+            target_cid_charge_indicators = self.get_charge_indicators(current_cid_charge)
             self.feature_vectors[cid_idx].append(target_cid_charge_indicators)
+
+            ref_cid_charge = float(self.cids[0].charge)
+            delta_z = float(current_cid_charge - ref_cid_charge)
+            self.partial_metadata[cid.cid]["stateless_relative_charge"] = delta_z
 
 
     def create_mass(self):
         for cid_idx, cid in enumerate(self.cids):
             current_cid_mass = np.array([float(cid.molecular_weight)])
             self.feature_vectors[cid_idx].append(current_cid_mass)
+
+            ref_cid_mass = float(self.cids[0].molecular_weight)
+            delta_mass = current_cid_mass - ref_cid_mass
+            self.partial_metadata[cid.cid]["stateless_relative_mass"] = delta_mass
 
 
     def reduce_to_vectors(self) -> list[CompoundResponse]:
@@ -88,11 +105,12 @@ class DataTransformer:
             )
             # then concatinate each item so it is a single vector
             # and set it to the features_vector of the cid
-            self.partial_metadata[cid.cid]["features_vector"] = np.concatenate(combined_features)
+            self.responses[cid_idx].features_vector = np.concatenate(
+                combined_features
+            ).tolist()
 
-            metadata = CidMetadata.model_validate(self.partial_metadata[cid.cid])
-            # self.responses[cid.cid]["meta_data"] = metadata
-            self.responses[cid.cid].meta_data = metadata
+            metadata = TransientMetadata.model_validate(self.partial_metadata[cid.cid])
+            self.responses[cid_idx].transient_meta_data = metadata
 
         adapter = TypeAdapter(list[CompoundResponse])
         return adapter.validate_python(self.responses)

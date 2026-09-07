@@ -3,16 +3,17 @@ from pydantic import BaseModel, TypeAdapter
 
 class CompoundResponse(BaseModel):
     cid: int
-    meta_data: CidMetadata
-
-class CidMetadata(BaseModel):
     title: str
     in_ch_i_key: str
+    features_vector: list[int]
+    transient_meta_data: TransientMetadata
+
+
+class TransientMetadata(BaseModel):
     stateless_ref_cid: int
     stateless_relative_mass: float
     stateless_relative_charge: float
     stateless_tanimoto: float
-    features_vector: list[int]
 
 
 # JSON_DATA = [
