@@ -90,8 +90,8 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
 
         // iteration 1 will not use tsne
         // https://haifengl.github.io/manifold.html#t-sne
-        var tsne = TSNE.fit(X, new TSNE.Options(2, Math.min(5, X.length - 1), 200, 12, 550));
-        double[][] embedding = tsne.coordinates();
+//        var tsne = TSNE.fit(X, new TSNE.Options(2, Math.min(5, X.length - 1), 200, 12, 550));
+//        double[][] embedding = tsne.coordinates();
 
         var clustMapData = new ClusterMapResponse(data, labels);
 
