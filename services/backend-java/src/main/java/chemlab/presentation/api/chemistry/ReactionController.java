@@ -7,7 +7,7 @@ import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.shared.responses.ReactionResponse;
 import chemlab.shared.requests.ClusterMapRequest;
-import chemlab.shared.responses.ClusterMapData;
+import chemlab.shared.responses.ClusterMapResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +43,7 @@ public class ReactionController {
     }
 
     @PostMapping(value = "analyze")
-    public ClusterMapData analyzeReaction(@RequestBody List<ClusterMapRequest> data) {
+    public ClusterMapResponse analyzeReaction(@RequestBody List<ClusterMapRequest> data) {
         return unsupervisedClustMap.testMl(data);
     }
 }

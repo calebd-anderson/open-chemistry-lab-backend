@@ -2,7 +2,7 @@ package chemlab.service.ml;
 
 import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.shared.requests.ClusterMapRequest;
-import chemlab.shared.responses.ClusterMapData;
+import chemlab.shared.responses.ClusterMapResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import smile.clustering.DBSCAN;
@@ -56,7 +56,7 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
         log.info("{} - Max values per column: {}", label, maxValues);
     }
 
-    public ClusterMapData testMl(List<ClusterMapRequest> data)  {
+    public ClusterMapResponse testMl(List<ClusterMapRequest> data)  {
         // transform all the ClusterMapRequest objects into a matrix of feature vectors for clustering
         double[][] featureVectors = data.stream()
                 .map(ClusterMapRequest::getFeaturesVector)
@@ -89,7 +89,7 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
 
         // Plot embedding[i] using labels[i] as the color.
 
-        var clustMapData = new ClusterMapData(embedding, labels);
+        var clustMapData = new ClusterMapResponse(embedding, labels);
         return clustMapData;
     }
 }

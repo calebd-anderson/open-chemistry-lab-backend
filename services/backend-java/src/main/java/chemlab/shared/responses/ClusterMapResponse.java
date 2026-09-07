@@ -3,14 +3,14 @@ package chemlab.shared.responses;
 import lombok.Data;
 
 @Data
-public class ClusterMapData {
+public class ClusterMapResponse {
     private double[][] embedding;
     private int[] labels;
 
-    public ClusterMapData() {
+    public ClusterMapResponse() {
     }
 
-    public ClusterMapData(double[][] embedding, int[] labels) {
+    public ClusterMapResponse(double[][] embedding, int[] labels) {
         this.embedding = embedding;
         this.labels = labels;
     }
