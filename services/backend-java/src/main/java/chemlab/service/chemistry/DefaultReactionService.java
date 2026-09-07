@@ -2,7 +2,6 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
-import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
@@ -12,8 +11,8 @@ import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
-import chemlab.shared.ReactionRequest;
-import chemlab.shared.ReactionResponse;
+import chemlab.shared.requests.ReactionRequest;
+import chemlab.shared.responses.ReactionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

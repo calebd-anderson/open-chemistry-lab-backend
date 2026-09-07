@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import chemlab.shared.UserRegisterRequest;
+import chemlab.shared.requests.UserRegisterRequest;
 
 import java.io.File;
 import java.io.IOException;

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import chemlab.shared.UserLoginRequest;
+import chemlab.shared.requests.UserLoginRequest;
 
 import java.io.Serializable;
 import java.util.ArrayList;

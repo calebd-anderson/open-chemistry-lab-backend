@@ -3,8 +3,8 @@ package chemlab.domain.service.chemistry;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
-import chemlab.shared.ReactionRequest;
-import chemlab.shared.ReactionResponse;
+import chemlab.shared.requests.ReactionRequest;
+import chemlab.shared.responses.ReactionResponse;
 
 import java.util.List;
 

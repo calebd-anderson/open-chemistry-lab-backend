@@ -1,25 +1,21 @@
 package chemlab.services;
 
 import chemlab.domain.service.chemistry.ReactionService;
-import chemlab.domain.service.game.FlashcardService;
-import chemlab.domain.service.user.UserReactionService;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.service.chemistry.DefaultReactionService;
-import chemlab.shared.ReactionRequest;
-import chemlab.shared.ReactionResponse;
+import chemlab.shared.requests.ReactionRequest;
+import chemlab.shared.responses.ReactionResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;

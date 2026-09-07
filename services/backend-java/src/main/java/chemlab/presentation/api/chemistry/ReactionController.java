@@ -5,14 +5,14 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
-import chemlab.shared.ReactionResponse;
+import chemlab.shared.responses.ReactionResponse;
 import chemlab.shared.requests.ClusterMapRequest;
 import chemlab.shared.responses.ClusterMapData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import chemlab.shared.ReactionRequest;
+import chemlab.shared.requests.ReactionRequest;
 
 import java.util.List;
 

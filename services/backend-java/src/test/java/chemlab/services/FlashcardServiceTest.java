@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.domain.model.game.Flashcard;
-import chemlab.shared.CreateFlashcardRequest;
+import chemlab.shared.requests.CreateFlashcardRequest;
 import chemlab.domain.model.user.User;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;

@@ -1,4 +1,4 @@
-package chemlab.shared;
+package chemlab.shared.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

@@ -1,4 +1,4 @@
-package chemlab.shared;
+package chemlab.shared.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

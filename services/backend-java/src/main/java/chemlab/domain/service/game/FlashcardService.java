@@ -1,7 +1,7 @@
 package chemlab.domain.service.game;
 
 import chemlab.domain.model.game.Flashcard;
-import chemlab.shared.CreateFlashcardRequest;
+import chemlab.shared.requests.CreateFlashcardRequest;
 
 import java.util.List;
 
