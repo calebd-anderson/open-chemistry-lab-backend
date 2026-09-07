@@ -4,6 +4,7 @@ import chemlab.auth.http.JwtAccessDeniedHandler;
 import chemlab.auth.http.JwtAuthenticationEntryPoint;
 import chemlab.auth.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +38,9 @@ public class SecurityConfig {
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final CorsProperties corsProperties;
 
+    @Value("${constants.public-urls:/,/elements,/styles/**}")
+    private String[] publicUrls;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -46,8 +50,7 @@ public class SecurityConfig {
 //                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
 //                .requestMatchers("/api/user/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
 //                    .hasAnyAuthority("user:update")
-                    .requestMatchers(SecurityConstants.PUBLIC_URLS).permitAll()
-                    .requestMatchers("/api/auth/**").permitAll() // Allow access to auth endpoints
+                    .requestMatchers(publicUrls).permitAll()
                     .anyRequest().authenticated()
             ).anonymous(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
