@@ -76,6 +76,7 @@ public class DefaultReactionService implements ReactionService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean authenticated = (authentication != null && authentication.isAuthenticated());
+        String discoveredBy = authenticated ? authentication.getName() : "anonymous";
 
         // new discovery
         if (!hasCompoundBeenDiscovered(formula)) {
@@ -83,10 +84,8 @@ public class DefaultReactionService implements ReactionService {
             FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(formula);
             reaction.setTitle(pugApiResponse.getFirstPropertyTitle());
             reaction.setFirstDiscoveredWhen(Instant.now());
-            String name = authenticated ? authentication.getName() : "anonymous";
-            log.trace("Setting reaction discovered by: {}", name);
-            reaction.setFirstDiscoveredBy(name);
-
+            log.trace("Setting reaction discovered by: {}", discoveredBy);
+            reaction.setFirstDiscoveredBy(discoveredBy);
         } else {
             // reaction already discovered
             reaction = retrieveCompoundFromRepo(formula);
@@ -94,7 +93,6 @@ public class DefaultReactionService implements ReactionService {
         reaction.setLastDiscoveredWhen(Instant.now());
         reaction.setDiscoveredCount(reaction.getDiscoveredCount() + 1);
         // set last discovered by
-        String discoveredBy = authenticated ? authentication.getName() : "anonymous";
         reaction.setLastDiscoveredBy(discoveredBy);
         log.trace("Updating reaction with formula: {}", reaction.getFormula());
         reaction = reactionRepo.save(reaction);
