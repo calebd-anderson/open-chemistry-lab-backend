@@ -57,10 +57,12 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
     }
 
     public ClusterMapData testMl(List<ClusterMapRequest> data)  {
-        // https://haifengl.github.io/data.html
+        // transform all the ClusterMapRequest objects into a matrix of feature vectors for clustering
         double[][] featureVectors = data.stream()
-                .map(ClusterMapRequest::getFeatureVector)
+                .map(ClusterMapRequest::getFeaturesVector)
                 .toArray(double[][]::new);
+
+        // https://haifengl.github.io/data.html
         var df = DataFrame.of(featureVectors);
 
         // Log statistics before scaling
