@@ -40,6 +40,7 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.AGE_SECRET_KEY }}
         run: sops -d src/main/resources/application-prod.enc.yml > src/main/resources/application-prod.yml
+        working-directory: services/backend-java
 
       - name: Set up Java version
         uses: actions/setup-java@v5
@@ -47,7 +48,6 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.DISTRIBUTION }}
           cache: 'maven'
-          working-directory: services/backend-java
 
       - name: Build OCI image with Maven
         run: mvn spring-boot:build-image -Dspring.profiles.active=test

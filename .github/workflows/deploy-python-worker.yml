@@ -23,6 +23,11 @@ jobs:
           docker push ${{ secrets.registry }}.azurecr.io/fastapi-worker:${{ github.sha }}
         working-directory: services/worker-python
 
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
       - name: 'Purge old images from ACR'
         run: |
           az acr run --registry ${{ secrets.registry }} --cmd "acr purge --filter '*:.*' --ago 0d --keep 5 --untagged" /dev/null
