@@ -56,6 +56,11 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
         log.info("{} - Max values per column: {}", label, maxValues);
     }
 
+    private void buildResponse(List<ClusterMapRequest> data) {
+        double[] cids = data.stream().mapToDouble(ClusterMapRequest::getCid).toArray();
+        double tanimoto = data.get(1).getTransientMetadata().getStatelessTanimoto();
+    }
+
     public ClusterMapResponse testMl(List<ClusterMapRequest> data)  {
         // transform all the ClusterMapRequest objects into a matrix of feature vectors for clustering
         double[][] featureVectors = data.stream()
@@ -83,13 +88,13 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
         DBSCAN<double[]> model = DBSCAN.fit(X, minPts, radius);
         int[] labels = model.group();
 
+        // iteration 1 will not use tsne
         // https://haifengl.github.io/manifold.html#t-sne
         var tsne = TSNE.fit(X, new TSNE.Options(2, Math.min(5, X.length - 1), 200, 12, 550));
         double[][] embedding = tsne.coordinates();
 
-        // Plot embedding[i] using labels[i] as the color.
+        var clustMapData = new ClusterMapResponse(data, labels);
 
-        var clustMapData = new ClusterMapResponse(embedding, labels);
         return clustMapData;
     }
 }
