@@ -9,13 +9,17 @@ import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.service.chemistry.DefaultReactionService;
+import chemlab.shared.ReactionRequest;
+import chemlab.shared.ReactionResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,10 +30,6 @@ class ReactionServiceTest {
 
     @Mock
     private ReactionRepository reactionRepo;
-    @Mock
-    private UserReactionService userReactionService;
-    @Mock
-    FlashcardService flashcardService;
 
     @Mock
     private PubChemApiService pubChemApi;
@@ -78,9 +78,11 @@ class ReactionServiceTest {
         doReturn(r1).when(reactionRepo).findReactionByFormula(formula);
         // the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
+        ReactionRequest reactionRequest = mock(ReactionRequest.class);
+        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
 
         // Act
-        Reaction reactionResult = reactionService.createReaction(r1);
+        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
 
         // Assert
         assertNotNull(reactionResult);
@@ -117,9 +119,11 @@ class ReactionServiceTest {
         doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(formula);
         // stub in the service returns the saved reaction
         doReturn(r1).when(reactionRepo).save(r1);
+        ReactionRequest reactionRequest = mock(ReactionRequest.class);
+        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
 
         // Act
-        Reaction reactionResult = reactionService.createReaction(r1);
+        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
 
         // Assert
         assertNotNull(reactionResult);
@@ -143,39 +147,23 @@ class ReactionServiceTest {
         // create reaction from elements
         Reaction r1 = new Reaction(elements);
         int initialDiscoveryCount = r1.getDiscoveredCount();
-        // create list of reactions
-//        List<Reaction> reactions = new ArrayList<>();
-//        reactions.add(r1);
-        String formula = "H2O";
-        // stub in the repo finds the reaction
-//        doReturn(reactions).when(reactionRepo).findCompoundByFormula(formula);
+
         // stub in the api return
         FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
-        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(formula);
-        // stub in the service returns the saved reaction
+        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(r1.getFormula());
+        // stub in the repo returns the saved reaction
+        r1.setDiscoveredCount(r1.getDiscoveredCount() + 1);
         doReturn(r1).when(reactionRepo).save(r1);
 
-        // check if discovery is recorded
-        // if not record in mongodb
-
-        // set discovery attributes:
-        // discoveredWhen
-        // discoveredBy
-        // timesDiscovered
-        // lastDiscoveredWhen
-        // lasterDiscoveredBy
-        // if so retrieve from database
-        // set discovery attributes:
-        // timesDiscovered
-        // lastDiscoveredWhen
-        // lasterDiscoveredBy
+        ReactionRequest reactionRequest = mock(ReactionRequest.class);
+        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
 
         // Act
-        Reaction reactionResult = reactionService.createReaction(r1);
+        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
 
         // Assert
         // reaction discovered for first time so PubChem api called
-        verify(pubChemApi, atLeastOnce()).getFormulaProperties(formula);
+        verify(pubChemApi, atLeastOnce()).getFormulaProperties(r1.getFormula());
         // after discovery (validateInput) the reaction discovery count is incremented by 1
         assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveredCount());
     }

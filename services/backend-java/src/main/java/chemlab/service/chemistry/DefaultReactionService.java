@@ -2,6 +2,7 @@ package chemlab.service.chemistry;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
+import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
@@ -11,7 +12,10 @@ import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.shared.ReactionRequest;
+import chemlab.shared.ReactionResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,9 +69,11 @@ public class DefaultReactionService implements ReactionService {
         return reactionRepo.findAll();
     }
 
-    public Reaction createReaction(Reaction reaction) throws PugApiException {
+    public ReactionResponse createReaction(ReactionRequest payload) throws PugApiException {
+        Reaction reaction = new Reaction(payload.getMappedPayload());
+
         String formula = reaction.getFormula();
-        log.info("Validating: [{}]", formula);
+        log.trace("Validating: [{}]", formula);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean authenticated = (authentication != null && authentication.isAuthenticated());
@@ -79,7 +85,7 @@ public class DefaultReactionService implements ReactionService {
             reaction.setTitle(pugApiResponse.getFirstPropertyTitle());
             reaction.setFirstDiscoveredWhen(Instant.now());
             String name = authenticated ? authentication.getName() : "anonymous";
-            log.info("Setting reaction discovered by: {}", name);
+            log.trace("Setting reaction discovered by: {}", name);
             reaction.setFirstDiscoveredBy(name);
 
         } else {
@@ -91,18 +97,20 @@ public class DefaultReactionService implements ReactionService {
         // set last discovered by
         String discoveredBy = authenticated ? authentication.getName() : "anonymous";
         reaction.setLastDiscoveredBy(discoveredBy);
-        log.info("Updating reaction with formula: {}", reaction.getFormula());
+        log.trace("Updating reaction with formula: {}", reaction.getFormula());
         reaction = reactionRepo.save(reaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
         if (authenticated) {
             // need to lookup user by username until able to add userid to JWT
-            log.info("Querying the db for user with username: {}", authentication.getName());
+            log.trace("Querying the db for user with username: {}", authentication.getName());
             User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            log.info("Saving the {} reaction with the user.", reaction.getFormula());
+            log.trace("Saving the {} reaction with the user.", reaction.getFormula());
             userReactionService.saveReactionWithUser(user.getUserId(), reaction);
         }
-        log.info("Finished validating input.");
-        return reaction;
+        log.trace("Finished validating input.");
+        ModelMapper modelMapper = new ModelMapper();
+        ReactionResponse response = modelMapper.map(reaction, ReactionResponse.class);
+        return response;
     }
 
     public Reaction analyzeFormula(Reaction reaction) throws PugApiException {
