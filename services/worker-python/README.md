@@ -21,6 +21,18 @@ uv run pytest
 ```
 
 ## CI
+### Docker
+https://fastapi.tiangolo.com/deployment/docker
+```sh
+# export requirements if `project.toml` or `uv.lock` changes
+uv export --format requirements-txt --no-dev --no-emit-project --output-file requirements.txt
+```
+```sh
+# build the image
+docker build -t myimage .
+# run the container
+docker run -d --name mycontainer -p 80:80 myimage
+```
 ```sh
 uv lock --check
 uv run ruff check .
