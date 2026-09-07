@@ -1,11 +1,33 @@
 on:
   push:
-    branches: [ main ]
+    branches: [ main, monorepo ]
     paths:
       - 'services/worker-python/**' # <--- Only run if Python files change!
       - '.github/workflows/deploy-python-worker.yml'
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 'Tag and push image'
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.registry }}.azurecr.io
+          username: ${{ secrets.service_principal }}
+          password: ${{ secrets.service_principal_password }}
+      - run: |
+          docker build -t fastapi-worker .
+          docker tag fastapi-worker ${{ secrets.registry }}.azurecr.io/fastapi-worker:${{ github.sha }}
+          docker push ${{ secrets.registry }}.azurecr.io/fastapi-worker:${{ github.sha }}
+        working-directory: services/worker-python
+
+      - name: 'Purge old images from ACR'
+        run: |
+          az acr run --registry ${{ secrets.registry }} --cmd "acr purge --filter '*:.*' --ago 0d --keep 5 --untagged" /dev/null
+
+
   deploy:
     runs-on: ubuntu-latest
     steps:
