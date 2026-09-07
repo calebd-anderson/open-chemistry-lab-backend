@@ -15,6 +15,7 @@ async def root():
 @app.post("/transform/")
 async def transform(item: PubChemFastformulaPropertiesRequest) -> list[CompoundResponse]:
     data_transformer = DataTransformer(item)
+    data_transformer.initialize_metadata()
     data_transformer.create_topology()
     data_transformer.create_composition()
     data_transformer.create_charge_indicators()

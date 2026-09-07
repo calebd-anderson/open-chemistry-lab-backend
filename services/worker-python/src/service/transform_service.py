@@ -24,12 +24,14 @@ class DataTransformer:
 
 
     def initialize_metadata(self):
-        for cid_idx, cid in enumerate(self.cids):
-            self.responses[cid_idx].cid = cid.cid
-            self.responses[cid_idx].title = cid.title
-            self.responses[cid_idx].in_ch_i_key = cid.in_ch_i_key
-            self.responses[cid_idx].features_vector = []
-
+        for _, cid in enumerate(self.cids):
+            self.responses.append(CompoundResponse(
+                cid=cid.cid,
+                title=cid.title,
+                in_ch_i_key=cid.in_ch_i_key,
+                features_vector=[],
+                transient_meta_data=None
+            ))
             self.partial_metadata[cid.cid] = {
                 "stateless_ref_cid": self.cids[0].cid
             }
@@ -83,11 +85,11 @@ class DataTransformer:
 
     def create_mass(self):
         for cid_idx, cid in enumerate(self.cids):
-            current_cid_mass = np.array([float(cid.molecular_weight)])
-            self.feature_vectors[cid_idx].append(current_cid_mass)
+            current_cid_mass = float(cid.molecular_weight)
+            self.feature_vectors[cid_idx].append(np.array([current_cid_mass]))
 
             ref_cid_mass = float(self.cids[0].molecular_weight)
-            delta_mass = current_cid_mass - ref_cid_mass
+            delta_mass = float(current_cid_mass - ref_cid_mass)
             self.partial_metadata[cid.cid]["stateless_relative_mass"] = delta_mass
 
 

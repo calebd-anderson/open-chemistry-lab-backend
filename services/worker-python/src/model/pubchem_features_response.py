@@ -5,8 +5,8 @@ class CompoundResponse(BaseModel):
     cid: int
     title: str
     in_ch_i_key: str
-    features_vector: list[int]
-    transient_meta_data: TransientMetadata
+    features_vector: list[float]
+    transient_meta_data: TransientMetadata | None = None
 
 
 class TransientMetadata(BaseModel):
