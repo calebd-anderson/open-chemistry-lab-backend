@@ -1,4 +1,4 @@
-package chemlab.shared;
+package chemlab.shared.responses;
 
 import lombok.Data;
 
