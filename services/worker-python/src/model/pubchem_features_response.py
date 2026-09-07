@@ -3,6 +3,9 @@ from pydantic import BaseModel, TypeAdapter
 
 class CompoundResponse(BaseModel):
     cid: int
+    meta_data: CidMetadata
+
+class CidMetadata(BaseModel):
     title: str
     in_ch_i_key: str
     stateless_ref_cid: int
