@@ -6,14 +6,13 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 
 from model.pubchem_request import (
-    JSON_DATA,
     PubChemFastformulaCidProperties,
-    PubChemFastformulaPropertiesResponse,
+    PubChemFastformulaPropertiesRequest,
 )
 
 
 class DataTransformer:
-    def __init__(self, data: PubChemFastformulaPropertiesResponse):
+    def __init__(self, data: PubChemFastformulaPropertiesRequest):
         self.cids: list[PubChemFastformulaCidProperties] = data.property_table.properties
         # initalize the matrix of size len(self.cids) that will hold the vectors
         # self.X_data = [[] for _ in enumerate(self.cids)]

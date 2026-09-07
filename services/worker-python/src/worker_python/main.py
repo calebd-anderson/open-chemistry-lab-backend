@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
-from model.pubchem_request import PubChemFastformulaPropertiesResponse
+from model.pubchem_features_response import PubChemFeaturesResponse
+from model.pubchem_request import PubChemFastformulaPropertiesRequest
 from service.transform_service import DataTransformer
 
 app = FastAPI()
@@ -12,7 +13,7 @@ async def root():
 
 
 @app.post("/transform/")
-async def transform(item: PubChemFastformulaPropertiesResponse):
+async def transform(item: PubChemFastformulaPropertiesRequest) -> PubChemFeaturesResponse:
     data_transformer = DataTransformer(item)
     data_transformer.create_topology()
     data_transformer.create_composition()
