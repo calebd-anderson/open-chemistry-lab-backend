@@ -117,6 +117,7 @@ public class DefaultReactionService implements ReactionService {
 
 
     public List<ClusterMapRequest>  analyzeFormula(ReactionRequest payload) throws PugApiException, JsonProcessingException {
+        log.trace("In default reaction service");
         Reaction reaction = new Reaction(payload.getMappedPayload());
         FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(reaction.getFormula());
         return fastApiWorkerService.analyzePubChemFastformulaProps(pugApiResponse);

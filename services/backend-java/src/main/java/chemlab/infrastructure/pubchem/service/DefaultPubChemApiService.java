@@ -20,7 +20,7 @@ public class DefaultPubChemApiService implements PubChemApiService {
     private RestTemplate restTemplate;
 
     public FastformulaPropertiesResponse getFormulaProperties(String formula) throws PugApiException {
-        log.info("Calling PubChem API with molecular formula: {}", formula);
+        log.trace("Calling PubChem API with molecular formula: {}", formula);
         String pubChemUrl = PUG_PROLOG + PUG_INPUT + formula + PUG_PROPERTIES_OPERATION + PUG_OUTPUT;
         try {
             log.trace("Sending PugAPI url in service: {}", pubChemUrl);

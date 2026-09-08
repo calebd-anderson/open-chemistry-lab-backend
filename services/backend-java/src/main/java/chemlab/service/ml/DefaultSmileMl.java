@@ -61,6 +61,7 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
     }
 
     public ClusterMapResponse testMl(List<ClusterMapRequest> data)  {
+        log.trace("Running machine learning.");
         // transform all the ClusterMapRequest objects into a matrix of feature vectors for clustering
         double[][] featureVectors = data.stream()
                 .map(ClusterMapRequest::getFeaturesVector)

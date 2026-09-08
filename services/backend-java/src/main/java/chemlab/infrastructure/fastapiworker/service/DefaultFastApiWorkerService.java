@@ -3,6 +3,7 @@ package chemlab.infrastructure.fastapiworker.service;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class DefaultFastApiWorkerService implements FastApiWorkerService {
     @Autowired
     private RestTemplate restTemplate;
@@ -30,6 +32,7 @@ public class DefaultFastApiWorkerService implements FastApiWorkerService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        log.trace("Sending request to FastAPI Worker: {}", url);
         ResponseEntity<ClusterMapRequest[]> fastApiResponse = restTemplate.postForEntity(url, pugApiResponse, ClusterMapRequest[].class, headers);
 
         assert fastApiResponse.getBody() != null;
