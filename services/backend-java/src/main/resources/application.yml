@@ -20,7 +20,7 @@ jwt:
   secret: "${JWT_SECRET:0000000000}"
 
 constants:
-  public-urls: /,/elements,/styles/**,/api/elements/**,/api/compound/validate/**,/api/auth/**
+  public-urls: /,/elements,/styles/**,/api/elements/**,/api/compound/validate/**,/api/auth/**,/api/compound/analyze/**
 
 # Spring Framework Defaults
 spring:
