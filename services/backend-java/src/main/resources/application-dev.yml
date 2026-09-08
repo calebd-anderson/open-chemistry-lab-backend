@@ -87,3 +87,6 @@ management:
 #     # Absolute or project-root-relative path. If omitted, default is
 #     # "storage/uploads" and no configuration is required.
 #     path: "C:/Users/you/my-uploads"   # or "storage/uploads" (relative)
+
+services:
+  fastapi-worker:  http://localhost:8000

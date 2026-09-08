@@ -1,5 +1,6 @@
-package chemlab.shared.requests;
+package chemlab.infrastructure.fastapiworker;
 
+import chemlab.shared.requests.TransientMetadata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

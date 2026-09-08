@@ -1,14 +1,13 @@
 package chemlab.service.ml;
 
 import chemlab.domain.service.ml.UnsupervisedClustMap;
-import chemlab.shared.requests.ClusterMapRequest;
+import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.shared.responses.ClusterMapResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import smile.clustering.DBSCAN;
 import smile.data.DataFrame;
 import smile.feature.transform.MaxAbsScaler;
-import smile.manifold.TSNE;
 
 import java.util.List;
 

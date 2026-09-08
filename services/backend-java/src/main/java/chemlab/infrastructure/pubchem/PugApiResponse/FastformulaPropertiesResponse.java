@@ -3,6 +3,7 @@ package chemlab.infrastructure.pubchem.PugApiResponse;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,33 +25,21 @@ public class FastformulaPropertiesResponse {
 		}
 	}
 	
-	@Getter
+	@Data
 	static class Properties {
 		public final int CID;
 		private final String MolecularFormula;
 		private final String MolecularWeight;
 		private final String Title;
-		
-		@JsonCreator
-		public Properties(@JsonProperty("CID") int CID,
-						  	@JsonProperty("MolecularFormula")
-						  	String MolecularFormula,
-						  	@JsonProperty("MolecularWeight")
-						  	String MolecularWeight,
-						  	@JsonProperty("Title")
-						  	String Title) {
-			this.CID = CID;
-			this.MolecularFormula = MolecularFormula;
-			this.MolecularWeight = MolecularWeight;
-			this.Title = Title;
-		}
+		@JsonProperty("InChIKey")
+		private final String InChIKey;
+		private final int Charge;
+		@JsonProperty("Fingerprint2D")
+		private final String Fingerprint2D;
+		private final String ConnectivitySMILES;
 	}
 
 	public String getFirstPropertyTitle() {
 		return this.propertyTableObj.properties.getFirst().getTitle();
 	}
-
-//	public int getCid() {
-//		return this.propertyTableObj.properties.getFirst().CID;
-//	}
 }

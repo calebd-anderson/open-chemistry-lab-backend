@@ -5,6 +5,8 @@ import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaCidsResponse;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
@@ -13,6 +15,7 @@ import chemlab.repository.chemistry.ReactionRepository;
 import chemlab.repository.user.RegisteredUserRepository;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,8 @@ public class DefaultReactionService implements ReactionService {
     private RegisteredUserRepository userRepo;
     @Autowired
     private UserReactionService userReactionService;
+    @Autowired
+    private FastApiWorkerService fastApiWorkerService;
 
     @Autowired
     private PubChemApiService pubChemApi;
@@ -110,43 +115,10 @@ public class DefaultReactionService implements ReactionService {
         return response;
     }
 
-    public Reaction analyzeFormula(Reaction reaction) throws PugApiException {
-        String formula = reaction.getFormula();
-        log.info("Analyzing formula: [{}]", formula);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean authenticated = (authentication != null && authentication.isAuthenticated());
-
-        // new discovery
-        if (!hasCompoundBeenDiscovered(formula)) {
-            // try formula with PubChem api
-            FastformulaCidsResponse pugApiResponse = pubChemApi.getFormulaCids(formula);
-            int[] cids = pugApiResponse.getCids();
-            reaction.setFirstDiscoveredWhen(Instant.now());
-            String name = authenticated ? authentication.getName() : "anonymous";
-            log.info("Setting reaction discovered by: {}", name);
-            reaction.setFirstDiscoveredBy(name);
-
-        } else {
-            // reaction already discovered
-            reaction = retrieveCompoundFromRepo(formula);
-        }
-        reaction.setLastDiscoveredWhen(Instant.now());
-        reaction.setDiscoveredCount(reaction.getDiscoveredCount() + 1);
-        // set last discovered by
-        String discoveredBy = authenticated ? authentication.getName() : "anonymous";
-        reaction.setLastDiscoveredBy(discoveredBy);
-        log.info("Updating reaction with formula: {}", reaction.getFormula());
-        reaction = reactionRepo.save(reaction);
-        // if user is logged in; create game data and save reaction from discovered reaction with the user
-        if (authenticated) {
-            // need to lookup user by username until able to add userid to JWT
-            log.info("Querying the db for user with username: {}", authentication.getName());
-            User user = userRepo.findRegisteredUserByUsername(authentication.getName());
-            log.info("Saving the {} reaction with the user.", reaction.getFormula());
-            userReactionService.saveReactionWithUser(user.getUserId(), reaction);
-        }
-        log.info("Finished validating input.");
-        return reaction;
+    public List<ClusterMapRequest>  analyzeFormula(ReactionRequest payload) throws PugApiException, JsonProcessingException {
+        Reaction reaction = new Reaction(payload.getMappedPayload());
+        FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(reaction.getFormula());
+        return fastApiWorkerService.analyzePubChemFastformulaProps(pugApiResponse);
     }
 }

@@ -1,6 +1,6 @@
 package chemlab.shared.responses;
 
-import chemlab.shared.requests.ClusterMapRequest;
+import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import lombok.Data;
 
 import java.util.ArrayList;

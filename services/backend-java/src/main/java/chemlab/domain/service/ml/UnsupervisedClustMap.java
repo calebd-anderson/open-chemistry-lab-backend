@@ -1,6 +1,6 @@
 package chemlab.domain.service.ml;
 
-import chemlab.shared.requests.ClusterMapRequest;
+import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.shared.responses.ClusterMapResponse;
 
 import java.util.List;
