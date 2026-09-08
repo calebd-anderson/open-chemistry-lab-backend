@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String authorizationHeader = req.getHeader(HttpHeaders.AUTHORIZATION);
             // if null or not starts with "Bearer "
             if (authorizationHeader == null || authorizationHeader.equals("Bearer null") || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
-                log.debug("Authorization header is null or invalid: {}.", authorizationHeader);
+                log.debug("Authorization header is null or invalid.");
                 // if the user is not authenticated, clear the security context
                 // TODO: This is a temporary fix for the test scenarios which do not provide a valid token to prevent the security context from being cleared when the authorization header is invalid.
                 // SecurityContextHolder.clearContext();
@@ -66,7 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.clearContext();
                     }
                 } catch (TokenExpiredException e) {
-                    log.warn("Authorization expired: {}.", authorizationHeader);
+                    log.warn("Authorization expired: {}.", e.getMessage());
                     SecurityContextHolder.clearContext();
                 }
                 catch (JWTVerificationException e) {
