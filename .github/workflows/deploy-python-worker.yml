@@ -35,5 +35,20 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+
     steps:
-      - uses: actions/checkout@v6
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: ${{ secrets.registry }}
+          containerAppName: fastapi-worker
+          resourceGroup: college-projects
+          imageToDeploy: ${{ secrets.registry }}.azurecr.io/fastapi-worker:${{ github.sha }}
