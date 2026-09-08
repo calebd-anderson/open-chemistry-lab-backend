@@ -1,6 +1,7 @@
 package chemlab.repository;
 
 import chemlab.auth.config.CorsProperties;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.repository.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ class ElementRepositoryTests {
     private ElementRepository elementRepo;
     @MockitoBean
     private CorsProperties corsProperties;
+    @MockitoBean
+    FastApiWorkerService fastApiWorkerService;
 
     @Test
     @DisplayName("should instantiate the repo")

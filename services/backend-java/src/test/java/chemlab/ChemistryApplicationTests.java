@@ -1,6 +1,7 @@
 package chemlab;
 
 import chemlab.auth.config.CorsProperties;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,8 @@ public class ChemistryApplicationTests {
 
 	@MockitoBean
 	private CorsProperties corsProperties;
+	@MockitoBean
+	FastApiWorkerService fastApiWorkerService;
 	
 	@Autowired
 	private MockMvc mockMvc;

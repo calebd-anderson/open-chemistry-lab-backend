@@ -1,6 +1,7 @@
 package chemlab.controllers.view;
 
 import chemlab.auth.config.CorsProperties;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.service.chemistry.DefaultElementService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ class PubChemElementViewControllerTest {
     private DefaultElementService elmServiceMock;
     @MockitoBean
     private CorsProperties corsProperties;
+    @MockitoBean
+    FastApiWorkerService fastApiWorkerService;
 
     private MockMvc mockMvc;
 

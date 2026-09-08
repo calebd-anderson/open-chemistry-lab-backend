@@ -1,6 +1,7 @@
 package chemlab.repository;
 
 import chemlab.domain.model.chemistry.Reaction;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.repository.chemistry.ReactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -27,6 +29,8 @@ public class ReactionRepositoryTest {
 
     @Autowired
     private ReactionRepository compoundRepo;
+    @MockitoBean
+    FastApiWorkerService fastApiWorkerService;
 
     private Reaction c1;
 
