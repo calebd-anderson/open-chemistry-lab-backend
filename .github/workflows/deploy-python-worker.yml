@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ main, monorepo ]
+    branches: [ main ]
     paths:
       - 'services/worker-python/**' # <--- Only run if Python files change!
       - '.github/workflows/deploy-python-worker.yml'

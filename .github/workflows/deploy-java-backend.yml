@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'monorepo'
     paths:
       - "services/backend-java/src/**"
       - "services/backend-java/pom.xml"
