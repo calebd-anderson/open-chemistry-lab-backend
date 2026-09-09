@@ -1,13 +1,5 @@
-# Backend API - Interactive Periodic Table Web Application
-
-<img src="/src/main/resources/static/images/chemistry.png" width="auto" height="95"  alt="chem-icon"/>
-
-## Features
-- Interactive periodic table of elements.
-- Experiment with chemistry.
-- Create an account:
-  - Create flash cards.
-  - Test your knowledge with a quiz automatically generated from your discovered compounds.
+# Catalyst Engine
+- BFF Spring Boot API
 
 ## Development
 ### Configure JDK 25 LTS
@@ -70,16 +62,3 @@ sops updatekeys src/main/resources/application-prod.enc.yml
 ```
 sops encrypt src/main/resources/application-prod.yml > src/main/resources/application-prod.enc.yml
 ```
-## Frontend built with [Angular](https://angular.dev/)
-- https://github.com/calebd-anderson/open-chemistry-lab-frontend
-
-## Credits
-This project was built with help from:
-- My B.S. capstone project professor and peers at Metro State University
-- An online tutorial from [Get Arrays](https://www.getarrays.io/)
-- The [PubChem API](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial)
-  - public chemistry data service
-- [RoboHash](https://robohash.org/)
-  - temporary profile image generator
-- Package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
-- <a href="https://www.flaticon.com/free-icons/chemistry" title="chemistry icons">Some chemistry icons created by Freepik - Flaticon</a>
