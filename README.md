@@ -14,7 +14,7 @@
 ### [Spring Boot Java 25](services/backend-java/README.md)
 - The backend for frontend (BFF) "brains" of the system.
 - Package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/).
-- Machine Learning with [Smile](https://haifengl.github.io/)
+- Machine Learning with [Smile](https://haifengl.github.io/).
 
 ### [FastAPI Python 3.14](services/worker-python/README.md)
 - [RDKit](https://www.rdkit.org/) worker service.
