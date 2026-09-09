@@ -14,13 +14,15 @@
 ### [Spring Boot Java 25](services/backend-java/README.md)
 - The backend for frontend (BFF) "brains" of the system.
 - Package organization is inspired by [onion architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/).
+- Machine Learning with [Smile](https://haifengl.github.io/)
 
 ### [FastAPI Python 3.14](services/worker-python/README.md)
 - [RDKit](https://www.rdkit.org/) worker service.
 
 ### [Angular Frontend](https://github.com/calebd-anderson/open-chemistry-lab-frontend)
 - The presentation layer with [Angular](https://angular.dev/).
-- [D3.js](https://d3js.org/).
+- Data visualization with [D3.js](https://d3js.org/).
+- Animation with [GSAP](https://gsap.com/).
 
 ## Credits
 - The [PubChem API](https://pubchem.ncbi.nlm.nih.gov/), public chemistry data service.
