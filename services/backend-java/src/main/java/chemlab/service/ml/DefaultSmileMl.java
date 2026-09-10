@@ -76,8 +76,8 @@ public class DefaultSmileMl implements UnsupervisedClustMap {
         // https://haifengl.github.io/feature.html
         var scaler = MaxAbsScaler.fit(df);
         var X = scaler.apply(df).toArray();
-        log.info("Data shape: {} rows, {} columns", featureVectors.length, featureVectors[0].length);
-        log.info("Scaled shape: {} rows, {} columns", X.length, X[0].length);
+        log.info("Data shape: {} rows, {} columns.", featureVectors.length, featureVectors[0].length);
+        log.info("Scaled shape: {} rows, {} columns.", X.length, X[0].length);
 
         // Log statistics after scaling
 //        logDataFrameStats("AFTER MaxAbsScaler", X);

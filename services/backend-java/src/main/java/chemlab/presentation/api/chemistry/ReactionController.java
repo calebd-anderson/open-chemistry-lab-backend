@@ -45,8 +45,9 @@ public class ReactionController {
 
     @PostMapping(value = "analyze")
     public ClusterMapResponse analyzeReaction(@RequestBody ReactionRequest payload) throws PugApiException, JsonProcessingException {
-        log.trace("Analyze endpoint received formula: {}", payload.getElements());
+        log.trace("Analyzing received formula: {}, with Python worker.", payload.getElements());
         List<ClusterMapRequest> data = reactionService.analyzeFormula(payload);
+        log.trace("Sending FastAPI data to unsupervised learning.");
         ClusterMapResponse response = unsupervisedClustMap.testMl(data);
         return response;
     }

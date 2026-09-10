@@ -1,10 +1,10 @@
 package chemlab.service.game;
 
-import chemlab.domain.service.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;
-import chemlab.shared.requests.CreateFlashcardRequest;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.game.FlashcardService;
 import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
     private RegisteredUserRepository userRepo;
 
     public List<Flashcard> listUserFlashcards(String userId) {
-        log.info("Getting flashcards by userId in service.");
+        log.trace("Getting flashcards by userId in service.");
         return userRepo.findRegisteredUserByUserId(userId).getUserFlashcards();
     }
 
@@ -40,7 +40,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
             throw new Exception();
         }
 
-        log.trace("add flashcard to user");
+        log.trace("Adding flashcard to user.");
         List<Flashcard> userFlashcards = user.getUserFlashcards();
         userFlashcards.add(newFlashcard);
         user.setUserFlashcards(userFlashcards);
