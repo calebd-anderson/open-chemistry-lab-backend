@@ -22,7 +22,7 @@ services:
     image: mongo:7.0.40-jammy
     container_name: chemlab-mongodb
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - ./storage:/storage/db
     healthcheck:
