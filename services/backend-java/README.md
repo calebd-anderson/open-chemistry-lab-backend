@@ -36,13 +36,7 @@ https://spring.io/guides/gs/spring-boot-docker
 # before using any container method, first build the project with Maven
 ./mvnw clean package -DskipTests
 ```
-```sh
-# then build and run containers
-docker compose up -d
-# follow logs
-docker compose logs -f backend
-docker compose logs -f python-worker
-```
+
 
 ### Manually build container image with Docker
 ```sh

@@ -29,3 +29,14 @@
 - Thanks to the online tutorial from [Get Arrays](https://www.getarrays.io/).
 - [RoboHash](https://robohash.org/), temporary profile image generator.
 - [Some chemistry icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/chemistry).
+
+## Run the complete backend environment
+```sh
+# build the Spring Boot BFF
+pushd services/backend-java && ./mvnw clean package -DskipTests && popd
+# then run the Docker Compose environment
+docker compose up -d
+# follow logs
+docker compose logs -f backend
+docker compose logs -f python-worker
+```
