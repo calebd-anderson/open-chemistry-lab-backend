@@ -23,10 +23,6 @@ spring:
     mongodb:
       # Enable auto-indexing during development
       auto-index-creation: true
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: validate
 
 logging:
   level:

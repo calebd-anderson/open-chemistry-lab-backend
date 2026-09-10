@@ -28,13 +28,30 @@
 # override default dev,local profiles
 ./mvnw spring-boot:run -Dapp.profiles=test
 ```
-### Manually build container image with Docker
+
+### Docker Compose
+The easiest way to get the backend environment running is with [Docker Compose](https://docs.docker.com/compose/).
 https://spring.io/guides/gs/spring-boot-docker
 ```sh
+# before using any container method, first build the project with Maven
+./mvnw clean package -DskipTests
+```
+```sh
+# then build and run containers
+docker compose up -d
+# follow logs
+docker compose logs -f backend
+docker compose logs -f python-worker
+```
+
+### Manually build container image with Docker
+```sh
+# then build the container with the Dockerfile
 docker build -t chemlab .
-docker run -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -t chemlab
 # or build an image with Maven (Dockerfile is ignored)
-./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=springio/gs-spring-boot-docker
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=chemlab
+# finally run the container
+docker run -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -t chemlab
 ```
 ### Configure a local `MongoDB` instance 
 Download, install [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
@@ -43,6 +60,7 @@ Download, install [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install
 docker pull mongo:7.0.40-jammy
 docker run --name mongodb -p 27017:27017 -d mongo:7.0.40-jammy
 ```
+
 ### Testing
 Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.com/). A container runtime will need to be present before running repository tests.
 ### Secrets kept using `sops` and `age`

@@ -31,7 +31,7 @@ spring:
     mongodb:
       auto-index-creation: false  # Override to true in dev/test only
 
-  # Logging defaults
+# Logging defaults
 logging:
   level:
     root: "INFO"

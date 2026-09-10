@@ -3,14 +3,42 @@ services:
     build:
       context: ./services/backend-java
       dockerfile: Dockerfile
+    container_name: chemlab-backend
     ports:
       - "8080:8080"
     environment:
-      - PYTHON_WORKER_URL=http://python-worker:8000
+      - SPRING_PROFILES_ACTIVE=compose,dev
+      - SPRING_MONGODB_URI=mongodb://mongodb:27017
+      - SERVICES_FASTAPI_WORKER=http://python-worker:80
+    volumes:
+      - ./storage:/storage
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      python-worker:
+        condition: service_started
+
+  mongodb:
+    image: mongo:7.0.40-jammy
+    container_name: chemlab-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./storage:/storage/db
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet --eval \"db.adminCommand('ping').ok\" | grep 1"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   python-worker:
     build:
       context: ./services/worker-python
       dockerfile: Dockerfile
+    container_name: python-worker
     ports:
-      - "8000:8000"
+      - "8000:80"
