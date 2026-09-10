@@ -23,8 +23,6 @@ services:
     container_name: chemlab-mongodb
     ports:
       - "27018:27017"
-    volumes:
-      - ./storage:/storage/db
     healthcheck:
       test:
         [

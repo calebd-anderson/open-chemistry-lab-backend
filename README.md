@@ -39,4 +39,6 @@ docker compose up -d
 # follow logs
 docker compose logs -f backend
 docker compose logs -f python-worker
+# inspect the container db
+mongosh --port 27018
 ```
