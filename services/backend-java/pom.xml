@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -30,7 +31,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb -->
+        <!--
+        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -98,7 +100,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-<!--            <version>2.19.0</version>-->
+            <!--            <version>2.19.0</version>-->
         </dependency>
         <!-- testing -->
         <dependency>
@@ -146,26 +148,26 @@
             <version>6.3.0</version>
         </dependency>
 
-<!--        &lt;!&ndash; Deep learning + LLMs (requires LibTorch) &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.haifengl</groupId>-->
-<!--            <artifactId>smile-deep</artifactId>-->
-<!--            <version>6.3.0</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; Deep learning + LLMs (requires LibTorch) &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.haifengl</groupId>-->
+        <!--            <artifactId>smile-deep</artifactId>-->
+        <!--            <version>6.3.0</version>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; Natural language processing &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.haifengl</groupId>-->
-<!--            <artifactId>smile-nlp</artifactId>-->
-<!--            <version>6.3.0</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; Natural language processing &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.haifengl</groupId>-->
+        <!--            <artifactId>smile-nlp</artifactId>-->
+        <!--            <version>6.3.0</version>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; Data visualization &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.haifengl</groupId>-->
-<!--            <artifactId>smile-plot</artifactId>-->
-<!--            <version>6.3.0</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; Data visualization &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.haifengl</groupId>-->
+        <!--            <artifactId>smile-plot</artifactId>-->
+        <!--            <version>6.3.0</version>-->
+        <!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -189,7 +191,8 @@
                 </configuration>
             </plugin>
             <!-- Configure Mockito as a Java agent for inline mock maker support -->
-            <!-- See: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3 -->
+            <!-- See:
+            https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -199,9 +202,12 @@
                       Disable Class Data Sharing (CDS) when launching the test JVM.
                       Without this option the JVM may print a warning like:
                       "Sharing is only supported for boot loader classes because bootstrap classpath has been appended"
-                      This happens when a javaagent appends to the bootstrap classpath; disabling CDS suppresses the warning.
+                      This happens when a javaagent appends to the bootstrap classpath; disabling CDS suppresses the
+                    warning.
                     -->
-                    <argLine>-Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
+                    <argLine>
+                        -Xshare:off
+                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
                 </configuration>
             </plugin>
 
@@ -212,10 +218,14 @@
                 <version>3.5.4</version>
                 <configuration>
                     <!--
-                      See note above: disable CDS to avoid bootstrap classpath warnings when loading Mockito as a javaagent.
-                      Mockito agent instructions: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+                      See note above: disable CDS to avoid bootstrap classpath warnings when loading Mockito as a
+                    javaagent.
+                      Mockito agent instructions:
+                    https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
                     -->
-                    <argLine>-Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
+                    <argLine>
+                        -Xshare:off
+                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
                 </configuration>
             </plugin>
 
@@ -224,11 +234,11 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!-- version from parent-->
             </plugin>
-
+            <!-- Source: https://mvnrepository.com/artifact/org.codehaus.mojo/versions-maven-plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.21.0</version>
                 <configuration>
                     <excludes>
                         <exclude>org.apache.commons:commons-collections4</exclude>

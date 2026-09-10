@@ -29,9 +29,12 @@
 ./mvnw spring-boot:run -Dapp.profiles=test
 ```
 ### Manually build container image with Docker
-```
+https://spring.io/guides/gs/spring-boot-docker
+```sh
 docker build -t chemlab .
-docker run --rm -p 8080:8080 chemlab
+docker run -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -t chemlab
+# or build an image with Maven (Dockerfile is ignored)
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=springio/gs-spring-boot-docker
 ```
 ### Configure a local `MongoDB` instance 
 Download, install [MongoDB](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/).
