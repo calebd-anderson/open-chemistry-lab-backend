@@ -7,7 +7,6 @@ import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaCidsResponse;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
