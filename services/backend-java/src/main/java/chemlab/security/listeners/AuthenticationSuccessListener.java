@@ -1,7 +1,7 @@
-package chemlab.auth.listeners;
+package chemlab.security.listeners;
 
-import chemlab.auth.user.RegisteredUserPrincipal;
-import chemlab.auth.user.LoginAttemptService;
+import chemlab.security.user.RegisteredUserPrincipal;
+import chemlab.security.user.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;

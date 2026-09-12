@@ -1,8 +1,8 @@
-package chemlab.auth.config;
+package chemlab.security.config;
 
-import chemlab.auth.http.JwtAccessDeniedHandler;
-import chemlab.auth.http.JwtAuthenticationEntryPoint;
-import chemlab.auth.jwt.JwtAuthorizationFilter;
+import chemlab.security.http.JwtAccessDeniedHandler;
+import chemlab.security.http.JwtAuthenticationEntryPoint;
+import chemlab.security.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

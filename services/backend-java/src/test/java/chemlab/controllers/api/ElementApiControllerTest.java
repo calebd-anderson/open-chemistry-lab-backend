@@ -1,6 +1,6 @@
 package chemlab.controllers.api;
 
-import chemlab.auth.jwt.JwtTokenProvider;
+import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.presentation.api.chemistry.ElementController;
 import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;

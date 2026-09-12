@@ -1,4 +1,4 @@
-package chemlab.auth.http;
+package chemlab.security.http;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

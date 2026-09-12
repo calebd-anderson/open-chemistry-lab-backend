@@ -1,6 +1,6 @@
 package chemlab.presentation;
 
-import chemlab.auth.http.HttpResponse;
+import chemlab.security.http.HttpResponse;
 import chemlab.domain.exceptions.*;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;

@@ -1,8 +1,8 @@
 package chemlab.presentation.api.auth;
 
-import chemlab.auth.http.HttpResponse;
-import chemlab.auth.jwt.JwtTokenProvider;
-import chemlab.auth.user.RegisteredUserPrincipal;
+import chemlab.security.http.HttpResponse;
+import chemlab.security.jwt.JwtTokenProvider;
+import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.presentation.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 
-import static chemlab.auth.config.SecurityConstants.JWT_TOKEN_HEADER;
+import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 

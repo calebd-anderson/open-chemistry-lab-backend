@@ -1,4 +1,4 @@
-package chemlab.auth.user;
+package chemlab.security.user;
 
 public class Authority {
     public static final String[] USER_AUTHORITIES = {"user:read"};

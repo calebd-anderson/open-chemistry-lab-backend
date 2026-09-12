@@ -1,6 +1,6 @@
 package chemlab.controllers.api;
 
-import chemlab.auth.jwt.JwtTokenProvider;
+import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.presentation.api.game.FlashcardController;
 import chemlab.domain.service.game.FlashcardService;
 import chemlab.domain.model.game.Flashcard;

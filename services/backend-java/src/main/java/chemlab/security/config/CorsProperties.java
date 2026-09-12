@@ -1,4 +1,4 @@
-package chemlab.auth.config;
+package chemlab.security.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,8 +1,8 @@
 package chemlab.service.user;
 
-import chemlab.auth.user.LoginAttemptService;
-import chemlab.auth.user.RegisteredUserPrincipal;
-import chemlab.auth.user.Role;
+import chemlab.security.user.LoginAttemptService;
+import chemlab.security.user.RegisteredUserPrincipal;
+import chemlab.security.user.Role;
 import chemlab.domain.exceptions.*;
 import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.domain.model.user.User;
@@ -33,7 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
-import static chemlab.auth.user.Role.ROLE_USER;
+import static chemlab.security.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
 import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;

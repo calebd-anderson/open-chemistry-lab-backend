@@ -1,6 +1,6 @@
-package chemlab.auth.user;
+package chemlab.security.user;
 
-import static chemlab.auth.user.Authority.*;
+import static chemlab.security.user.Authority.*;
 
 public enum Role {
     ROLE_USER(USER_AUTHORITIES),

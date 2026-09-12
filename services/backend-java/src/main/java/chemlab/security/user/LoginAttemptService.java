@@ -1,4 +1,4 @@
-package chemlab.auth.user;
+package chemlab.security.user;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

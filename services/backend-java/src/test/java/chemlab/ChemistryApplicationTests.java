@@ -1,6 +1,6 @@
 package chemlab;
 
-import chemlab.auth.config.CorsProperties;
+import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

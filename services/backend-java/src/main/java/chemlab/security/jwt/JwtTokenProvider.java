@@ -1,12 +1,14 @@
-package chemlab.auth.jwt;
+package chemlab.security.jwt;
 
-import chemlab.auth.user.RegisteredUserPrincipal;
+import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.security.user.RegisteredUserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static chemlab.auth.config.SecurityConstants.*;
+import static chemlab.security.config.SecurityConstants.AUTHORITIES;
+import static chemlab.security.config.SecurityConstants.EXPIRATION_TIME;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static java.util.Arrays.stream;
 
@@ -29,16 +32,20 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secret;
     private final String audience = "open-chem-lab";
+    @Autowired
+    RegisteredUserService registeredUserService;
 
     // generate the token
     public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
         String[] claims = getClaimsFromUser(userPrincipal);
         String userRole = getRoleFromUser(userPrincipal);
+        User user = registeredUserService.findUserByUsername(userPrincipal.getUsername());
         return JWT.create().withIssuer(issuer)
                 .withAudience(audience)
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
                 .withArrayClaim(AUTHORITIES, claims)
                 .withClaim("role", userRole)
+                .withClaim("userId", user.getUserId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }

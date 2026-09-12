@@ -1,6 +1,6 @@
 package chemlab.controllers.view;
 
-import chemlab.auth.config.CorsProperties;
+import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.service.chemistry.DefaultElementService;
 import org.hamcrest.Matchers;

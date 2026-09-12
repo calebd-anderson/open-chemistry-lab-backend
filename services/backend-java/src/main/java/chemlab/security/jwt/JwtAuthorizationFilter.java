@@ -1,6 +1,6 @@
-package chemlab.auth.jwt;
+package chemlab.security.jwt;
 
-import chemlab.auth.config.SecurityConstants;
+import chemlab.security.config.SecurityConstants;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.util.List;
 
-import static chemlab.auth.config.SecurityConstants.TOKEN_PREFIX;
+import static chemlab.security.config.SecurityConstants.TOKEN_PREFIX;
 
 @Component
 @Slf4j

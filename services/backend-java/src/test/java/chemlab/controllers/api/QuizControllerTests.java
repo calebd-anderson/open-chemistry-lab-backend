@@ -1,6 +1,6 @@
 package chemlab.controllers.api;
 
-import chemlab.auth.jwt.JwtTokenProvider;
+import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.service.game.QuizService;
 import chemlab.presentation.api.game.QuizController;

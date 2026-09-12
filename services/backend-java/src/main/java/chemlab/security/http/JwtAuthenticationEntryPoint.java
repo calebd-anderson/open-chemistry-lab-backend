@@ -1,6 +1,6 @@
-package chemlab.auth.http;
+package chemlab.security.http;
 
-import chemlab.auth.config.SecurityConstants;
+import chemlab.security.config.SecurityConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
