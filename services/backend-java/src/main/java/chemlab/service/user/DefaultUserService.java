@@ -1,5 +1,6 @@
 package chemlab.service.user;
 
+import chemlab.config.CustomMapper;
 import chemlab.domain.exceptions.*;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
@@ -10,6 +11,7 @@ import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.security.user.Role;
 import chemlab.shared.requests.RegisterUserRequest;
+import chemlab.shared.requests.UpdateUserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +50,8 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     private EmailService emailService;
     @Autowired
     private ImageStorageService imageStorageService;
+    @Autowired
+    CustomMapper customMapper;
 
     @Override
     public User register(RegisterUserRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
@@ -102,38 +106,19 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        User user = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
-        user.setFirstName(newFirstName);
-        user.setLastName(newLastName);
-        user.setUsername(newUsername);
-        user.setEmail(newEmail);
-        // role is undefined from form in user space, so leave these properties alone
-        if (!role.equalsIgnoreCase("undefined")) {
-            user.setActive(isActive);
-            user.setNotLocked(isNonLocked);
-            user.setRole(getRoleEnumName(role).name());
-            user.setAuthorities(getRoleEnumName(role).getAuthorities());
-        }
-        userRepo.save(user);
-        saveProfileImg(user, profileImg);
-        return user;
-    }
-
-    @Override
-    public User editUser(String userId, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        User user = validateEditUsernameAndEmail(userId, newUsername, newEmail);
-        user.setFirstName(newFirstName);
-        user.setLastName(newLastName);
-        user.setUsername(newUsername);
-        user.setEmail(newEmail);
-        user.setActive(isActive);
-        user.setNotLocked(isNonLocked);
-        user.setRole(getRoleEnumName(role).name());
-        user.setAuthorities(getRoleEnumName(role).getAuthorities());
-        userRepo.save(user);
-        saveProfileImg(user, profileImg);
-        return user;
+    public User updateUser(UpdateUserRequest updateUserRequest) {
+//        User user = validateNewUsernameAndEmail(updateUserRequest.currentUsername, updateUserRequest.username, updateUserRequest.email);
+        Optional<User> userToUpdate = userRepo.findByUserId(updateUserRequest.userId);
+        userToUpdate.ifPresent(user -> {
+            customMapper.updateUserFromDto(updateUserRequest, user);
+            userRepo.save(user);
+            try {
+                saveProfileImg(user, updateUserRequest.profileImg);
+            } catch (IOException | NotAnImageFileException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return userToUpdate.get();
     }
 
     public void saveLastLogin(Date date, String username) {
@@ -148,7 +133,12 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     public void deleteUser(String username) {
         Optional<User> user = userRepo.findByUsername(username);
         user.ifPresent(value -> {
-
+            String[] imageUrlParts = value.getProfileImgUrl().split("/");
+            String part = imageUrlParts[imageUrlParts.length - 2];
+            if (!(part.equals("robohash"))) {
+                String imageSlug = imageUrlParts[imageUrlParts.length - 1];
+                imageStorageService.deleteImage(imageSlug);
+            }
             userRepo.deleteById(value.getId());
         });
     }
@@ -174,7 +164,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     public List<User> getUsers() {
-        log.info("fetching all users");
+        log.trace("Fetching all users.");
         return userRepo.findAll();
     }
 
@@ -186,7 +176,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
         } else {
             validateLoginAttempt(user.get());
-            log.info("user: {} found in the database", username);
+            log.info("User: {} found in the database.", username);
         }
         return new RegisteredUserPrincipal(user.get());
     }
@@ -288,9 +278,10 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             // calculate file hash
             String md5Hash = createMD5HashImg(profileImg);
             String filename = md5Hash + "_" + user.getUsername();
-            log.info("image hash: {}", md5Hash);
+            log.info("Image hash: {}", md5Hash);
             String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + ".jpg", profileImg.getInputStream());
-            ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/"+ imageBlobPath).toUriString();
+            String profileImageUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/"+ imageBlobPath).toUriString();
+            user.setProfileImgUrl(profileImageUrl);
             userRepo.save(user);
             log.trace("Successfully updated user profile image.");
         }
@@ -309,7 +300,6 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             return convertToHex(messageDigest);
         } catch (NoSuchAlgorithmException | IOException e) {
             log.error(e.getMessage());
-//            e.printStackTrace();
             return null;
         }
     }

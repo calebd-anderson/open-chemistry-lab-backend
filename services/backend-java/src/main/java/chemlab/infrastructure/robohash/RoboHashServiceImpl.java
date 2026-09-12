@@ -10,10 +10,8 @@ import java.net.URL;
 @Service
 public class RoboHashServiceImpl implements RoboHashService {
 
-    public static final String TEMP_PROFILE_IMAGE_BASE_URL = "https://robohash.org/";
-
     public byte[] getProfileImage(String username) throws IOException {
-        URL url = new URL(TEMP_PROFILE_IMAGE_BASE_URL + username);
+        URL url = new URL("https://robohash.org/" + username);
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             try (InputStream inputStream = url.openStream()) {
                 int bytesRead;

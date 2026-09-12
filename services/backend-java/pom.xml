@@ -19,6 +19,7 @@
     <properties>
         <java.version>25</java.version>
         <lombok.version>1.18.44</lombok.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -168,6 +169,12 @@
         <!--            <artifactId>smile-plot</artifactId>-->
         <!--            <version>6.3.0</version>-->
         <!--        </dependency>-->
+        <!-- https://mapstruct.org/ -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -184,6 +191,11 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
                     <!-- optional: fork compiler for isolation and to add extra args -->

@@ -86,7 +86,7 @@ public class AzureBlobStorage implements ImageStorageService {
     }
 
     @Override
-    public void deleteImage(String storagePath) throws IOException {
+    public void deleteImage(String storagePath) {
         throw new NotImplementedException();
     }
 }

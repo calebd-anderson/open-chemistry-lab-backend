@@ -8,6 +8,7 @@ import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.domain.model.user.User;
+import chemlab.shared.requests.UpdateUserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -66,44 +67,14 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<User> update(@RequestParam("currentUsername") String currentUsername,
-                                       @RequestParam("firstName") String firstName,
-                                       @RequestParam("lastName") String lastName,
-                                       @RequestParam("username") String username,
-                                       @RequestParam("email") String email,
-                                       @RequestParam("role") String role,
-                                       @RequestParam("isActive") String isActive,            // boolean
-                                       @RequestParam("isNonLocked") String isNonLocked,    // boolean
-                                       @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        if (profileImg != null) {
-            validateMultipartFile("profileImg", profileImg);
-            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+    public ResponseEntity<User> update(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        if (updateUserRequest.profileImg != null) {
+            validateMultipartFile("profileImg", updateUserRequest.profileImg);
+            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(updateUserRequest.profileImg.getContentType())) {
                 throw new NotAnImageFileException("Invalid content type for profile image.");
             }
         }
-        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
-                Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
-        return new ResponseEntity<>(updatedUser, OK);
-    }
-
-    @PostMapping("/edit")
-    public ResponseEntity<User> edit(@RequestParam("userId") String userId,
-                                     @RequestParam("firstName") String firstName,
-                                     @RequestParam("lastName") String lastName,
-                                     @RequestParam("username") String username,
-                                     @RequestParam("email") String email,
-                                     @RequestParam("role") String role,
-                                     @RequestParam("isActive") String isActive,               // boolean
-                                     @RequestParam("isNonLocked") String isNonLocked,         // boolean
-                                     @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        if (profileImg != null) {
-            validateMultipartFile("profileImg", profileImg);
-            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
-                throw new NotAnImageFileException("Invalid content type for profile image.");
-            }
-        }
-        User updatedUser = userService.editUser(userId, firstName, lastName, username, email, role,
-                Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
+        User updatedUser = userService.updateUser(updateUserRequest);
         return new ResponseEntity<>(updatedUser, OK);
     }
 

@@ -41,8 +41,12 @@ public class LocalFileSystemStorage implements ImageStorageService {
         }
     }
 
-    public void deleteImage(String storagePath) throws IOException {
+    public void deleteImage(String storagePath) {
         Path filePath = this.storageLocation.resolve(storagePath);
-        Files.delete(filePath);
+        try {
+            Files.delete(filePath);
+        } catch (IOException e) {
+            log.error("Error deleting image from local storage: {}", e.getMessage());
+        }
     }
 }

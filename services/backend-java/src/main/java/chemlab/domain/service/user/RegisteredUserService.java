@@ -2,6 +2,7 @@ package chemlab.domain.service.user;
 
 import chemlab.domain.exceptions.*;
 import chemlab.domain.model.user.User;
+import chemlab.shared.requests.UpdateUserRequest;
 import org.springframework.web.multipart.MultipartFile;
 import chemlab.shared.requests.RegisterUserRequest;
 
@@ -26,25 +27,7 @@ public interface RegisteredUserService {
                     boolean isActive,
                     MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
-    User updateUser(String currentUsername,
-                    String newFirstName,
-                    String newLastName,
-                    String newUsername,
-                    String newEmail,
-                    String role,
-                    boolean isNonLocked,
-                    boolean isActive,
-                    MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
-
-    User editUser(String userId,
-                  String newFirstName,
-                  String newLastName,
-                  String newUsername,
-                  String newEmail,
-                  String role,
-                  boolean isNonLocked,
-                  boolean isActive,
-                  MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+    User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     void deleteUser(String username) throws IOException;
 
