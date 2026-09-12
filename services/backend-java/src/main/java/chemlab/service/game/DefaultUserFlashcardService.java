@@ -24,7 +24,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.trace("Getting flashcards by userId in service.");
-        return userRepo.findRegisteredUserByUserId(userId).getUserFlashcards();
+        return userRepo.findByUserId(userId).getUserFlashcards();
     }
 
     public List<Flashcard> create(CreateFlashcardRequest flashcard) throws Exception {
@@ -34,7 +34,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        User user = userRepo.findRegisteredUserByUsername(authentication.getName());
+        User user = userRepo.findByUsername(authentication.getName());
 
         if (!Objects.equals(flashcard.getUserId(), user.getUserId())) {
             throw new Exception();

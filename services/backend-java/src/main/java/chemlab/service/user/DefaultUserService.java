@@ -74,11 +74,11 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     public User findUserByEmail(String email) {
-        return userRepo.findRegisteredUserByEmail(email);
+        return userRepo.findByEmail(email);
     }
 
     public User findUserByUsername(String username) {
-        return userRepo.findRegisteredUserByUsername(username);
+        return userRepo.findByUsername(username);
     }
 
     @Override
@@ -141,14 +141,14 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     public void saveLastLogin(Date date, String username) {
-        User user = userRepo.findRegisteredUserByUsername(username);
+        User user = userRepo.findByUsername(username);
         user.setLastLoginDate(new Date());
         userRepo.save(user);
     }
 
     @Override
     public void deleteUser(String username) throws IOException {
-        User user = userRepo.findRegisteredUserByUsername(username);
+        User user = userRepo.findByUsername(username);
         Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
         FileUtils.deleteDirectory(new File(userFolder.toString()));
         userRepo.deleteById(user.getId());
@@ -156,7 +156,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
 
     @Override
     public void resetPassword(String email) throws EmailNotFoundException {
-        User user = userRepo.findRegisteredUserByEmail(email);
+        User user = userRepo.findByEmail(email);
         if (user == null) {
             throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         }
@@ -181,7 +181,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findRegisteredUserByUsername(username);
+        User user = userRepo.findByUsername(username);
         if (user == null) {
             log.error(NO_USER_FOUND_BY_USERNAME + username);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
@@ -251,7 +251,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     private User findUserByUserId(String userId) {
-        return userRepo.findRegisteredUserByUserId(userId);
+        return userRepo.findByUserId(userId);
     }
 
     // update 500 instead of user not found ?

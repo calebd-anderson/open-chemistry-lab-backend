@@ -31,12 +31,12 @@ class FlashcardServiceTest {
     @Test
     void findsFlashcards() {
         User user = mock(User.class);
-        when(userRepo.findRegisteredUserByUserId("123456"))
+        when(userRepo.findByUserId("123456"))
                 .thenReturn(user);
 
         String answerYes = "yes";
         String answerNo = "no";
-        when(userRepo.findRegisteredUserByUserId("123456").getUserFlashcards()).thenReturn(List.of(
+        when(userRepo.findByUserId("123456").getUserFlashcards()).thenReturn(List.of(
                 new Flashcard("is this mock value 1?", answerYes),
                 new Flashcard("is this mock value 2?", answerNo),
                 new Flashcard("is this mock value 3?", answerYes),
@@ -65,7 +65,7 @@ class FlashcardServiceTest {
         user.setUsername("testuser");
         user.setEmail("test@mail.com");
         // mock the repository to return the user when queried by username
-        when(userRepo.findRegisteredUserByUsername("testuser")).thenReturn(user);
+        when(userRepo.findByUsername("testuser")).thenReturn(user);
         when(userRepo.save(user)).thenReturn(user);
         // create a flashcard
         CreateFlashcardRequest fc = new CreateFlashcardRequest("12345", "is this mock value 1?", "yes");

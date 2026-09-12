@@ -24,7 +24,7 @@ public class DefaultUserQuizService implements QuizService {
     RegisteredUserRepository userRepo;
 
     private List<UserQuiz> generateQuizzes(String userId) {
-        User user = userRepo.findRegisteredUserByUserId(userId);
+        User user = userRepo.findByUserId(userId);
         if (user != null) {
             List<UserReaction> userReactions = userReactionRepo.findByUserId(userId);
             List<UserQuiz> userQuizzes = new java.util.ArrayList<>();

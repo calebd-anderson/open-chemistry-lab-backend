@@ -104,7 +104,7 @@ public class DefaultReactionService implements ReactionService {
         if (authenticated) {
             // need to lookup user by username until able to add userid to JWT
             log.trace("Querying the db for user with username: {}", authentication.getName());
-            User user = userRepo.findRegisteredUserByUsername(authentication.getName());
+            User user = userRepo.findByUsername(authentication.getName());
             log.trace("Saving the {} reaction with the user.", reaction.getFormula());
             userReactionService.saveReactionWithUser(user.getUserId(), reaction);
         }
