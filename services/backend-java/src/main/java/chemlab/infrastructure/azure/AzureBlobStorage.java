@@ -9,6 +9,7 @@ import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobStorageException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -49,9 +50,10 @@ public class AzureBlobStorage implements ImageStorageService {
 
         try {
             byte[] bytes = img.readAllBytes();
+            long length = bytes.length;
             try (ByteArrayInputStream dataStream =
                          new ByteArrayInputStream(bytes)) {
-                blobClient.upload(dataStream, bytes.length, true);
+                blobClient.upload(dataStream, length, true);
             }
             return blobName;
         } catch (IOException e) {
@@ -72,7 +74,7 @@ public class AzureBlobStorage implements ImageStorageService {
 
         try (ByteArrayOutputStream outputStream =
                      new ByteArrayOutputStream()) {
-            blobClient.download(outputStream);
+            blobClient.downloadStream(outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
             log.error("Failed to download image for blob {}: {}", blobName, e.getMessage());
@@ -81,5 +83,10 @@ public class AzureBlobStorage implements ImageStorageService {
             log.error("Failed to download image from Azure Blob Storage for blob {}: {}", blobName, e.getMessage());
             throw new RuntimeException("Failed to download image from Azure Blob Storage", e);
         }
+    }
+
+    @Override
+    public void deleteImage(String storagePath) throws IOException {
+        throw new NotImplementedException();
     }
 }

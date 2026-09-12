@@ -40,4 +40,9 @@ public class LocalFileSystemStorage implements ImageStorageService {
             throw new RuntimeException("Could not read image from local storage", e);
         }
     }
+
+    public void deleteImage(String storagePath) throws IOException {
+        Path filePath = this.storageLocation.resolve(storagePath);
+        Files.delete(filePath);
+    }
 }

@@ -163,7 +163,7 @@ public class RegisteredUserController extends ExceptionHandling {
         return userService.getProfileImage(userId, fileName);
     }
 
-    @GetMapping(path = "/image/profile/{username}", produces = IMAGE_JPEG_VALUE)
+    @GetMapping(path = "/image/robohash/{username}", produces = IMAGE_JPEG_VALUE)
     public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
         return roboHashService.getProfileImage(username);
     }

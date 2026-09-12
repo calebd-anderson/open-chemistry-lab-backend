@@ -1,18 +1,18 @@
 package chemlab.service.user;
 
+import chemlab.domain.exceptions.*;
+import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.infrastructure.email.EmailService;
+import chemlab.infrastructure.storage.ImageStorageService;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.security.user.Role;
-import chemlab.domain.exceptions.*;
-import chemlab.domain.service.user.RegisteredUserService;
-import chemlab.domain.model.user.User;
-import chemlab.infrastructure.storage.ImageStorageService;
-import chemlab.infrastructure.email.EmailService;
+import chemlab.shared.requests.RegisterUserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,13 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import chemlab.shared.requests.RegisterUserRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -35,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static chemlab.security.user.Role.ROLE_USER;
-import static chemlab.service.user.config.FileConstants.*;
 import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -153,15 +148,9 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     public void deleteUser(String username) {
         Optional<User> user = userRepo.findByUsername(username);
         user.ifPresent(value -> {
-            Path userFolder = Paths.get(USER_FOLDER + value.getUsername()).toAbsolutePath().normalize();
-            try {
-                FileUtils.deleteDirectory(new File(userFolder.toString()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
             userRepo.deleteById(value.getId());
         });
-
     }
 
     @Override
@@ -193,7 +182,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepo.findByUsername(username);
         if (user.isEmpty()) {
-            log.error(NO_USER_FOUND_BY_USERNAME + username);
+            log.error(NO_USER_FOUND_BY_USERNAME + "{}", username);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
         } else {
             validateLoginAttempt(user.get());
@@ -238,10 +227,10 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         Optional<User> userByNewEmail = findUserByEmail(newEmail);
         if (StringUtils.isNotBlank(userId)) {
             Optional<User> currentUser = findUserByUserId(userId);
-            log.info(currentUser.get().getUserId());
-            if (currentUser == null) {
+            if (currentUser.isEmpty()) {
                 throw new UserNotFoundException("No user found by id: " + userId);
             }
+            log.info(currentUser.get().getUserId());
             if (userByNewUsername.isPresent() && !currentUser.get().getId().equals(userByNewUsername.get().getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
@@ -278,7 +267,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     private String getTemporaryProfileImageUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/" + DEFAULT_USER_IMAGE_PATH + username).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/robohash/" + username).toUriString();
     }
 
     private String generateUserId() {
@@ -300,15 +289,11 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             String md5Hash = createMD5HashImg(profileImg);
             String filename = md5Hash + "_" + user.getUsername();
             log.info("image hash: {}", md5Hash);
-            String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + DOT + JPG_EXTENSION, profileImg.getInputStream());
-            user.setProfileImgUrl(generateProfileImgUrl(imageBlobPath));
+            String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + ".jpg", profileImg.getInputStream());
+            ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/"+ imageBlobPath).toUriString();
             userRepo.save(user);
             log.trace("Successfully updated user profile image.");
         }
-    }
-
-    private String generateProfileImgUrl(String blobPath) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/api" + USER_IMAGE_PATH + blobPath).toUriString();
     }
 
     public byte[] getProfileImage(String userId, String fileName) throws IOException {
