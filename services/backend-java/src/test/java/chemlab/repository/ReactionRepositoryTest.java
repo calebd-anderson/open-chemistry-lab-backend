@@ -1,8 +1,8 @@
 package chemlab.repository;
 
 import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.repository.ReactionRepository;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.infrastructure.persistence.chemistry.ReactionRepository;
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import org.junit.jupiter.api.AfterEach;

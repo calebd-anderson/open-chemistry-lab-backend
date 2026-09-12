@@ -1,9 +1,9 @@
 package chemlab.services;
 
-import chemlab.security.user.LoginAttemptService;
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.infrastructure.email.EmailService;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
+import chemlab.security.user.LoginAttemptService;
 import chemlab.service.user.DefaultUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

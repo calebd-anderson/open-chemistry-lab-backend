@@ -1,11 +1,11 @@
 package chemlab.services;
 
-import chemlab.domain.service.game.QuizService;
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.shared.requests.CreateQuizRequest;
+import chemlab.domain.repository.ReactionRepository;
+import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.service.game.QuizService;
 import chemlab.infrastructure.persistence.chemistry.ElementRepository;
-import chemlab.infrastructure.persistence.chemistry.ReactionRepository;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
+import chemlab.shared.requests.CreateQuizRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.HashMap;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ReactionQuizServiceTest {
