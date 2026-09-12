@@ -6,7 +6,7 @@ import chemlab.security.user.Role;
 import chemlab.domain.exceptions.*;
 import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.domain.model.user.User;
-import chemlab.repository.user.RegisteredUserRepository;
+import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.infrastructure.storage.ImageStorageService;
 import chemlab.infrastructure.email.EmailService;
 import lombok.extern.slf4j.Slf4j;

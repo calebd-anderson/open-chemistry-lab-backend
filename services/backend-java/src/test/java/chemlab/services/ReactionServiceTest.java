@@ -5,7 +5,7 @@ import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesRespon
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.domain.model.chemistry.Reaction;
-import chemlab.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.chemistry.ReactionRepository;
 import chemlab.service.chemistry.DefaultReactionService;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;

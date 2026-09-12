@@ -2,7 +2,7 @@ package chemlab.repository;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.repository.chemistry.ReactionRepository;
+import chemlab.domain.repository.chemistry.ReactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

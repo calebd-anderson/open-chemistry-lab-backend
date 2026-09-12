@@ -2,7 +2,7 @@ package chemlab.repository;
 
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.repository.chemistry.ElementRepository;
+import chemlab.domain.repository.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
