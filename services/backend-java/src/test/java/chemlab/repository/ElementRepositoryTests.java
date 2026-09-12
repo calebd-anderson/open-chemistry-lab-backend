@@ -1,6 +1,7 @@
 package chemlab.repository;
 
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.chemistry.ElementRepository;
@@ -26,6 +27,8 @@ class ElementRepositoryTests {
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
     RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    @MockitoBean
+    UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 
     @Test
     @DisplayName("should instantiate the repo")

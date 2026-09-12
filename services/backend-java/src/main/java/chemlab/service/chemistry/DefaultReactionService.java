@@ -3,15 +3,15 @@ package chemlab.service.chemistry;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
+import chemlab.infrastructure.persistence.chemistry.ReactionRepository;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
-import chemlab.infrastructure.persistence.chemistry.ReactionRepository;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -104,9 +105,9 @@ public class DefaultReactionService implements ReactionService {
         if (authenticated) {
             // need to lookup user by username until able to add userid to JWT
             log.trace("Querying the db for user with username: {}", authentication.getName());
-            User user = userRepo.findByUsername(authentication.getName());
+            Optional<User> user = userRepo.findByUsername(authentication.getName());
             log.trace("Saving the {} reaction with the user.", reaction.getFormula());
-            userReactionService.saveReactionWithUser(user.getUserId(), reaction);
+            userReactionService.saveReactionWithUser(user.get().getUserId(), reaction);
         }
         log.trace("Finished validating input.");
         ModelMapper modelMapper = new ModelMapper();

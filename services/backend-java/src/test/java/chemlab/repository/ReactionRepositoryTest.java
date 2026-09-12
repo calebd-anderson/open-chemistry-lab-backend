@@ -4,6 +4,7 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.chemistry.ReactionRepository;
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,8 @@ public class ReactionRepositoryTest {
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
     RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    @MockitoBean
+    UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 
     private Reaction c1;
 

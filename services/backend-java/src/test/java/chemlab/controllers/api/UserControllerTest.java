@@ -4,6 +4,7 @@ import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.domain.model.user.User;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,8 @@ public class UserControllerTest {
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
     RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    @MockitoBean
+    UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 
     private MockMvc mockMvc;
 

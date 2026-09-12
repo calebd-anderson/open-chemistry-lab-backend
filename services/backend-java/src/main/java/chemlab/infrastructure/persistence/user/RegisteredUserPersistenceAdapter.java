@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegisteredUserPersistenceAdapter implements RegisteredUserRepository {
     @Autowired
-    private final RegisteredUserRepository mongoRepository;
+    private final chemlab.infrastructure.persistence.user.RegisteredUserRepository mongoRepository;
 
     @Override
     public User save(User user) {

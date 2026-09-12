@@ -2,8 +2,8 @@ package chemlab.service.game;
 
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.game.FlashcardService;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,7 +25,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.trace("Getting flashcards by userId in service.");
-        return userRepo.findByUserId(userId).getUserFlashcards();
+        return userRepo.findByUserId(userId).get().getUserFlashcards();
     }
 
     public List<Flashcard> create(CreateFlashcardRequest flashcard) throws Exception {
@@ -34,16 +35,16 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
-        User user = userRepo.findByUsername(authentication.getName());
+        Optional<User> user = userRepo.findByUsername(authentication.getName());
 
-        if (!Objects.equals(flashcard.getUserId(), user.getUserId())) {
+        if (!Objects.equals(flashcard.getUserId(), user.get().getUserId())) {
             throw new Exception();
         }
 
         log.trace("Adding flashcard to user.");
-        List<Flashcard> userFlashcards = user.getUserFlashcards();
+        List<Flashcard> userFlashcards = user.get().getUserFlashcards();
         userFlashcards.add(newFlashcard);
-        user.setUserFlashcards(userFlashcards);
-        return userRepo.save(user).getUserFlashcards();
+        user.get().setUserFlashcards(userFlashcards);
+        return userRepo.save(user.get()).getUserFlashcards();
     }
 }

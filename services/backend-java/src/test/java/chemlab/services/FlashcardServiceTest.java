@@ -1,9 +1,9 @@
 package chemlab.services;
 
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import chemlab.domain.model.user.User;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -32,11 +33,11 @@ class FlashcardServiceTest {
     void findsFlashcards() {
         User user = mock(User.class);
         when(userRepo.findByUserId("123456"))
-                .thenReturn(user);
+                .thenReturn(Optional.ofNullable(user));
 
         String answerYes = "yes";
         String answerNo = "no";
-        when(userRepo.findByUserId("123456").getUserFlashcards()).thenReturn(List.of(
+        when(userRepo.findByUserId("123456").get().getUserFlashcards()).thenReturn(List.of(
                 new Flashcard("is this mock value 1?", answerYes),
                 new Flashcard("is this mock value 2?", answerNo),
                 new Flashcard("is this mock value 3?", answerYes),
@@ -65,7 +66,7 @@ class FlashcardServiceTest {
         user.setUsername("testuser");
         user.setEmail("test@mail.com");
         // mock the repository to return the user when queried by username
-        when(userRepo.findByUsername("testuser")).thenReturn(user);
+        when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
         when(userRepo.save(user)).thenReturn(user);
         // create a flashcard
         CreateFlashcardRequest fc = new CreateFlashcardRequest("12345", "is this mock value 1?", "yes");

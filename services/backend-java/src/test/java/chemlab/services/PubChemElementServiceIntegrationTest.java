@@ -3,6 +3,7 @@ package chemlab.services;
 import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
+import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,8 @@ class PubChemElementServiceIntegrationTest {
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
     RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    @MockitoBean
+    UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 
     @Test
     @DisplayName("should list all 118 elements from database")

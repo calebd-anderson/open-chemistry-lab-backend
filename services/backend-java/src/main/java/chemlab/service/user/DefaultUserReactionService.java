@@ -2,8 +2,8 @@ package chemlab.service.user;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
+import chemlab.domain.repository.UserReactionRepository;
 import chemlab.domain.service.user.UserReactionService;
-import chemlab.infrastructure.persistence.user.UserReactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

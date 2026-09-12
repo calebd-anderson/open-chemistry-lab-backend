@@ -1,17 +1,18 @@
 package chemlab.service.game;
 
-import chemlab.domain.service.game.QuizService;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.model.user.User;
-import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
-import chemlab.infrastructure.persistence.user.UserReactionRepository;
+import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserReactionRepository;
+import chemlab.domain.service.game.QuizService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,8 +25,8 @@ public class DefaultUserQuizService implements QuizService {
     RegisteredUserRepository userRepo;
 
     private List<UserQuiz> generateQuizzes(String userId) {
-        User user = userRepo.findByUserId(userId);
-        if (user != null) {
+        Optional<User> user = userRepo.findByUserId(userId);
+        if (user.isPresent()) {
             List<UserReaction> userReactions = userReactionRepo.findByUserId(userId);
             List<UserQuiz> userQuizzes = new java.util.ArrayList<>();
             for(UserReaction userReaction : userReactions) {
