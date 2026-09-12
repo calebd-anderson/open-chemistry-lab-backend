@@ -1,9 +1,9 @@
 package chemlab.service.chemistry;
 
-import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;
+import chemlab.domain.repository.ElementRepository;
+import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;
-import chemlab.infrastructure.persistence.chemistry.ElementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class DefaultElementService implements ElementService {
 
 //    @Autowired
-    private final ElementRepository elmRepo;
+    private final chemlab.domain.repository.ElementRepository elmRepo;
 
     public DefaultElementService(ElementRepository elmRepo) {
         this.elmRepo = elmRepo;

@@ -1,10 +1,10 @@
 package chemlab.repository;
 
+import chemlab.domain.repository.ElementRepository;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
-import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.infrastructure.persistence.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 class ElementRepositoryTests {
 
-    @Autowired
-    private ElementRepository elementRepo;
     @MockitoBean
     private CorsProperties corsProperties;
     @MockitoBean
@@ -29,11 +27,13 @@ class ElementRepositoryTests {
     RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
+    @Autowired
+    ElementRepository elementRepository;
 
     @Test
     @DisplayName("should instantiate the repo")
     void testInit() {
-        assertNotNull(elementRepo);
+        assertNotNull(elementRepository);
     }
 
 //	@Test
