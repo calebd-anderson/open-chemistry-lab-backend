@@ -6,10 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-
-import static chemlab.service.user.config.FileConstants.USER_FOLDER;
-
 @SpringBootApplication
 public class ChemistryApplication {
 
@@ -26,6 +22,5 @@ public class ChemistryApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ChemistryApplication.class, args);
-        new File(USER_FOLDER).mkdirs();
     }
 }
