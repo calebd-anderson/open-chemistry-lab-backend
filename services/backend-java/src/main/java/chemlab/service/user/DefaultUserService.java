@@ -1,12 +1,12 @@
 package chemlab.service.user;
 
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.security.user.Role;
 import chemlab.domain.exceptions.*;
 import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.user.RegisteredUserRepository;
 import chemlab.infrastructure.storage.ImageStorageService;
 import chemlab.infrastructure.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import chemlab.shared.requests.UserRegisterRequest;
+import chemlab.shared.requests.RegisterUserRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static chemlab.security.user.Role.ROLE_USER;
 import static chemlab.service.user.config.FileConstants.*;
@@ -54,7 +55,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     private ImageStorageService imageStorageService;
 
     @Override
-    public User register(UserRegisterRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public User register(RegisterUserRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
         validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
         User user = new User();
         user.setUserId(generateUserId());
@@ -73,11 +74,11 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         return user;
     }
 
-    public User findUserByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
-    public User findUserByUsername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         return userRepo.findByUsername(username);
     }
 
@@ -141,28 +142,37 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     public void saveLastLogin(Date date, String username) {
-        User user = userRepo.findByUsername(username);
-        user.setLastLoginDate(new Date());
-        userRepo.save(user);
+        Optional<User> user = userRepo.findByUsername(username);
+        user.ifPresent(value -> {
+            value.setLastLoginDate(new Date());
+            userRepo.save(value);
+        });
     }
 
     @Override
-    public void deleteUser(String username) throws IOException {
-        User user = userRepo.findByUsername(username);
-        Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
-        FileUtils.deleteDirectory(new File(userFolder.toString()));
-        userRepo.deleteById(user.getId());
+    public void deleteUser(String username) {
+        Optional<User> user = userRepo.findByUsername(username);
+        user.ifPresent(value -> {
+            Path userFolder = Paths.get(USER_FOLDER + value.getUsername()).toAbsolutePath().normalize();
+            try {
+                FileUtils.deleteDirectory(new File(userFolder.toString()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            userRepo.deleteById(value.getId());
+        });
+
     }
 
     @Override
     public void resetPassword(String email) throws EmailNotFoundException {
-        User user = userRepo.findByEmail(email);
-        if (user == null) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if (user.isEmpty()) {
             throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         }
         String password = generatePassword();
-        user.setPassword(encodePassword(password));
-        userRepo.save(user);
+        user.get().setPassword(encodePassword(password));
+        userRepo.save(user.get());
 //		log.info("New user password: " + password);
 //        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
     }
@@ -181,42 +191,42 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        if (user == null) {
+        Optional<User> user = userRepo.findByUsername(username);
+        if (user.isEmpty()) {
             log.error(NO_USER_FOUND_BY_USERNAME + username);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
         } else {
-            validateLoginAttempt(user);
+            validateLoginAttempt(user.get());
             log.info("user: {} found in the database", username);
         }
-        return new RegisteredUserPrincipal(user);
+        return new RegisteredUserPrincipal(user.get());
     }
 
     private User validateNewUsernameAndEmail(String currentUsername, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // Only look up by newUsername/newEmail if they are provided to avoid unnecessary DB calls and NPEs
-        User userByNewUsername = StringUtils.isNotBlank(newUsername) ? findUserByUsername(newUsername) : null;
-        User userByNewEmail = StringUtils.isNotBlank(newEmail) ? findUserByEmail(newEmail) : null;
+        Optional<User> userByNewUsername = StringUtils.isNotBlank(newUsername) ? findUserByUsername(newUsername) : Optional.empty();
+        Optional<User> userByNewEmail = StringUtils.isNotBlank(newEmail) ? findUserByEmail(newEmail) : Optional.empty();
 
         if (StringUtils.isNotBlank(currentUsername)) {
             // Update scenario: ensure the current user exists and any found user for the new
             // username/email is either null or the same as the current user
-            User currentUser = findUserByUsername(currentUsername);
-            if (currentUser == null) {
+            Optional<User> currentUser = findUserByUsername(currentUsername);
+            if (currentUser.isEmpty()) {
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentUsername);
             }
-            if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
+            if (userByNewUsername.isPresent() && !currentUser.get().getId().equals(userByNewUsername.get().getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
+            if (userByNewEmail.isPresent() && !currentUser.get().getId().equals(userByNewEmail.get().getId())) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
-            return currentUser;
+            return currentUser.get();
         } else {
             // Create scenario: new username/email must not already exist
-            if (userByNewUsername != null) {
+            if (userByNewUsername.isPresent()) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null) {
+            if (userByNewEmail.isPresent()) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
         }
@@ -224,33 +234,33 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     private User validateEditUsernameAndEmail(String userId, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        User userByNewUsername = findUserByUsername(newUsername);
-        User userByNewEmail = findUserByEmail(newEmail);
+        Optional<User> userByNewUsername = findUserByUsername(newUsername);
+        Optional<User> userByNewEmail = findUserByEmail(newEmail);
         if (StringUtils.isNotBlank(userId)) {
-            User currentUser = findUserByUserId(userId);
-            log.info(currentUser.getUserId());
+            Optional<User> currentUser = findUserByUserId(userId);
+            log.info(currentUser.get().getUserId());
             if (currentUser == null) {
                 throw new UserNotFoundException("No user found by id: " + userId);
             }
-            if (userByNewUsername != null && !currentUser.getId().equals(userByNewUsername.getId())) {
+            if (userByNewUsername.isPresent() && !currentUser.get().getId().equals(userByNewUsername.get().getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null && !currentUser.getId().equals(userByNewEmail.getId())) {
+            if (userByNewEmail.isPresent() && !currentUser.get().getId().equals(userByNewEmail.get().getId())) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
-            return currentUser;
+            return currentUser.get();
         } else {
-            if (userByNewUsername != null) {
+            if (userByNewUsername.isPresent()) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail != null) {
+            if (userByNewEmail.isPresent()) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
         }
         return null;
     }
 
-    private User findUserByUserId(String userId) {
+    private Optional<User> findUserByUserId(String userId) {
         return userRepo.findByUserId(userId);
     }
 

@@ -1,4 +1,4 @@
-package chemlab.domain.repository.user;
+package chemlab.infrastructure.persistence.user;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;

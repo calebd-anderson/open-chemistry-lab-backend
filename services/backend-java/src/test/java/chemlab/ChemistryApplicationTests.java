@@ -1,5 +1,6 @@
 package chemlab;
 
+import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ public class ChemistryApplicationTests {
 	private CorsProperties corsProperties;
 	@MockitoBean
 	FastApiWorkerService fastApiWorkerService;
+	@MockitoBean
+	RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
 	
 	@Autowired
 	private MockMvc mockMvc;

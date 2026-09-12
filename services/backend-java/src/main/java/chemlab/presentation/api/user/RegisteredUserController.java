@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.*;
@@ -153,8 +154,8 @@ public class RegisteredUserController extends ExceptionHandling {
     // validate
     @GetMapping("/find/{username}")
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = userService.findUserByUsername(username);
-        return new ResponseEntity<>(user, OK);
+        Optional<User> user = userService.findUserByUsername(username);
+        return new ResponseEntity<>(user.get(), OK);
     }
 
     @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)

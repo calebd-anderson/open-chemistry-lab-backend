@@ -1,8 +1,9 @@
 package chemlab.repository;
 
+import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.domain.repository.chemistry.ElementRepository;
+import chemlab.infrastructure.persistence.chemistry.ElementRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,8 @@ class ElementRepositoryTests {
     private CorsProperties corsProperties;
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
+    @MockitoBean
+    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
 
     @Test
     @DisplayName("should instantiate the repo")

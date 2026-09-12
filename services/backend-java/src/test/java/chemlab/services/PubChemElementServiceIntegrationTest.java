@@ -4,6 +4,7 @@ import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.pubchem.PubChemElement;
+import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ class PubChemElementServiceIntegrationTest {
     ElementService elmService;
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
+    @MockitoBean
+    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
 
     @Test
     @DisplayName("should list all 118 elements from database")

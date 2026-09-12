@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class UserRegisterRequest {
+public class RegisterUserRequest {
     @Email(message = "The email address is invalid.", flags = {Pattern.Flag.CASE_INSENSITIVE})
     private String email;
     @NotEmpty(message = "The username is required.")

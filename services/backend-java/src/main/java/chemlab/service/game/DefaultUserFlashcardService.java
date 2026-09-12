@@ -3,7 +3,7 @@ package chemlab.service.game;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.game.FlashcardService;
-import chemlab.domain.repository.user.RegisteredUserRepository;
+import chemlab.infrastructure.persistence.user.RegisteredUserRepository;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

@@ -1,4 +1,4 @@
-package chemlab.domain.repository.user;
+package chemlab.infrastructure.persistence.user;
 
 import chemlab.domain.model.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

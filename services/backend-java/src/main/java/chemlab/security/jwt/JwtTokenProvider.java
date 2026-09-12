@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static chemlab.security.config.SecurityConstants.AUTHORITIES;
@@ -39,13 +40,13 @@ public class JwtTokenProvider {
     public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
         String[] claims = getClaimsFromUser(userPrincipal);
         String userRole = getRoleFromUser(userPrincipal);
-        User user = registeredUserService.findUserByUsername(userPrincipal.getUsername());
+        Optional<User> user = registeredUserService.findUserByUsername(userPrincipal.getUsername());
         return JWT.create().withIssuer(issuer)
                 .withAudience(audience)
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
                 .withArrayClaim(AUTHORITIES, claims)
                 .withClaim("role", userRole)
-                .withClaim("userId", user.getUserId())
+                .withClaim("userId", user.get().getUserId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }

@@ -1,5 +1,6 @@
 package chemlab.controllers.view;
 
+import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.service.chemistry.DefaultElementService;
@@ -38,6 +39,8 @@ class PubChemElementViewControllerTest {
     private CorsProperties corsProperties;
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
+    @MockitoBean
+    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
 
     private MockMvc mockMvc;
 

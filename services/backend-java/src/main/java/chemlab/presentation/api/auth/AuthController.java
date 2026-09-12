@@ -10,7 +10,7 @@ import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.shared.requests.UserLoginRequest;
-import chemlab.shared.requests.UserRegisterRequest;
+import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.domain.model.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -49,20 +50,20 @@ public class AuthController extends ExceptionHandling {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userService.saveLastLogin(new Date(), user.getUsername());
-            User loginUser = userService.findUserByUsername(user.getUsername());
-            RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser);
+            Optional<User> loginUser = userService.findUserByUsername(user.getUsername());
+            RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser.get());
             String issuer = ServletUriComponentsBuilder.fromRequestUri(req)
                     .replacePath(null)
                     .build()
                     .toUriString();
             HttpHeaders jwtHeader = getJwtHeader(userPrincipal, issuer);
-            return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
+            return new ResponseEntity<>(loginUser.get(), jwtHeader, HttpStatus.OK);
         } else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody UserRegisterRequest user) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterUserRequest user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
         User newUser = userService.register(user);
         return new ResponseEntity<>(newUser, CREATED);

@@ -1,4 +1,4 @@
-package chemlab.domain.repository.chemistry;
+package chemlab.infrastructure.persistence.chemistry;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.infrastructure.pubchem.PubChemElement;
