@@ -1,24 +1,27 @@
 # AGENTS.md - Chemlab Backend Development Guide
 
 ## Project Overview
-**Chemlab** is an interactive periodic table and chemistry education platform built with **Spring Boot 4.0.6**, **Java 21**, and **MongoDB**. It enables users to explore elements, conduct experiments, create flashcards, and take auto-generated quizzes.
+**Chemlab** is an interactive periodic table and chemistry education platform built with **Spring Boot 4.x** (for the core backend) and **FastAPI** (for specialized services), **Java 21**, and **MongoDB**. It enables users to explore elements, conduct experiments, create flashcards, and take auto-generated quizzes.
 
 ### Core Technology Stack
-- **Framework**: Spring Boot 4.0.6 (Spring Web, Spring Security, Spring Data MongoDB)
-- **Language**: Java 21 LTS (set `JAVA_HOME` to match)
-- **Database**: MongoDB 7.0.40 (via Docker or local)
-- **Build**: Maven (wrapper: `./mvnw`)
-- **Authentication**: JWT (Auth0 library) + BCrypt + Spring Security
-- **File Storage**: Azure Blob Storage (prod) / Local filesystem (dev/test)
-- **Testing**: JUnit 5 + Mockito + Testcontainers (MongoDB)
-- **Secrets**: sops + age encryption for `application-prod.enc.yml`
+|- **Framework**: Spring Boot 4.x (Core Backend), FastAPI (Specialized Services)
+|- **Language**: Java 21 LTS, Python 3.11+
+|- **Database**: MongoDB 7.0.40 (via Docker or local)
+|- **Build**: Maven (Java), Poetry/Pip (Python)
+|- **Authentication**: JWT (Auth0 library) + BCrypt + Spring Security
+|- **File Storage**: Azure Blob Storage (prod) / Local filesystem (dev/test)
+|- **Testing**: JUnit 5 + Mockito + Testcontainers (Java), Pytest (Python)
+|- **Secrets**: sops + age encryption for `application-prod.enc.yml`
 
 ---
 
-## Architecture Patterns
+### Architecture Patterns
 
 ### Onion Architecture (Package-by-Feature)
-The codebase follows **onion/layered architecture**, organized by domain features:
+The codebase follows a **hybrid architecture**: A **Spring Boot core** for the main domain and **FastAPI services** for specialized, high-performance, or AI-driven tasks.
+
+#### Core Backend (Spring Boot)
+The Spring Boot application follows a layered architecture, organized by domain features:
 
 ```
 controller/api/{domain}/         → HTTP endpoints, request/response handling
@@ -51,10 +54,19 @@ infrastructure/                 → External integrations
     └── robohash/                → Avatar generation
 ```
 
+#### Specialized Services (FastAPI)
+Python-based services reside in the `services/` directory, handling data processing, AI/ML workloads, and specialized chemistry computations.
+```
+services/
+    ├── element-analyzer/        → FastAPI service for advanced element analysis
+    └── simulation-engine/       → FastAPI service for chemical reaction simulations
+```
+
 ### Domain Separation
-- **Chemistry**: Elements (periodic table), Reactions (compound discovery)
-- **Game**: Quiz service, Flashcard management
-- **User**: Authentication, Account management, File uploads
+|- **Chemistry (Spring)**: Elements (periodic table), Reactions (compound discovery)
+|- **Game (Spring)**: Quiz service, Flashcard management
+|- **User (Spring)**: Authentication, Account management, File uploads
+|- **Specialized (FastAPI)**: Computational chemistry, AI integration, Data heavy lifting
 
 **Key Principle**: Each domain has its own controller → service → repository → model path. Controllers import from their domain's service layer, not other domains (except shared utilities).
 
