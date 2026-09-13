@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserReactionRepository extends MongoRepository<UserReaction, String> {
+public interface SpringDataUserReactionRepository extends MongoRepository<UserReaction, String> {
     List<UserReaction> findByUserId(String userId);
     UserReaction findByUserIdAndReaction(String userId, Reaction reaction);
 }

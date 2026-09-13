@@ -13,7 +13,7 @@ import java.util.List;
 public class ReactionPersistenceAdapter implements ReactionRepository {
 
     @Autowired
-    chemlab.infrastructure.persistence.chemistry.ReactionRepository mongoRepository;
+    SpringDataReactionRepository mongoRepository;
 
     @Override
     public Reaction findReactionByFormula(String formula) {

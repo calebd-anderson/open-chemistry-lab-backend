@@ -13,8 +13,7 @@ import java.util.List;
 @Slf4j
 public class DefaultElementService implements ElementService {
 
-//    @Autowired
-    private final chemlab.domain.repository.ElementRepository elmRepo;
+    private final ElementRepository elmRepo;
 
     public DefaultElementService(ElementRepository elmRepo) {
         this.elmRepo = elmRepo;

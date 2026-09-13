@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserReactionPersistenceAdapter implements UserReactionRepository {
     @Autowired
-    private final chemlab.infrastructure.persistence.user.UserReactionRepository mongoRepository;
+    private final SpringDataUserReactionRepository mongoRepository;
 
     @Override
     public List<UserReaction> findByUserId(String userId) {

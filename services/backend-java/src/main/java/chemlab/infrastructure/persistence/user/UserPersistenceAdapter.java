@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class RegisteredUserPersistenceAdapter implements RegisteredUserRepository {
+public class UserPersistenceAdapter implements RegisteredUserRepository {
     @Autowired
-    private final chemlab.infrastructure.persistence.user.RegisteredUserRepository mongoRepository;
+    private final SpringDataUserRepository mongoRepository;
 
     @Override
     public User save(User user) {

@@ -2,7 +2,7 @@ package chemlab.repository;
 
 import chemlab.domain.repository.ElementRepository;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ class ElementRepositoryTests {
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
-    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
     @Autowired

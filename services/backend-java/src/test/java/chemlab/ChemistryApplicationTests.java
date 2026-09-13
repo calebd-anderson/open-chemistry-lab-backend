@@ -1,6 +1,6 @@
 package chemlab;
 
-import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
@@ -24,7 +24,7 @@ public class ChemistryApplicationTests {
 	@MockitoBean
 	FastApiWorkerService fastApiWorkerService;
 	@MockitoBean
-	RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+	UserPersistenceAdapter userPersistenceAdapter;
 	@MockitoBean
 	UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 	

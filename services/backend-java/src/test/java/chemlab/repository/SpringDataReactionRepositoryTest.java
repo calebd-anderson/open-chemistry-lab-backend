@@ -3,7 +3,7 @@ package chemlab.repository;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.ReactionRepository;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
-import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-public class ReactionRepositoryTest {
+public class SpringDataReactionRepositoryTest {
     @Container
     public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0.0"));
 
@@ -34,7 +34,7 @@ public class ReactionRepositoryTest {
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
-    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 

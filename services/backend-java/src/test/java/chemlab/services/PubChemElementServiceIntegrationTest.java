@@ -5,7 +5,7 @@ import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.infrastructure.pubchem.PubChemElement;
-import chemlab.infrastructure.persistence.user.RegisteredUserPersistenceAdapter;
+import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class PubChemElementServiceIntegrationTest {
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
     @MockitoBean
-    RegisteredUserPersistenceAdapter registeredUserPersistenceAdapter;
+    UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
 
