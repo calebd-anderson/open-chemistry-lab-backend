@@ -1,15 +1,14 @@
 package chemlab.domain.model.user;
 
 import chemlab.domain.model.game.Flashcard;
+import chemlab.shared.requests.UserLoginRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import chemlab.shared.requests.UserLoginRequest;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 @Document(collection = "users")
 @Data
 @RequiredArgsConstructor
-public class User implements Serializable {
+public class User {
     @Id
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
@@ -34,17 +33,12 @@ public class User implements Serializable {
     private String profileImgUrl;
     private Date lastLoginDate;
     private Date joinDate;
-    // spring properties
-    // ROLE_USER{ read, edit }, ROLE_ADMIN{ delete , update, create }
     private String role;
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
     // game information
     private int highScore;
-    // reaction information
-    // @BsonProperty(value = "reactions")
-//    private List<UserReaction> discoveredReactions = new ArrayList<>();
     private List<Flashcard> userFlashcards = new ArrayList<>();
 
     public User(UserLoginRequest userDTO) {
