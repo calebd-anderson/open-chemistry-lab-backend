@@ -34,8 +34,8 @@
 ```sh
 # build the Spring Boot BFF
 pushd services/backend-java && ./mvnw clean package -DskipTests && popd
-# then run the Docker Compose environment
-docker compose up -d
+# then rebuild the images and run the Docker Compose environment
+docker compose up -d --build
 # follow logs
 docker compose logs -f backend
 docker compose logs -f python-worker
