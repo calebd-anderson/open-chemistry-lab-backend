@@ -1,14 +1,16 @@
-package chemlab.presentation.api.user;
+package chemlab.controller.api.user;
 
-import chemlab.domain.service.user.RegisteredUserService;
-import chemlab.presentation.ExceptionHandling;
+import chemlab.controller.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
-import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.infrastructure.robohash.RoboHashService;
+import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -47,22 +49,15 @@ public class RegisteredUserController extends ExceptionHandling {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
-                                           @RequestParam("lastName") String lastName,
-                                           @RequestParam("username") String username,
-                                           @RequestParam("email") String email,
-                                           @RequestParam("isActive") String isActive,          // boolean
-                                           @RequestParam("isNonLocked") String isNonLocked,    // boolean
-                                           @RequestParam("role") String role,
-                                           @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        if (profileImg != null) {
-            validateMultipartFile("profileImg", profileImg);
-            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
+    public ResponseEntity<User> addNewUser(@Valid CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        if (createUserRequest.getProfileImg() != null) {
+            validateMultipartFile("profileImg", createUserRequest.getProfileImg());
+            if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(createUserRequest.getProfileImg().getContentType())) {
                 throw new NotAnImageFileException("Invalid content type for profile image.");
             }
         }
-        User newUser = userService.addNewUser(firstName, lastName, username, email, role,
-                Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImg);
+        User newUser = userService.addNewUser(createUserRequest.getFirstName(), createUserRequest.getLastName(), createUserRequest.getUsername(), createUserRequest.getEmail(), createUserRequest.getRole(),
+                createUserRequest.isNotLocked(), createUserRequest.isActive(), createUserRequest.getProfileImg());
         return new ResponseEntity<>(newUser, OK);
     }
 

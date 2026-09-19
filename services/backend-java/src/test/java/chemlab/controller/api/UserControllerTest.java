@@ -1,7 +1,7 @@
-package chemlab.controllers.api;
+package chemlab.controller.api;
 
-import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.RegisteredUserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;

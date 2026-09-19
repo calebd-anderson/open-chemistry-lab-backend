@@ -1,4 +1,4 @@
-package chemlab.controllers.view;
+package chemlab.controller.view;
 
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;

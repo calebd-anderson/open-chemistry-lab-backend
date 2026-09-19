@@ -1,4 +1,4 @@
-package chemlab.presentation;
+package chemlab.controller;
 
 import chemlab.security.http.HttpResponse;
 import chemlab.domain.exceptions.*;

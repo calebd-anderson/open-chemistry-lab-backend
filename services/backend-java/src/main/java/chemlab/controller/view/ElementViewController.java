@@ -1,5 +1,5 @@
 // the controller class has model view features, end-point config, and error handling
-package chemlab.presentation.view;
+package chemlab.controller.view;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.service.chemistry.DefaultElementService;

@@ -1,4 +1,4 @@
-package chemlab.presentation.api.game;
+package chemlab.controller.api.game;
 
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;

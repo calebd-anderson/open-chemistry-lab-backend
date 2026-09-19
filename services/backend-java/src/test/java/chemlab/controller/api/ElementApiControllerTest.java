@@ -1,7 +1,7 @@
-package chemlab.controllers.api;
+package chemlab.controller.api;
 
 import chemlab.security.jwt.JwtTokenProvider;
-import chemlab.presentation.api.chemistry.ElementController;
+import chemlab.controller.api.chemistry.ElementController;
 import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import org.junit.jupiter.api.Test;

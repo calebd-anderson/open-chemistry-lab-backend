@@ -1,19 +1,21 @@
-package chemlab.presentation.api.auth;
+package chemlab.controller.api.auth;
 
-import chemlab.security.http.HttpResponse;
-import chemlab.security.jwt.JwtTokenProvider;
-import chemlab.security.user.RegisteredUserPrincipal;
-import chemlab.domain.service.user.RegisteredUserService;
-import chemlab.presentation.ExceptionHandling;
+import chemlab.controller.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
-import chemlab.shared.requests.UserLoginRequest;
-import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.security.http.HttpResponse;
+import chemlab.security.jwt.JwtTokenProvider;
+import chemlab.security.user.RegisteredUserPrincipal;
+import chemlab.shared.requests.RegisterUserRequest;
+import chemlab.shared.requests.UserLoginRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +26,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
+@Log4j2
 @RestController
 @RequestMapping("/auth")
 public class AuthController extends ExceptionHandling {
 
-    public static final String EMAIL_SENT = "Email with new password sent to: ";
     private final RegisteredUserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
@@ -50,14 +50,14 @@ public class AuthController extends ExceptionHandling {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userService.saveLastLogin(new Date(), user.getUsername());
-            Optional<User> loginUser = userService.findUserByUsername(user.getUsername());
-            RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser.get());
+            User loginUser = userService.findUserByUsername(user.getUsername()).orElseThrow();
+            RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser);
             String issuer = ServletUriComponentsBuilder.fromRequestUri(req)
                     .replacePath(null)
                     .build()
                     .toUriString();
             HttpHeaders jwtHeader = getJwtHeader(userPrincipal, issuer);
-            return new ResponseEntity<>(loginUser.get(), jwtHeader, HttpStatus.OK);
+            return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
         } else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -71,13 +71,10 @@ public class AuthController extends ExceptionHandling {
 
     @GetMapping("/resetpassword/{email}")
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email) throws EmailNotFoundException {
-        userService.resetPassword(email);
-        return response(OK, EMAIL_SENT + email);
-    }
-
-    private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(),
-                message.toUpperCase()), httpStatus);
+        throw new NotImplementedException();
+//        userService.resetPassword(email);
+//        log.info("Email with new password sent to: {}", email);
+//        return ResponseEntity.ok().build();
     }
 
     private Authentication authenticate(String username, String password) {

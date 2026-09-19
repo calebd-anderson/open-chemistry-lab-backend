@@ -1,4 +1,4 @@
-package chemlab.presentation.api.chemistry;
+package chemlab.controller.api.chemistry;
 
 import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;

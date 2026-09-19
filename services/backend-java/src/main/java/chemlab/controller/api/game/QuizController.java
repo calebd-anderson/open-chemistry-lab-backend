@@ -1,4 +1,4 @@
-package chemlab.presentation.api.game;
+package chemlab.controller.api.game;
 
 import chemlab.domain.service.game.QuizService;
 import chemlab.domain.model.game.UserQuiz;

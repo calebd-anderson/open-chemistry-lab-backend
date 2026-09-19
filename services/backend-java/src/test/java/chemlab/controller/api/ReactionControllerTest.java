@@ -1,10 +1,10 @@
-package chemlab.controllers.api;
+package chemlab.controller.api;
 
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
-import chemlab.presentation.api.chemistry.ReactionController;
+import chemlab.controller.api.chemistry.ReactionController;
 import chemlab.shared.requests.Element;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
