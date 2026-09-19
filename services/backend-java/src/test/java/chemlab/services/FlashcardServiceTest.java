@@ -1,20 +1,18 @@
 package chemlab.services;
 
 import chemlab.domain.model.game.Flashcard;
-import chemlab.domain.repository.RegisteredUserRepository;
-import chemlab.shared.requests.CreateFlashcardRequest;
 import chemlab.domain.model.user.User;
+import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;
+import chemlab.shared.requests.CreateFlashcardRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,54 +27,68 @@ class FlashcardServiceTest {
     @InjectMocks
     private DefaultUserFlashcardService flashcardService;
 
-    @Test
-    void findsFlashcards() {
-        User user = mock(User.class);
-        when(userRepo.findByUserId("123456"))
-                .thenReturn(Optional.ofNullable(user));
+    private List<Flashcard> mockUserFlashcards;
 
+    @BeforeEach
+    void setUp() {
         String answerYes = "yes";
         String answerNo = "no";
-        when(userRepo.findByUserId("123456").get().getUserFlashcards()).thenReturn(List.of(
+
+        mockUserFlashcards = new ArrayList<>(List.of(
                 new Flashcard("is this mock value 1?", answerYes),
                 new Flashcard("is this mock value 2?", answerNo),
                 new Flashcard("is this mock value 3?", answerYes),
                 new Flashcard("is this mock value 4?", answerNo)
         ));
-        List<Flashcard> result = flashcardService.listUserFlashcards("123456");
+    }
+
+    @Test
+    void findsUserFlashcards() {
+        // Arrange
+        String userId = "123456";
+        when(userRepo.findByUserId(userId)).thenReturn(Optional.ofNullable(mock(User.class)));
+        User user = userRepo.findByUserId(userId).orElseThrow();
+        when(user.getUserFlashcards()).thenReturn(mockUserFlashcards);
+
+        // Act
+        List<Flashcard> result = flashcardService.listUserFlashcards(userId);
+
+        // Assert
         assertEquals(4, result.size());
     }
 
     @Test
-    void createFlashcardSuccess() throws Exception {
+    void createUserFlashcardSuccess() throws Exception {
         // Arrange
-        Authentication authentication = mock(Authentication.class);
+        // create a flashcard request
+        CreateFlashcardRequest flashcardRequest = new CreateFlashcardRequest("123456", "is this mock value 1?", "yes");
 
-        when(authentication.getName()).thenReturn("testuser");
-//        when(authentication.isAuthenticated()).thenReturn(true);
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
-
-        // configure a user to hold the flashcard
+        // mock the repository to return a user
         User user = new User();
-        user.setUserId("12345");
-        user.setUsername("testuser");
-        user.setEmail("test@mail.com");
-        // mock the repository to return the user when queried by username
-        when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
+        user.setUserFlashcards(mockUserFlashcards);
+        when(userRepo.findByUserId(flashcardRequest.getUserId())).thenReturn(Optional.of(user));
         when(userRepo.save(user)).thenReturn(user);
-        // create a flashcard
-        CreateFlashcardRequest fc = new CreateFlashcardRequest("12345", "is this mock value 1?", "yes");
-        // map the request to a flashcard
-        ModelMapper modelMapper = new ModelMapper();
-        Flashcard newFlashcard = modelMapper.map(fc, Flashcard.class);
+        int initialNumberOfFlashcards = user.getUserFlashcards().size();
 
         // Act
-        List<Flashcard> result = flashcardService.create(fc);
+        List<Flashcard> result = flashcardService.create(flashcardRequest);
+
         // Assert
-        assertEquals(List.of(newFlashcard), result);
+        assertEquals(initialNumberOfFlashcards + 1, result.size());
+    }
+
+    @Test
+    void deleteUserFlashcardSuccess() throws Exception {
+        // Arrange
+        User user = new User();
+        user.setUsername("test_user");
+        user.setUserFlashcards(mockUserFlashcards);
+        when(userRepo.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(userRepo.save(user)).thenReturn(user);
+        int initialNumberOfFlashcards = user.getUserFlashcards().size();
+        // Act
+        flashcardService.delete(user.getUsername(), "is this mock value 1?");
+        // Assert
+        assertEquals(initialNumberOfFlashcards - 1, user.getUserFlashcards().size());
     }
 }

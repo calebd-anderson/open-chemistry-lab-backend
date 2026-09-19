@@ -1,12 +1,14 @@
 package chemlab.presentation.api.game;
 
-import chemlab.domain.service.game.FlashcardService;
+import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.service.game.FlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -38,5 +40,12 @@ public class FlashcardController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(@RequestParam String question, Authentication authentication) throws UserNotFoundException {
+        String name = authentication.getName();
+        log.trace("Deleting Flashcard with question: {} and authentication: {}", question, name);
+        flashcardService.delete(name, question);
     }
 }

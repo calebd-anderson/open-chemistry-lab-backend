@@ -1,5 +1,6 @@
 package chemlab.service.game;
 
+import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
@@ -25,7 +26,8 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.trace("Getting flashcards by userId in service.");
-        return userRepo.findByUserId(userId).get().getUserFlashcards();
+        User user = userRepo.findByUserId(userId).orElseThrow();
+        return user.getUserFlashcards();
     }
 
     public List<Flashcard> create(CreateFlashcardRequest flashcard) throws Exception {
@@ -33,18 +35,18 @@ public class DefaultUserFlashcardService implements FlashcardService {
         ModelMapper modelMapper = new ModelMapper();
         Flashcard newFlashcard = modelMapper.map(flashcard, Flashcard.class);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assert authentication != null;
-        Optional<User> user = userRepo.findByUsername(authentication.getName());
-
-        if (!Objects.equals(flashcard.getUserId(), user.get().getUserId())) {
-            throw new Exception();
-        }
+        User user = userRepo.findByUserId(flashcard.getUserId()).orElseThrow();
 
         log.trace("Adding flashcard to user.");
-        List<Flashcard> userFlashcards = user.get().getUserFlashcards();
+        List<Flashcard> userFlashcards = user.getUserFlashcards();
         userFlashcards.add(newFlashcard);
-        user.get().setUserFlashcards(userFlashcards);
-        return userRepo.save(user.get()).getUserFlashcards();
+        user.setUserFlashcards(userFlashcards);
+        return userRepo.save(user).getUserFlashcards();
+    }
+
+    public void delete(String username, String question) throws UserNotFoundException {
+        User user = userRepo.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        user.getUserFlashcards().removeIf(flashcard -> flashcard.getQuestion().equals(question));
+        userRepo.save(user);
     }
 }
