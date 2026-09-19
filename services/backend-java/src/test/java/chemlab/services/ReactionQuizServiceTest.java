@@ -1,10 +1,10 @@
 package chemlab.services;
 
 import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.repository.ElementRepository;
 import chemlab.domain.repository.ReactionRepository;
 import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.game.QuizService;
-import chemlab.infrastructure.persistence.chemistry.ElementRepository;
 import chemlab.shared.requests.CreateQuizRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

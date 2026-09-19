@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 @Slf4j
-public class JsonFileElementRepository implements ElementRepository {
+public class PubChemReducedJsonFileElementRepository implements ElementRepository {
 
     private final String PERIODIC_TABLE_PATH = "static/data/all_elements.json";
 
@@ -35,7 +35,7 @@ public class JsonFileElementRepository implements ElementRepository {
     public PubChemElement findElementBySymbol(String symbol) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            InputStream pTableData = JsonFileElementRepository.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
+            InputStream pTableData = PubChemReducedJsonFileElementRepository.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
             List<PubChemElement> pt = mapper.readValue(pTableData, new TypeReference<>() {
             });
             // lame efficiency search

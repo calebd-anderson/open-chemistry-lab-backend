@@ -1,11 +1,11 @@
-package chemlab.services;
+package chemlab.services.integration;
 
-import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;
+import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
+import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.infrastructure.pubchem.PubChemElement;
-import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
-class PubChemElementServiceIntegrationTest {
+class ElementServiceIntegrationTests {
 
     @Autowired
     ElementService elmService;
@@ -49,20 +49,4 @@ class PubChemElementServiceIntegrationTest {
         PubChemElement elm = elmService.getElementBySymbol("D");
         assertNull(elm);
     }
-
-    // must overhaul repo
-//	@Test
-//	@DisplayName("should equal 1 (hydrogen)")
-//	void testFindByAtomicNumber() {
-//		Element elm = elmService.getElementByAtomicNumber("1");
-//		assertEquals(elm.getAtomicNumber(), "1");
-//	}
-
-//    @Test
-//    @DisplayName("should fail to find element by atomic number 0")
-//    void testFailToFindByAtomicNumber() {
-//        Element elm = elmService.getElementByAtomicNumber("0");
-//        assertNull(elm);
-//    }
-
 }

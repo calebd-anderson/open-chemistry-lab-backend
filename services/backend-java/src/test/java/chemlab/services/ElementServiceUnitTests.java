@@ -4,7 +4,6 @@ import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.domain.repository.ElementRepository;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import chemlab.service.chemistry.DefaultElementService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,29 +16,17 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PubChemElementServiceTest {
+class ElementServiceUnitTests {
     @Mock
     private ElementRepository elmRepo;
 
     @InjectMocks
     private DefaultElementService elmService;
 
-    private PubChemElement elm;
-
-    @BeforeEach
-    public void setupMock() {
-        elm = mock(PubChemElement.class);
-    }
-
-    @Test
-    public void testMockCreation() {
-        assertNotNull(elmService);
-        assertNotNull(elm);
-    }
 
     @Test
     @DisplayName("should list all elements")
@@ -73,16 +60,4 @@ class PubChemElementServiceTest {
         assertEquals(testElm.getSymbol(), actualElm.getSymbol());
         verify(elmRepo).findElementBySymbol("H");
     }
-
-//    @Test
-//    @DisplayName("should find Element with atomic number of 1")
-//    void testFindByAtomicNumber() {
-//        Element testElm = new Element();
-//        testElm.setAtomicNumber("1");
-//        when(elmService.getElementByAtomicNumber("1")).thenReturn(testElm);
-//        Element actualElm = elmService.getElementByAtomicNumber("1");
-//        assertEquals(testElm.getAtomicNumber(), actualElm.getAtomicNumber());
-//        verify(elmService).getElementByAtomicNumber("1");
-//    }
-
 }
