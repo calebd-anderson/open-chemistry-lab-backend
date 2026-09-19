@@ -43,9 +43,10 @@ public class FlashcardController {
     }
 
     @DeleteMapping("/delete")
-    public void delete(@RequestParam String question, Authentication authentication) throws UserNotFoundException {
+    public ResponseEntity<Void> delete(@RequestParam String question, Authentication authentication) throws UserNotFoundException {
         String name = authentication.getName();
         log.trace("Deleting Flashcard with question: {} and authentication: {}", question, name);
         flashcardService.delete(name, question);
+        return ResponseEntity.noContent().build();
     }
 }
