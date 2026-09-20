@@ -133,9 +133,9 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public User updateUser(UpdateUserRequest updateUserRequest) {
-        // User user = validateNewUsernameAndEmail(updateUserRequest.currentUsername, updateUserRequest.username, updateUserRequest.email);
-        User userToUpdate = userRepo.findByUserId(updateUserRequest.userId).orElseThrow();
+    public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        // Validate uniqueness using userId (single DB lookup inside validateEditUsernameAndEmail)
+        User userToUpdate = validateEditUsernameAndEmail(updateUserRequest.userId, updateUserRequest.username, updateUserRequest.email);
         customMapper.updateUserFromDto(updateUserRequest, userToUpdate);
         try {
             if (updateUserRequest.profileImg != null && !updateUserRequest.profileImg.isEmpty()) {
@@ -199,17 +199,19 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         if (StringUtils.isNotBlank(currentUsername)) {
             // Update scenario: ensure the current user exists and any found user for the new
             // username/email is either null or the same as the current user
-            Optional<User> currentUser = findUserByUsername(currentUsername);
-            if (currentUser.isEmpty()) {
+            Optional<User> currentUserOpt = findUserByUsername(currentUsername);
+            if (currentUserOpt.isEmpty()) {
                 throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME + currentUsername);
             }
-            if (userByNewUsername.isPresent() && !currentUser.get().getId().equals(userByNewUsername.get().getId())) {
+            User currentUser = currentUserOpt.get();
+
+            if (userByNewUsername.isPresent() && !currentUser.getId().equals(userByNewUsername.get().getId())) {
                 throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
             }
-            if (userByNewEmail.isPresent() && !currentUser.get().getId().equals(userByNewEmail.get().getId())) {
+            if (userByNewEmail.isPresent() && !currentUser.getId().equals(userByNewEmail.get().getId())) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
-            return currentUser.get();
+            return currentUser;
         } else {
             // Create scenario: new username/email must not already exist
             if (userByNewUsername.isPresent()) {
@@ -218,35 +220,25 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             if (userByNewEmail.isPresent()) {
                 throw new EmailExistException(EMAIL_ALREADY_EXISTS);
             }
+            return null;
         }
-        return null;
     }
 
     private User validateEditUsernameAndEmail(String userId, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        Optional<User> userByNewUsername = findUserByUsername(newUsername);
-        Optional<User> userByNewEmail = findUserByEmail(newEmail);
-        if (StringUtils.isNotBlank(userId)) {
-            Optional<User> currentUser = findUserByUserId(userId);
-            if (currentUser.isEmpty()) {
-                throw new UserNotFoundException("No user found by id: " + userId);
-            }
-            log.info(currentUser.get().getUserId());
-            if (userByNewUsername.isPresent() && !currentUser.get().getId().equals(userByNewUsername.get().getId())) {
-                throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
-            }
-            if (userByNewEmail.isPresent() && !currentUser.get().getId().equals(userByNewEmail.get().getId())) {
-                throw new EmailExistException(EMAIL_ALREADY_EXISTS);
-            }
-            return currentUser.get();
-        } else {
-            if (userByNewUsername.isPresent()) {
-                throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
-            }
-            if (userByNewEmail.isPresent()) {
-                throw new EmailExistException(EMAIL_ALREADY_EXISTS);
-            }
+        // Resolve the current user once (by id) and then perform uniqueness checks against
+        // the new username/email — this avoids an extra lookup of the current user by username.
+        User currentUser = findUserByUserId(userId).orElseThrow(() -> new UserNotFoundException("No user found by id: " + userId));
+
+        Optional<User> userByNewUsername = StringUtils.isNotBlank(newUsername) ? findUserByUsername(newUsername) : Optional.empty();
+        Optional<User> userByNewEmail = StringUtils.isNotBlank(newEmail) ? findUserByEmail(newEmail) : Optional.empty();
+
+        if (userByNewUsername.isPresent() && !currentUser.getId().equals(userByNewUsername.get().getId())) {
+            throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
         }
-        return null;
+        if (userByNewEmail.isPresent() && !currentUser.getId().equals(userByNewEmail.get().getId())) {
+            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
+        }
+        return currentUser;
     }
 
     private Optional<User> findUserByUserId(String userId) {
