@@ -5,6 +5,7 @@ import chemlab.shared.requests.UserLoginRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +22,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
     @Indexed(unique = true)
-    private String userId;
+    private String userId = generateUserId();
     @Indexed(unique = true)
     private String email;
     @Indexed(unique = true)
@@ -54,4 +55,11 @@ public class User {
         this.username = username;
         this.email = email;
     }
+
+    private String generateUserId() {
+        // return secure random number length 10
+        return RandomStringUtils.secure().next(10, false, true);
+    }
 }
+
+

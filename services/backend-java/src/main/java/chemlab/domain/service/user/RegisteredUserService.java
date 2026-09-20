@@ -2,6 +2,7 @@ package chemlab.domain.service.user;
 
 import chemlab.domain.exceptions.*;
 import chemlab.domain.model.user.User;
+import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import org.springframework.web.multipart.MultipartFile;
 import chemlab.shared.requests.RegisterUserRequest;
@@ -18,14 +19,7 @@ public interface RegisteredUserService {
 
     Optional<User> findUserByUsername(String username);
 
-    User addNewUser(String firstName,
-                    String lastName,
-                    String username,
-                    String email,
-                    String role,
-                    boolean isNonLocked,
-                    boolean isActive,
-                    MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
+    User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 

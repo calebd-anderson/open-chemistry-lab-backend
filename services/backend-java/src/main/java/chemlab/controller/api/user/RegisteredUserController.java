@@ -56,8 +56,7 @@ public class RegisteredUserController extends ExceptionHandling {
                 throw new NotAnImageFileException("Invalid content type for profile image.");
             }
         }
-        User newUser = userService.addNewUser(createUserRequest.getFirstName(), createUserRequest.getLastName(), createUserRequest.getUsername(), createUserRequest.getEmail(), createUserRequest.getRole(),
-                createUserRequest.isNotLocked(), createUserRequest.isActive(), createUserRequest.getProfileImg());
+        User newUser = userService.addNewUser(createUserRequest);
         return new ResponseEntity<>(newUser, OK);
     }
 

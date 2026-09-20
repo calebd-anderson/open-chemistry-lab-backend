@@ -10,6 +10,7 @@ import chemlab.infrastructure.storage.ImageStorageService;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.security.user.Role;
+import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -56,21 +57,21 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     @Override
     public User register(RegisterUserRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
         validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
-        User user = new User();
-        user.setUserId(generateUserId());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setJoinDate(new Date());
-        user.setPassword(encodePassword(userDto.getPassword()));
-        user.setActive(true);
-        user.setNotLocked(true);
-        user.setRole(ROLE_USER.name());
-        user.setAuthorities(ROLE_USER.getAuthorities());
-        user.setProfileImgUrl(getTemporaryProfileImageUrl(userDto.getUsername()));
-        userRepo.save(user);
-        return user;
+        try {
+            User user = buildUserEntity(
+                    userDto.getFirstName(),
+                    userDto.getLastName(),
+                    userDto.getUsername(),
+                    userDto.getEmail(),
+                    userDto.getPassword(),
+                    ROLE_USER.name(),
+                    null
+            );
+            userRepo.save(user);
+            return user;
+        } catch (IOException | NotAnImageFileException e) {
+            throw new IllegalStateException("Unable to create user during registration.", e);
+        }
     }
 
     public Optional<User> findUserByEmail(String email) {
@@ -82,45 +83,80 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        validateNewUsernameAndEmail(EMPTY, username, email);
+    public User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        validateNewUsernameAndEmail(EMPTY, createUserRequest.getUsername(), createUserRequest.getEmail());
+
+        User user = buildUserEntity(
+                createUserRequest.getFirstName(),
+                createUserRequest.getLastName(),
+                createUserRequest.getUsername(),
+                createUserRequest.getEmail(),
+                generatePassword(),
+                createUserRequest.getRole(),
+                createUserRequest.getProfileImg()
+        );
+
+        customMapper.createUserFromDto(createUserRequest, user);
+        userRepo.save(user);
+
+        return user;
+    }
+
+    private User buildUserEntity(String firstName,
+                                String lastName,
+                                String username,
+                                String email,
+                                String password,
+                                String roleName,
+                                MultipartFile profileImg) throws IOException, NotAnImageFileException {
         User user = new User();
-        String password = generatePassword();
-        user.setUserId(generateUserId());
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setJoinDate(new Date());
         user.setUsername(username);
         user.setEmail(email);
+        user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
-        user.setActive(isActive);
-        user.setNotLocked(isNonLocked);
-        user.setRole(getRoleEnumName(role).name());
-        user.setAuthorities(getRoleEnumName(role).getAuthorities());
-        user.setProfileImgUrl(getTemporaryProfileImageUrl(username));
-        userRepo.save(user);
-        saveProfileImg(user, profileImg);
-//		log.info("New user password: " + password);
-//        emailService.sendNewPasswordEmail(firstName, password, email);
+        user.setActive(true);
+        user.setNotLocked(true);
+
+        Role resolvedRole = StringUtils.isNotBlank(roleName) ? getRoleEnumName(roleName) : ROLE_USER;
+        user.setRole(resolvedRole.name());
+        user.setAuthorities(resolvedRole.getAuthorities());
+
+        if (profileImg != null && !profileImg.isEmpty()) {
+            saveProfileImg(user, profileImg);
+        } else {
+            user.setProfileImgUrl(getTemporaryProfileImageUrl(username));
+        }
+
         return user;
     }
 
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest) {
-//        User user = validateNewUsernameAndEmail(updateUserRequest.currentUsername, updateUserRequest.username, updateUserRequest.email);
-        Optional<User> userToUpdate = userRepo.findByUserId(updateUserRequest.userId);
-        userToUpdate.ifPresent(user -> {
-            customMapper.updateUserFromDto(updateUserRequest, user);
-            userRepo.save(user);
-            try {
-                saveProfileImg(user, updateUserRequest.profileImg);
-            } catch (IOException | NotAnImageFileException e) {
-                throw new RuntimeException(e);
+        // User user = validateNewUsernameAndEmail(updateUserRequest.currentUsername, updateUserRequest.username, updateUserRequest.email);
+        User userToUpdate = userRepo.findByUserId(updateUserRequest.userId).orElseThrow();
+        customMapper.updateUserFromDto(updateUserRequest, userToUpdate);
+        try {
+            if (updateUserRequest.profileImg != null && !updateUserRequest.profileImg.isEmpty()) {
+                saveProfileImg(userToUpdate, updateUserRequest.profileImg);
             }
-        });
-        return userToUpdate.get();
+        } catch (IOException | NotAnImageFileException e) {
+            throw new RuntimeException(e);
+        }
+        userRepo.save(userToUpdate);
+        return userToUpdate;
     }
 
+    @Override
+    public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+        User user = validateNewUsernameAndEmail(username, null, null);
+        saveProfileImg(user, profileImg);
+        userRepo.save(user);
+        return user;
+    }
+
+    @Override
     public void saveLastLogin(Date date, String username) {
         Optional<User> user = userRepo.findByUsername(username);
         user.ifPresent(value -> {
@@ -130,37 +166,11 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public void deleteUser(String username) {
-        Optional<User> user = userRepo.findByUsername(username);
-        user.ifPresent(value -> {
-            String[] imageUrlParts = value.getProfileImgUrl().split("/");
-            String part = imageUrlParts[imageUrlParts.length - 2];
-            if (!(part.equals("robohash"))) {
-                String imageSlug = imageUrlParts[imageUrlParts.length - 1];
-                imageStorageService.deleteImage(imageSlug);
-            }
-            userRepo.deleteById(value.getId());
-        });
-    }
-
-    @Override
     public void resetPassword(String email) throws EmailNotFoundException {
-        Optional<User> user = userRepo.findByEmail(email);
-        if (user.isEmpty()) {
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-        }
+        User user = userRepo.findByEmail(email).orElseThrow();
         String password = generatePassword();
-        user.get().setPassword(encodePassword(password));
-        userRepo.save(user.get());
-//		log.info("New user password: " + password);
-//        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
-    }
-
-    @Override
-    public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        User user = validateNewUsernameAndEmail(username, null, null);
-        saveProfileImg(user, profileImg);
-        return user;
+        user.setPassword(encodePassword(password));
+        userRepo.save(user);
     }
 
     public List<User> getUsers() {
@@ -252,21 +262,16 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         }
     }
 
+    private String generatePassword() {
+        return RandomStringUtils.secure().nextAlphanumeric(10);
+    }
+
     private String encodePassword(String password) {
         return bCryptPasswordEncoder.encode(password);
     }
 
     private String getTemporaryProfileImageUrl(String username) {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/robohash/" + username).toUriString();
-    }
-
-    private String generateUserId() {
-        // return secure random number length 10
-        return RandomStringUtils.secure().next(10, false, true);
-    }
-
-    private String generatePassword() {
-        return RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
     private Role getRoleEnumName(String role) {
@@ -280,9 +285,8 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             String filename = md5Hash + "_" + user.getUsername();
             log.info("Image hash: {}", md5Hash);
             String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + ".jpg", profileImg.getInputStream());
-            String profileImageUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/"+ imageBlobPath).toUriString();
+            String profileImageUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/" + imageBlobPath).toUriString();
             user.setProfileImgUrl(profileImageUrl);
-            userRepo.save(user);
             log.trace("Successfully updated user profile image.");
         }
     }
@@ -311,5 +315,19 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             hexText = "0".concat(hexText);
         }
         return hexText;
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        Optional<User> user = userRepo.findByUsername(username);
+        user.ifPresent(value -> {
+            String[] imageUrlParts = value.getProfileImgUrl().split("/");
+            String part = imageUrlParts[imageUrlParts.length - 2];
+            if (!(part.equals("robohash"))) {
+                String imageSlug = imageUrlParts[imageUrlParts.length - 1];
+                imageStorageService.deleteImage(imageSlug);
+            }
+            userRepo.deleteById(value.getId());
+        });
     }
 }
