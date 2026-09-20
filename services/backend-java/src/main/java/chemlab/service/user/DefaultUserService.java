@@ -16,7 +16,10 @@ import chemlab.shared.requests.UpdateUserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -67,7 +70,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
                     ROLE_USER.name(),
                     null
             );
-            userRepo.save(user);
+            persistUserWithDuplicateCheck(user);
             return user;
         } catch (IOException | NotAnImageFileException e) {
             throw new IllegalStateException("Unable to create user during registration.", e);
@@ -97,7 +100,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         );
 
         customMapper.createUserFromDto(createUserRequest, user);
-        userRepo.save(user);
+        persistUserWithDuplicateCheck(user);
 
         return user;
     }
@@ -133,7 +136,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+    public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException {
         // Validate uniqueness using userId (single DB lookup inside validateEditUsernameAndEmail)
         User userToUpdate = validateEditUsernameAndEmail(updateUserRequest.userId, updateUserRequest.username, updateUserRequest.email);
         customMapper.updateUserFromDto(updateUserRequest, userToUpdate);
@@ -144,7 +147,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
         } catch (IOException | NotAnImageFileException e) {
             throw new RuntimeException(e);
         }
-        userRepo.save(userToUpdate);
+        persistUserWithDuplicateCheck(userToUpdate);
         return userToUpdate;
     }
 
@@ -152,7 +155,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         User user = validateNewUsernameAndEmail(username, null, null);
         saveProfileImg(user, profileImg);
-        userRepo.save(user);
+        persistUserWithDuplicateCheck(user);
         return user;
     }
 
@@ -166,7 +169,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public void resetPassword(String email) throws EmailNotFoundException {
+    public void resetPassword(String email) {
         User user = userRepo.findByEmail(email).orElseThrow();
         String password = generatePassword();
         user.setPassword(encodePassword(password));
@@ -179,7 +182,7 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Optional<User> user = userRepo.findByUsername(username);
         if (user.isEmpty()) {
             log.error(NO_USER_FOUND_BY_USERNAME + "{}", username);
@@ -239,6 +242,26 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
             throw new EmailExistException(EMAIL_ALREADY_EXISTS);
         }
         return currentUser;
+    }
+
+    private void persistUserWithDuplicateCheck(User user) throws UsernameExistException, EmailExistException {
+        try {
+            userRepo.save(user);
+        } catch (DuplicateKeyException ex) {
+            handleDuplicateKeyException(ex);
+        } catch (DataIntegrityViolationException ex) {
+            handleDuplicateKeyException(ex);
+        }
+    }
+    private void handleDuplicateKeyException(Throwable ex) throws UsernameExistException, EmailExistException {
+        String message = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+        if (message != null && (message.contains("username_unique") || message.contains("username") || message.contains("username_1"))) {
+            throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
+        }
+        if (message != null && (message.contains("email_unique") || message.contains("email") || message.contains("email_1"))) {
+            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
+        }
+        throw new IllegalStateException("Unique user constraint violation while saving user.", ex);
     }
 
     private Optional<User> findUserByUserId(String userId) {
