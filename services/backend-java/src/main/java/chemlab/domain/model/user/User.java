@@ -21,11 +21,11 @@ public class User {
     @Id
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String id;
-    @Indexed(name = "userId_unique", unique = true)
+    @Indexed(unique = true)
     private String userId = generateUserId();
-    @Indexed(name = "email_unique", unique = true)
+    @Indexed(unique = true)
     private String email;
-    @Indexed(name = "username_unique", unique = true)
+    @Indexed(unique = true)
     private String username;
     private String firstName;
     private String lastName;

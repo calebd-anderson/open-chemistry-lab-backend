@@ -1,7 +1,10 @@
 package chemlab.service.user;
 
 import chemlab.config.CustomMapper;
-import chemlab.domain.exceptions.*;
+import chemlab.domain.exceptions.EmailExistException;
+import chemlab.domain.exceptions.NotAnImageFileException;
+import chemlab.domain.exceptions.UserNotFoundException;
+import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.user.RegisteredUserService;
@@ -255,10 +258,10 @@ public class DefaultUserService implements RegisteredUserService, UserDetailsSer
     }
     private void handleDuplicateKeyException(Throwable ex) throws UsernameExistException, EmailExistException {
         String message = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
-        if (message != null && (message.contains("username_unique") || message.contains("username") || message.contains("username_1"))) {
+        if (message != null && (message.contains("username"))) {
             throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
         }
-        if (message != null && (message.contains("email_unique") || message.contains("email") || message.contains("email_1"))) {
+        if (message != null && (message.contains("email"))) {
             throw new EmailExistException(EMAIL_ALREADY_EXISTS);
         }
         throw new IllegalStateException("Unique user constraint violation while saving user.", ex);
