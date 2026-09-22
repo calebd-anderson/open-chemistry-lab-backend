@@ -1,6 +1,7 @@
 package chemlab.controller.api;
 
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
@@ -51,6 +52,8 @@ public class UserControllerTest {
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
     @MockitoBean
     UserRegistrationService userRegistrationService;
+    @MockitoBean
+    UserAuthenticationService userAuthenticationService;
 
     private MockMvc mockMvc;
 
