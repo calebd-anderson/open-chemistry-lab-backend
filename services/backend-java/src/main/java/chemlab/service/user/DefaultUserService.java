@@ -7,7 +7,9 @@ import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.domain.service.user.UserProfileService;
+import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.email.EmailService;
 import chemlab.infrastructure.storage.ImageStorageService;
@@ -53,6 +55,14 @@ public class DefaultUserService implements UserService {
     @Autowired
     private UserProfileService userProfileService;
     @Autowired
+    private UserAuthenticationService userAuthenticationService;
+    @Autowired
+    private UserRegistrationService userRegistrationService;
+    @Autowired
+    private UserValidator userValidator;
+    @Autowired
+    private UserService userService;
+    @Autowired
     private EmailService emailService;
     @Autowired
     CustomMapper customMapper;
@@ -72,14 +82,14 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        validateNewUsernameAndEmail(EMPTY, createUserRequest.getUsername(), createUserRequest.getEmail());
+        userValidator.validateNewUsernameAndEmail(EMPTY, createUserRequest.getUsername(), createUserRequest.getEmail());
 
-        User user = buildUserEntity(
+        User user = userRegistrationService.buildUserEntity(
                 createUserRequest.getFirstName(),
                 createUserRequest.getLastName(),
                 createUserRequest.getUsername(),
                 createUserRequest.getEmail(),
-                generatePassword(),
+                userAuthenticationService.generatePassword(),
                 createUserRequest.getRole(),
                 createUserRequest.getProfileImg()
         );
@@ -93,13 +103,14 @@ public class DefaultUserService implements UserService {
     @Override
     public User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException {
         // Validate uniqueness using userId (single DB lookup inside validateEditUsernameAndEmail)
-        User userToUpdate = validateEditUsernameAndEmail(updateUserRequest.userId, updateUserRequest.username, updateUserRequest.email);
+        User userToUpdate = userValidator.validateEditUsernameAndEmail(updateUserRequest.userId, updateUserRequest.username, updateUserRequest.email);
         customMapper.updateUserFromDto(updateUserRequest, userToUpdate);
         try {
             if (updateUserRequest.profileImg != null && !updateUserRequest.profileImg.isEmpty()) {
                 userProfileService.saveProfileImg(userToUpdate, updateUserRequest.profileImg);
             }
-        } catch (IOException | NotAnImageFileException e) {
+        } catch (IOException e) {
+//        } catch (IOException | NotAnImageFileException e) {
             throw new RuntimeException(e);
         }
         persistUserWithDuplicateCheck(userToUpdate);

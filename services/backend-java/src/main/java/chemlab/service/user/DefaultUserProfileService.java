@@ -7,6 +7,7 @@ import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.user.UserProfileService;
+import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.infrastructure.storage.ImageStorageService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,14 @@ public class DefaultUserProfileService implements UserProfileService {
     private RegisteredUserRepository userRepo;
     @Autowired
     private ImageStorageService imageStorageService;
+    @Autowired
+    UserValidator userValidator;
+    @Autowired
+    UserRegistrationService userRegistrationService;
 
     @Override
     public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
-        User user = validateNewUsernameAndEmail(username, null, null);
+        User user = userValidator.validateNewUsernameAndEmail(username, null, null);
         saveProfileImg(user, profileImg);
         persistUserWithDuplicateCheck(user);
         return user;
@@ -52,12 +57,12 @@ public class DefaultUserProfileService implements UserProfileService {
     }
 
 
-    private String getTemporaryProfileImageUrl(String username) {
+    public String getTemporaryProfileImageUrl(String username) {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/robohash/" + username).toUriString();
     }
 
 
-    private void saveProfileImg(User user, MultipartFile profileImg) throws IOException, NotAnImageFileException {
+    public void saveProfileImg(User user, MultipartFile profileImg) throws IOException {
         if (profileImg != null) {
             // calculate file hash
             String md5Hash = createMD5HashImg(profileImg);

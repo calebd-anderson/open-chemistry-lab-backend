@@ -17,7 +17,7 @@ public interface UserService {
 
     Optional<User> findUserByUsername(String username);
 
-    void saveUser(User user);
+//    void saveUser(User user);
 
     User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 

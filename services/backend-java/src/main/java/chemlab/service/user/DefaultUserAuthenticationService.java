@@ -60,15 +60,15 @@ public class DefaultUserAuthenticationService implements UserAuthenticationServi
         return new RegisteredUserPrincipal(user.get());
     }
 
-    private String generatePassword() {
+    public String generatePassword() {
         return RandomStringUtils.secure().nextAlphanumeric(10);
     }
 
-    private String encodePassword(String password) {
+    public String encodePassword(String password) {
         return bCryptPasswordEncoder.encode(password);
     }
 
-    private Role getRoleEnumName(String role) {
+    public Role getRoleEnumName(String role) {
         return Role.valueOf(role.toUpperCase());
     }
 }

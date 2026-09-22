@@ -21,4 +21,6 @@ public interface UserProfileService {
     void deleteProfileImage(String username);
 
     void saveProfileImg(User user, MultipartFile profileImg) throws IOException;
+
+    String getTemporaryProfileImageUrl(String username);
 }
