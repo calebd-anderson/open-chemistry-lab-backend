@@ -12,38 +12,16 @@ import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.email.EmailService;
-import chemlab.infrastructure.storage.ImageStorageService;
-import chemlab.security.user.LoginAttemptService;
-import chemlab.security.user.RegisteredUserPrincipal;
-import chemlab.security.user.Role;
 import chemlab.shared.requests.CreateUserRequest;
-import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static chemlab.security.user.Role.ROLE_USER;
-import static chemlab.service.user.config.UserImplementationConstant.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
@@ -60,8 +38,6 @@ public class DefaultUserService implements UserService {
     private UserRegistrationService userRegistrationService;
     @Autowired
     private UserValidator userValidator;
-    @Autowired
-    private UserService userService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -95,7 +71,7 @@ public class DefaultUserService implements UserService {
         );
 
         customMapper.createUserFromDto(createUserRequest, user);
-        persistUserWithDuplicateCheck(user);
+        userProfileService.persistUserWithDuplicateCheck(user);
 
         return user;
     }
@@ -113,28 +89,8 @@ public class DefaultUserService implements UserService {
 //        } catch (IOException | NotAnImageFileException e) {
             throw new RuntimeException(e);
         }
-        persistUserWithDuplicateCheck(userToUpdate);
+        userProfileService.persistUserWithDuplicateCheck(userToUpdate);
         return userToUpdate;
-    }
-
-    private void persistUserWithDuplicateCheck(User user) throws UsernameExistException, EmailExistException {
-        try {
-            userRepo.save(user);
-        } catch (DuplicateKeyException ex) {
-            handleDuplicateKeyException(ex);
-        } catch (DataIntegrityViolationException ex) {
-            handleDuplicateKeyException(ex);
-        }
-    }
-    private void handleDuplicateKeyException(Throwable ex) throws UsernameExistException, EmailExistException {
-        String message = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
-        if (message != null && (message.contains("username"))) {
-            throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
-        }
-        if (message != null && (message.contains("email"))) {
-            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
-        }
-        throw new IllegalStateException("Unique user constraint violation while saving user.", ex);
     }
 
     private Optional<User> findUserByUserId(String userId) {

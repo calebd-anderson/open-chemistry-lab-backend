@@ -1,5 +1,6 @@
 package chemlab.controller.view;
 
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
 import chemlab.security.config.CorsProperties;
@@ -44,6 +45,8 @@ class PubChemElementViewControllerTest {
     UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
+    @MockitoBean
+    UserService userService;
 
     private MockMvc mockMvc;
 

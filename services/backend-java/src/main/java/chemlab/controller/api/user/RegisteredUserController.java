@@ -6,11 +6,13 @@ import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ public class RegisteredUserController extends ExceptionHandling {
 
     private final UserService userService;
     private final RoboHashService roboHashService;
+    @Autowired
+    private UserProfileService userProfileService;
 
     public RegisteredUserController(UserService userService, RoboHashService roboHashService) {
         this.userService = userService;
@@ -91,7 +95,7 @@ public class RegisteredUserController extends ExceptionHandling {
         if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(profileImg.getContentType())) {
             throw new NotAnImageFileException("Invalid content type for profile image.");
         }
-        User user = userService.updateProfileImage(username, profileImg);
+        User user = userProfileService.updateProfileImage(username, profileImg);
         return new ResponseEntity<>(user, OK);
     }
 
@@ -119,13 +123,13 @@ public class RegisteredUserController extends ExceptionHandling {
     // validate
     @GetMapping("/find/{username}")
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        Optional<User> user = userService.findUserByUsername(username);
-        return new ResponseEntity<>(user.get(), OK);
+        User user = userService.findUserByUsername(username).orElseThrow();
+        return new ResponseEntity<>(user, OK);
     }
 
     @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)
     public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) throws IOException {
-        return userService.getProfileImage(userId, fileName);
+        return userProfileService.getProfileImage(userId, fileName);
     }
 
     @GetMapping(path = "/image/robohash/{username}", produces = IMAGE_JPEG_VALUE)

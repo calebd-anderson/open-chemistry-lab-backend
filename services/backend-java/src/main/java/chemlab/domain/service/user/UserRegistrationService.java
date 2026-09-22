@@ -7,6 +7,8 @@ import chemlab.domain.model.user.User;
 import chemlab.shared.requests.RegisterUserRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public interface UserRegistrationService {
     User register(RegisterUserRequest registerUserRequest) throws UserNotFoundException, UsernameExistException, EmailExistException;
     User buildUserEntity(String firstName,
@@ -15,5 +17,5 @@ public interface UserRegistrationService {
                          String email,
                          String password,
                          String roleName,
-                         MultipartFile profileImg);
+                         MultipartFile profileImg) throws IOException;
 }

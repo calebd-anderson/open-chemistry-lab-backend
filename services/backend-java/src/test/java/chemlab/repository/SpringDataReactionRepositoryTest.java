@@ -2,6 +2,7 @@ package chemlab.repository;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.repository.ReactionRepository;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
@@ -37,6 +38,8 @@ public class SpringDataReactionRepositoryTest {
     UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
+    @MockitoBean
+    UserService userService;
 
     private Reaction c1;
 

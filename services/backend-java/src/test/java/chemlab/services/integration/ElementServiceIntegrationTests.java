@@ -2,6 +2,7 @@ package chemlab.services.integration;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.domain.service.chemistry.ElementService;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
@@ -28,6 +29,8 @@ class ElementServiceIntegrationTests {
     UserPersistenceAdapter userPersistenceAdapter;
     @MockitoBean
     UserReactionPersistenceAdapter userReactionPersistenceAdapter;
+    @MockitoBean
+    UserService userService;
 
     @Test
     @DisplayName("should list all 118 elements from database")

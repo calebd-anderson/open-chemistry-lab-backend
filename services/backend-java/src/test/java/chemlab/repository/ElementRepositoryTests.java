@@ -2,6 +2,7 @@ package chemlab.repository;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.domain.repository.ElementRepository;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,9 @@ class ElementRepositoryTests {
 
     @MockitoBean
     FastApiWorkerService fastApiWorkerService;
+
+    @MockitoBean
+    UserService userService;
 
     @Test
     @DisplayName("should find all the elements in the periodic table")

@@ -23,4 +23,5 @@ public interface UserProfileService {
     void saveProfileImg(User user, MultipartFile profileImg) throws IOException;
 
     String getTemporaryProfileImageUrl(String username);
+    void persistUserWithDuplicateCheck(User user) throws UsernameExistException, EmailExistException;
 }

@@ -7,10 +7,11 @@ import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.RegisteredUserRepository;
 import chemlab.domain.service.user.UserProfileService;
-import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.infrastructure.storage.ImageStorageService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,6 +23,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Optional;
 
+import static chemlab.service.user.config.UserImplementationConstant.EMAIL_ALREADY_EXISTS;
+import static chemlab.service.user.config.UserImplementationConstant.USERNAME_ALREADY_EXISTS;
+
 @Service
 @Log4j2
 public class DefaultUserProfileService implements UserProfileService {
@@ -31,8 +35,6 @@ public class DefaultUserProfileService implements UserProfileService {
     private ImageStorageService imageStorageService;
     @Autowired
     UserValidator userValidator;
-    @Autowired
-    UserRegistrationService userRegistrationService;
 
     @Override
     public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
@@ -94,5 +96,30 @@ public class DefaultUserProfileService implements UserProfileService {
             hexText = "0".concat(hexText);
         }
         return hexText;
+    }
+
+    @Override
+    public void deleteProfileImage(String username) {
+        imageStorageService.deleteImage(username);
+    }
+
+    public void persistUserWithDuplicateCheck(User user) throws UsernameExistException, EmailExistException {
+        try {
+            userRepo.save(user);
+        } catch (DuplicateKeyException ex) {
+            handleDuplicateKeyException(ex);
+        } catch (DataIntegrityViolationException ex) {
+            handleDuplicateKeyException(ex);
+        }
+    }
+    private void handleDuplicateKeyException(Throwable ex) throws UsernameExistException, EmailExistException {
+        String message = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+        if (message != null && (message.contains("username"))) {
+            throw new UsernameExistException(USERNAME_ALREADY_EXISTS);
+        }
+        if (message != null && (message.contains("email"))) {
+            throw new EmailExistException(EMAIL_ALREADY_EXISTS);
+        }
+        throw new IllegalStateException("Unique user constraint violation while saving user.", ex);
     }
 }

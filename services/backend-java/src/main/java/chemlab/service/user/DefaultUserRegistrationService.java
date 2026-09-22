@@ -1,7 +1,6 @@
 package chemlab.service.user;
 
 import chemlab.domain.exceptions.EmailExistException;
-import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
@@ -12,6 +11,7 @@ import chemlab.security.user.Role;
 import chemlab.shared.requests.RegisterUserRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +20,7 @@ import java.util.Date;
 import static chemlab.security.user.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+@Service
 public class DefaultUserRegistrationService implements UserRegistrationService {
     @Autowired
     private UserProfileService userProfileService;
@@ -41,9 +42,10 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
                     ROLE_USER.name(),
                     null
             );
-            persistUserWithDuplicateCheck(user);
+            userProfileService.persistUserWithDuplicateCheck(user);
             return user;
-        } catch (IOException | NotAnImageFileException e) {
+//        } catch (IOException | NotAnImageFileException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Unable to create user during registration.", e);
         }
     }

@@ -6,6 +6,8 @@ import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.UserProfileService;
+import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.security.http.HttpResponse;
 import chemlab.security.jwt.JwtTokenProvider;
@@ -16,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +41,10 @@ public class AuthController extends ExceptionHandling {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserProfileService  userProfileService;
+    @Autowired
+    private UserRegistrationService userRegistrationService;
 
     public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
@@ -49,7 +56,7 @@ public class AuthController extends ExceptionHandling {
     public ResponseEntity<User> login(@Valid @RequestBody UserLoginRequest user, HttpServletRequest req) {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
-            userService.saveLastLogin(new Date(), user.getUsername());
+            userProfileService.saveLastLogin(new Date(), user.getUsername());
             User loginUser = userService.findUserByUsername(user.getUsername()).orElseThrow();
             RegisteredUserPrincipal userPrincipal = new RegisteredUserPrincipal(loginUser);
             String issuer = ServletUriComponentsBuilder.fromRequestUri(req)
@@ -65,7 +72,7 @@ public class AuthController extends ExceptionHandling {
     @PostMapping("/register")
     public ResponseEntity<User> register(@Valid @RequestBody RegisterUserRequest user) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // might want validation
-        User newUser = userService.register(user);
+        User newUser = userRegistrationService.register(user);
         return new ResponseEntity<>(newUser, CREATED);
     }
 
