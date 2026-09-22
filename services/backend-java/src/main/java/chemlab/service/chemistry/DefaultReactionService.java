@@ -4,7 +4,7 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.ReactionRepository;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.user.UserReactionService;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
@@ -33,7 +33,7 @@ public class DefaultReactionService implements ReactionService {
     @Autowired
     private ReactionRepository reactionRepo;
     @Autowired
-    private RegisteredUserRepository userRepo;
+    private UserRepository userRepo;
     @Autowired
     private UserReactionService userReactionService;
     @Autowired

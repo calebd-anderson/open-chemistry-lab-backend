@@ -4,7 +4,7 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.repository.UserReactionRepository;
 import chemlab.domain.service.game.QuizService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class DefaultUserQuizService implements QuizService {
     UserReactionRepository userReactionRepo;
 
     @Autowired
-    RegisteredUserRepository userRepo;
+    UserRepository userRepo;
 
     private List<UserQuiz> generateQuizzes(String userId) {
         Optional<User> user = userRepo.findByUserId(userId);

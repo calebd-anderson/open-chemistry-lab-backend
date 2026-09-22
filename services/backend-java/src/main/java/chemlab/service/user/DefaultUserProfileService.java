@@ -5,7 +5,7 @@ import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.infrastructure.storage.ImageStorageService;
 import lombok.extern.log4j.Log4j2;
@@ -30,7 +30,7 @@ import static chemlab.service.user.config.UserImplementationConstant.USERNAME_AL
 @Log4j2
 public class DefaultUserProfileService implements UserProfileService {
     @Autowired
-    private RegisteredUserRepository userRepo;
+    private UserRepository userRepo;
     @Autowired
     private ImageStorageService imageStorageService;
     @Autowired

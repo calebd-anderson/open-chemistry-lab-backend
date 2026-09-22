@@ -1,7 +1,7 @@
 package chemlab.service.user;
 
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
@@ -24,7 +24,7 @@ import static chemlab.service.user.config.UserImplementationConstant.NO_USER_FOU
 @Log4j2
 public class DefaultUserAuthenticationService implements UserAuthenticationService, UserDetailsService {
     @Autowired
-    private RegisteredUserRepository userRepo;
+    private UserRepository userRepo;
     @Autowired
     private LoginAttemptService loginAttemptService;
     @Autowired

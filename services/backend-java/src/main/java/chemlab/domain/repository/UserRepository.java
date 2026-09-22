@@ -5,7 +5,7 @@ import chemlab.domain.model.user.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface RegisteredUserRepository {
+public interface UserRepository {
 
     User save(User user);
 

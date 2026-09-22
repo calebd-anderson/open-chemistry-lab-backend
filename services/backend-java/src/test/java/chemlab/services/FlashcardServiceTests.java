@@ -2,7 +2,7 @@ package chemlab.services;
 
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FlashcardServiceTests {
     @Mock
-    RegisteredUserRepository userRepo;
+    UserRepository userRepo;
     @InjectMocks
     private DefaultUserFlashcardService flashcardService;
 

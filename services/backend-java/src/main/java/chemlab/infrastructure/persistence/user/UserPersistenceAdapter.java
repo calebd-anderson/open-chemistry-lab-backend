@@ -1,7 +1,7 @@
 package chemlab.infrastructure.persistence.user;
 
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements RegisteredUserRepository {
+public class UserPersistenceAdapter implements UserRepository {
     @Autowired
     private final SpringDataUserRepository mongoRepository;
 

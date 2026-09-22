@@ -1,6 +1,6 @@
 package chemlab.services;
 
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.email.EmailService;
 import chemlab.security.user.LoginAttemptService;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserServiceTest {
 
     @Mock
-    private RegisteredUserRepository userRepo;
+    private UserRepository userRepo;
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock

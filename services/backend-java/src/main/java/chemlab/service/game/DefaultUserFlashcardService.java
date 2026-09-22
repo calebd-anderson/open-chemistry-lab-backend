@@ -3,7 +3,7 @@ package chemlab.service.game;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.RegisteredUserRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.game.FlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.List;
 public class DefaultUserFlashcardService implements FlashcardService {
 
     @Autowired
-    private RegisteredUserRepository userRepo;
+    private UserRepository userRepo;
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.trace("Getting flashcards by userId in service.");

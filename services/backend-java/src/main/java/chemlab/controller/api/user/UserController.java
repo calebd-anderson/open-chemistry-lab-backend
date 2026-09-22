@@ -7,6 +7,7 @@ import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.user.UserProfileService;
+import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.shared.requests.CreateUserRequest;
@@ -21,21 +22,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/user")
-public class RegisteredUserController extends ExceptionHandling {
+public class UserController extends ExceptionHandling {
 
     private final UserService userService;
     private final RoboHashService roboHashService;
     @Autowired
+    private UserRegistrationService userRegistrationService;
+    @Autowired
     private UserProfileService userProfileService;
 
-    public RegisteredUserController(UserService userService, RoboHashService roboHashService) {
+    public UserController(UserService userService, RoboHashService roboHashService) {
         this.userService = userService;
         this.roboHashService = roboHashService;
     }
@@ -60,7 +62,7 @@ public class RegisteredUserController extends ExceptionHandling {
                 throw new NotAnImageFileException("Invalid content type for profile image.");
             }
         }
-        User newUser = userService.addNewUser(createUserRequest);
+        User newUser = userRegistrationService.addNewUser(createUserRequest);
         return new ResponseEntity<>(newUser, OK);
     }
 
@@ -72,14 +74,14 @@ public class RegisteredUserController extends ExceptionHandling {
                 throw new NotAnImageFileException("Invalid content type for profile image.");
             }
         }
-        User updatedUser = userService.updateUser(updateUserRequest);
+        User updatedUser = userRegistrationService.updateUser(updateUserRequest);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
     @DeleteMapping("/delete/{username}")
     @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username) throws IOException {
-        userService.deleteUser(username);
+        userRegistrationService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
