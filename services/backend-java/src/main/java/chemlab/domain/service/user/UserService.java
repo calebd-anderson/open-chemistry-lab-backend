@@ -12,25 +12,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface RegisteredUserService {
-    User register(RegisterUserRequest registerUserRequest) throws UserNotFoundException, UsernameExistException, EmailExistException;
-
+public interface UserService {
     List<User> getUsers();
 
     Optional<User> findUserByUsername(String username);
+
+    void saveUser(User user);
 
     User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
     void deleteUser(String username) throws IOException;
-
-    void resetPassword(String email) throws EmailNotFoundException;
-
-    byte[] getProfileImage(String userId, String filename) throws IOException;
-
-    User updateProfileImage(String username,
-                            MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
-
-    void saveLastLogin(Date date, String username);
 }

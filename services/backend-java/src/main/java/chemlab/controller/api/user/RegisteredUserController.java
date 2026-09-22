@@ -6,7 +6,7 @@ import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
-import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
@@ -28,10 +28,10 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/user")
 public class RegisteredUserController extends ExceptionHandling {
 
-    private final RegisteredUserService userService;
+    private final UserService userService;
     private final RoboHashService roboHashService;
 
-    public RegisteredUserController(RegisteredUserService userService, RoboHashService roboHashService) {
+    public RegisteredUserController(UserService userService, RoboHashService roboHashService) {
         this.userService = userService;
         this.roboHashService = roboHashService;
     }

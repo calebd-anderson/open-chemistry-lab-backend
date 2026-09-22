@@ -1,7 +1,7 @@
 package chemlab.security.jwt;
 
 import chemlab.domain.model.user.User;
-import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.domain.service.user.UserService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -34,13 +34,13 @@ public class JwtTokenProvider {
     private String secret;
     private final String audience = "open-chem-lab";
     @Autowired
-    RegisteredUserService registeredUserService;
+    UserService userService;
 
     // generate the token
     public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
         String[] claims = getClaimsFromUser(userPrincipal);
         String userRole = getRoleFromUser(userPrincipal);
-        Optional<User> user = registeredUserService.findUserByUsername(userPrincipal.getUsername());
+        Optional<User> user = userService.findUserByUsername(userPrincipal.getUsername());
         return JWT.create().withIssuer(issuer)
                 .withAudience(audience)
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())

@@ -1,7 +1,7 @@
 package chemlab.controller.api;
 
 import chemlab.domain.model.user.User;
-import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.persistence.user.UserPersistenceAdapter;
 import chemlab.infrastructure.persistence.user.UserReactionPersistenceAdapter;
@@ -39,7 +39,7 @@ public class UserControllerTest {
     private WebApplicationContext context;
 
     @MockitoBean
-    private RegisteredUserService registeredUserService;
+    private UserService userService;
     @MockitoBean
     private UserDetailsService userDetailsService;
     @MockitoBean
@@ -54,7 +54,7 @@ public class UserControllerTest {
     @BeforeEach
     void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).apply(springSecurity()).build();
-        given(this.registeredUserService.getUsers()).willReturn(List.of(new User("jimbo", "jimbo@mail.com")));
+        given(this.userService.getUsers()).willReturn(List.of(new User("jimbo", "jimbo@mail.com")));
     }
 
     @Test
@@ -85,6 +85,6 @@ public class UserControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(authenticated())
                 .andDo(print());
-        verify(registeredUserService).getUsers();
+        verify(userService).getUsers();
     }
 }

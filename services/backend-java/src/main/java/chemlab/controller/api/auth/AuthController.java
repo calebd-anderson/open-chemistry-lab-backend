@@ -6,7 +6,7 @@ import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
-import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.domain.service.user.UserService;
 import chemlab.security.http.HttpResponse;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.security.user.RegisteredUserPrincipal;
@@ -35,11 +35,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/auth")
 public class AuthController extends ExceptionHandling {
 
-    private final RegisteredUserService userService;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(RegisteredUserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;

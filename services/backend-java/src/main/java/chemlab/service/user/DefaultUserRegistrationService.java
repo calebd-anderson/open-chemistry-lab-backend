@@ -1,0 +1,71 @@
+package chemlab.service.user;
+
+import chemlab.domain.exceptions.EmailExistException;
+import chemlab.domain.exceptions.NotAnImageFileException;
+import chemlab.domain.exceptions.UserNotFoundException;
+import chemlab.domain.exceptions.UsernameExistException;
+import chemlab.domain.model.user.User;
+import chemlab.domain.service.user.UserRegistrationService;
+import chemlab.security.user.Role;
+import chemlab.shared.requests.RegisterUserRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Date;
+
+import static chemlab.security.user.Role.ROLE_USER;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
+public class DefaultUserRegistrationService implements UserRegistrationService {
+
+    @Override
+    public User register(RegisterUserRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
+        validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
+        try {
+            User user = buildUserEntity(
+                    userDto.getFirstName(),
+                    userDto.getLastName(),
+                    userDto.getUsername(),
+                    userDto.getEmail(),
+                    userDto.getPassword(),
+                    ROLE_USER.name(),
+                    null
+            );
+            persistUserWithDuplicateCheck(user);
+            return user;
+        } catch (IOException | NotAnImageFileException e) {
+            throw new IllegalStateException("Unable to create user during registration.", e);
+        }
+    }
+
+    private User buildUserEntity(String firstName,
+                                 String lastName,
+                                 String username,
+                                 String email,
+                                 String password,
+                                 String roleName,
+                                 MultipartFile profileImg) throws IOException, NotAnImageFileException {
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setJoinDate(new Date());
+        user.setPassword(encodePassword(password));
+        user.setActive(true);
+        user.setNotLocked(true);
+
+        Role resolvedRole = StringUtils.isNotBlank(roleName) ? getRoleEnumName(roleName) : ROLE_USER;
+        user.setRole(resolvedRole.name());
+        user.setAuthorities(resolvedRole.getAuthorities());
+
+        if (profileImg != null && !profileImg.isEmpty()) {
+            saveProfileImg(user, profileImg);
+        } else {
+            user.setProfileImgUrl(getTemporaryProfileImageUrl(username));
+        }
+
+        return user;
+    }
+}

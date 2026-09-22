@@ -1,7 +1,7 @@
 package chemlab.services;
 
 import chemlab.domain.repository.RegisteredUserRepository;
-import chemlab.domain.service.user.RegisteredUserService;
+import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.email.EmailService;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.service.user.DefaultUserService;
@@ -25,7 +25,7 @@ public class UserServiceTest {
     private EmailService emailService;
 
     @InjectMocks
-    private RegisteredUserService userService = new DefaultUserService();
+    private UserService userService = new DefaultUserService();
 
     @Test
     void findQuizByUserId() {
