@@ -41,8 +41,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
     public User register(RegisterUserRequest userDto) throws UsernameExistException, EmailExistException, UserNotFoundException {
         userValidator.validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
 
-        User user = new User();
-        customMapper.registerUserFromDto(userDto, user);
+        User user = customMapper.registerUserFromDto(userDto);
 
         userProfileService.persistUserWithDuplicateCheck(user);
         return user;
@@ -53,9 +52,8 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
         userValidator.validateNewUsernameAndEmail(EMPTY, createUserRequest.getUsername(), createUserRequest.getEmail());
 
         String password = userAuthenticationService.generatePassword();
-        User user = new User();
+        User user = customMapper.createUserFromDto(createUserRequest);
         user.setPassword(password);
-        customMapper.createUserFromDto(createUserRequest, user);
 
         userProfileService.persistUserWithDuplicateCheck(user);
         return user;

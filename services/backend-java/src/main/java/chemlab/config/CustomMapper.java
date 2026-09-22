@@ -1,20 +1,14 @@
 package chemlab.config;
 
 import chemlab.domain.model.user.User;
-import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserAuthenticationService;
-import chemlab.infrastructure.storage.ImageStorageService;
+import chemlab.domain.service.user.UserProfileService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.AfterMapping;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -28,8 +22,6 @@ public abstract class CustomMapper {
 
     @Autowired
     protected BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    protected ImageStorageService imageStorageService;
     @Autowired
     protected UserAuthenticationService userAuthenticationService;
     @Autowired
@@ -61,21 +53,21 @@ public abstract class CustomMapper {
     @Mapping(target = "userFlashcards", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "notLocked", ignore = true)
-    public abstract void createUserFromDto(CreateUserRequest dto, @MappingTarget User entity);
+    public abstract User createUserFromDto(CreateUserRequest dto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "profileImgUrl", ignore = true)
     @Mapping(target = "lastLoginDate", ignore = true)
-    @Mapping(target = "joinDate",ignore = true)
+    @Mapping(target = "joinDate", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "highScore", ignore = true)
     @Mapping(target = "userFlashcards", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "notLocked", ignore = true)
-    public abstract void registerUserFromDto(RegisterUserRequest dto, @MappingTarget User entity);
+    public abstract User registerUserFromDto(RegisterUserRequest dto);
 
     @AfterMapping
     protected void afterRegisterUser(@Nonnull RegisterUserRequest dto, @MappingTarget User entity) {
@@ -105,6 +97,7 @@ public abstract class CustomMapper {
             } else {
                 entity.setProfileImgUrl(userProfileService.getTemporaryProfileImageUrl(entity.getUsername()));
             }
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to process profile image during user creation", e);
         }
