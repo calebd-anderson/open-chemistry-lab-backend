@@ -60,7 +60,7 @@ public class DefaultUserProfileService implements UserProfileService {
 
 
     public String getTemporaryProfileImageUrl(String username) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/robohash/" + username).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("api/users/image/robohash/" + username).toUriString();
     }
 
 
@@ -71,7 +71,7 @@ public class DefaultUserProfileService implements UserProfileService {
             String filename = md5Hash + "_" + user.getUsername();
             log.info("Image hash: {}", md5Hash);
             String imageBlobPath = imageStorageService.saveImage(user.getUserId(), filename + ".jpg", profileImg.getInputStream());
-            String profileImageUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/image/" + imageBlobPath).toUriString();
+            String profileImageUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("api/users/image/" + imageBlobPath).toUriString();
             user.setProfileImgUrl(profileImageUrl);
             log.trace("Successfully updated user profile image.");
         }
