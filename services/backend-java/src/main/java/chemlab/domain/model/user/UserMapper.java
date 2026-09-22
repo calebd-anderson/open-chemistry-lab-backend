@@ -1,6 +1,5 @@
-package chemlab.config;
+package chemlab.domain.model.user;
 
-import chemlab.domain.model.user.User;
 import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.shared.requests.CreateUserRequest;
@@ -18,7 +17,7 @@ import java.util.Date;
 import static chemlab.security.user.Role.ROLE_USER;
 
 @Mapper(componentModel = "spring")
-public abstract class CustomMapper {
+public abstract class UserMapper {
 
     @Autowired
     protected BCryptPasswordEncoder bCryptPasswordEncoder;

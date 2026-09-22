@@ -1,6 +1,6 @@
 package chemlab.service.user;
 
-import chemlab.config.CustomMapper;
+import chemlab.domain.model.user.UserMapper;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.exceptions.UserNotFoundException;
@@ -10,7 +10,6 @@ import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.email.EmailService;
-import chemlab.security.user.Role;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import static chemlab.security.user.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
@@ -33,7 +31,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
     @Autowired
     private UserValidator userValidator;
     @Autowired
-    private CustomMapper customMapper;
+    private UserMapper userMapper;
     @Autowired
     private EmailService emailService;
 
@@ -41,7 +39,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
     public User register(RegisterUserRequest userDto) throws UsernameExistException, EmailExistException, UserNotFoundException {
         userValidator.validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
 
-        User user = customMapper.registerUserFromDto(userDto);
+        User user = userMapper.registerUserFromDto(userDto);
 
         userProfileService.persistUserWithDuplicateCheck(user);
         return user;
@@ -52,7 +50,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
         userValidator.validateNewUsernameAndEmail(EMPTY, createUserRequest.getUsername(), createUserRequest.getEmail());
 
         String password = userAuthenticationService.generatePassword();
-        User user = customMapper.createUserFromDto(createUserRequest);
+        User user = userMapper.createUserFromDto(createUserRequest);
         user.setPassword(password);
 
         userProfileService.persistUserWithDuplicateCheck(user);
@@ -63,7 +61,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
     public User updateUser(UpdateUserRequest updateUserRequest) throws UsernameExistException, EmailExistException, UserNotFoundException {
         // Validate uniqueness using userId (single DB lookup inside validateEditUsernameAndEmail)
         User userToUpdate = userValidator.validateEditUsernameAndEmail(updateUserRequest.userId, updateUserRequest.username, updateUserRequest.email);
-        customMapper.updateUserFromDto(updateUserRequest, userToUpdate);
+        userMapper.updateUserFromDto(updateUserRequest, userToUpdate);
         try {
             if (updateUserRequest.profileImg != null && !updateUserRequest.profileImg.isEmpty()) {
                 userProfileService.saveProfileImg(userToUpdate, updateUserRequest.profileImg);
