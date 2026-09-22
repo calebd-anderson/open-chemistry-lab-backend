@@ -72,7 +72,7 @@ public class UserControllerTest {
         // requires more research
         // https://stackoverflow.com/questions/30643029/spring-security-anonymous-401-instead-of-403
         // https://basicutils.com/learn/spring-security/implementing-role-based-access-control-rbac-spring-boot
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/list"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
                 .andExpect(status().isForbidden())
                 .andExpect(authenticated());
     }
@@ -81,7 +81,7 @@ public class UserControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("role ADMIN authorized to enumerate all users")
     void shouldReturnAllUsers() throws Exception {
-        this.mockMvc.perform(get("/api/user/list")
+        this.mockMvc.perform(get("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

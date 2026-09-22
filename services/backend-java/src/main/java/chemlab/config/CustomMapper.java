@@ -32,7 +32,7 @@ public abstract class CustomMapper {
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "highScore", ignore = true)
     @Mapping(target = "userFlashcards", ignore = true)
-    void updateUserFromDto(UpdateUserRequest dto, @MappingTarget User entity) {};
+    public void updateUserFromDto(UpdateUserRequest dto, @MappingTarget User entity) {};
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
@@ -45,7 +45,7 @@ public abstract class CustomMapper {
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "highScore", ignore = true)
     @Mapping(target = "userFlashcards", ignore = true)
-    void createUserFromDto(CreateUserRequest dto, @MappingTarget User entity) {};
+    public void createUserFromDto(CreateUserRequest dto, @MappingTarget User entity) {};
 
-    void registerUserFromDto(RegisterUserRequest dto, @MappingTarget User entity) {};
+    public void registerUserFromDto(RegisterUserRequest dto, @MappingTarget User entity) {};
 }

@@ -27,7 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController extends ExceptionHandling {
 
     private final UserService userService;
@@ -42,7 +42,7 @@ public class UserController extends ExceptionHandling {
         this.roboHashService = roboHashService;
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getUsers();
@@ -54,7 +54,14 @@ public class UserController extends ExceptionHandling {
 //				.collect(Collectors.toList()));
     }
 
-    @PostMapping("/add")
+
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getUser(@PathVariable("username") String username) {
+        User user = userService.findUserByUsername(username).orElseThrow();
+        return new ResponseEntity<>(user, OK);
+    }
+
+    @PostMapping
     public ResponseEntity<User> addNewUser(@Valid CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         if (createUserRequest.getProfileImg() != null) {
             validateMultipartFile("profileImg", createUserRequest.getProfileImg());
@@ -78,11 +85,21 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(updatedUser, OK);
     }
 
-    @DeleteMapping("/delete/{username}")
+    @DeleteMapping("/{username}")
     @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username) throws IOException {
         userRegistrationService.deleteUser(username);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)
+    public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) throws IOException {
+        return userProfileService.getProfileImage(userId, fileName);
+    }
+
+    @GetMapping(path = "/image/robohash/{username}", produces = IMAGE_JPEG_VALUE)
+    public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
+        return roboHashService.getProfileImage(username);
     }
 
     @PostMapping("/updateprofileimg")
@@ -120,22 +137,5 @@ public class UserController extends ExceptionHandling {
             }
         }
         return "";
-    }
-
-    // validate
-    @GetMapping("/find/{username}")
-    public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = userService.findUserByUsername(username).orElseThrow();
-        return new ResponseEntity<>(user, OK);
-    }
-
-    @GetMapping(path = "/image/{userId}/{fileName}", produces = IMAGE_JPEG_VALUE)
-    public byte[] getProfileImage(@PathVariable("userId") String userId, @PathVariable("fileName") String fileName) throws IOException {
-        return userProfileService.getProfileImage(userId, fileName);
-    }
-
-    @GetMapping(path = "/image/robohash/{username}", produces = IMAGE_JPEG_VALUE)
-    public byte[] getTempProfileImage(@PathVariable("username") String username) throws IOException {
-        return roboHashService.getProfileImage(username);
     }
 }
