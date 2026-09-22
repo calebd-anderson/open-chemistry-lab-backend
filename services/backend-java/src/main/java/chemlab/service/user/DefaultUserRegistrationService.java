@@ -45,6 +45,11 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
     @Override
     public User register(RegisterUserRequest userDto) throws UserNotFoundException, UsernameExistException, EmailExistException {
         userValidator.validateNewUsernameAndEmail(EMPTY, userDto.getUsername(), userDto.getEmail());
+        // how to do the whole build user in the mapper
+        // how to inject
+        User mappedUser = new User();
+        customMapper.registerUserFromDto(userDto, mappedUser);
+
         try {
             User user = buildUserEntity(
                     userDto.getFirstName(),
@@ -100,7 +105,7 @@ public class DefaultUserRegistrationService implements UserRegistrationService {
         return userToUpdate;
     }
 
-    public User buildUserEntity(String firstName,
+    private User buildUserEntity(String firstName,
                                  String lastName,
                                  String username,
                                  String email,

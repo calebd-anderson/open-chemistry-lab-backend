@@ -14,13 +14,6 @@ import java.io.IOException;
 
 public interface UserRegistrationService {
     User register(RegisterUserRequest registerUserRequest) throws UserNotFoundException, UsernameExistException, EmailExistException;
-    User buildUserEntity(String firstName,
-                         String lastName,
-                         String username,
-                         String email,
-                         String password,
-                         String roleName,
-                         MultipartFile profileImg) throws IOException;
     User addNewUser(CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
     User updateUser(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
     void deleteUser(String username) throws IOException;
