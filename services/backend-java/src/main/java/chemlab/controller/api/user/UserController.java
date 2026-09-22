@@ -13,7 +13,6 @@ import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +31,14 @@ public class UserController extends ExceptionHandling {
 
     private final UserService userService;
     private final RoboHashService roboHashService;
-    @Autowired
-    private UserRegistrationService userRegistrationService;
-    @Autowired
-    private UserProfileService userProfileService;
+    private final UserRegistrationService userRegistrationService;
+    private final UserProfileService userProfileService;
 
-    public UserController(UserService userService, RoboHashService roboHashService) {
+    public UserController(UserService userService, RoboHashService roboHashService, UserRegistrationService  userRegistrationService, UserProfileService  userProfileService) {
         this.userService = userService;
         this.roboHashService = roboHashService;
+        this.userRegistrationService = userRegistrationService;
+        this.userProfileService = userProfileService;
     }
 
     @GetMapping
