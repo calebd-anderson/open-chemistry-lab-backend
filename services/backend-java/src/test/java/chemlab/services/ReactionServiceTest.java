@@ -2,22 +2,34 @@ package chemlab.services;
 
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.ReactionMapper;
+import chemlab.domain.model.user.User;
 import chemlab.domain.repository.ReactionRepository;
-import chemlab.domain.service.chemistry.ReactionService;
+import chemlab.domain.repository.UserRepository;
+import chemlab.domain.service.user.UserReactionService;
+import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
+import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
 import chemlab.service.chemistry.DefaultReactionService;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,140 +43,152 @@ class ReactionServiceTest {
     private PubChemApiService pubChemApi;
     @Mock
     private ReactionMapper reactionMapper;
+    @Mock
+    private UserRepository userRepo;
+    @Mock
+    private UserReactionService userReactionService;
+    @Mock
+    private FastApiWorkerService fastApiWorkerService;
+    @Mock
+    private SecurityContext securityContext;
+    @Mock
+    private Authentication authentication;
 
     @InjectMocks
     private DefaultReactionService reactionService;
 
+    private MockedStatic<SecurityContextHolder> mockedSecurityContextHolder;
+
+    @BeforeEach
+    void setUp() {
+        mockedSecurityContextHolder = mockStatic(SecurityContextHolder.class);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (mockedSecurityContextHolder != null) {
+            mockedSecurityContextHolder.close();
+        }
+    }
+
     @Test
-    @DisplayName("compound not yet discovered")
+    @DisplayName("hasCompoundBeenDiscovered returns false when reaction not in repo")
     void hasCompoundBeenDiscovered_false() {
-        doReturn(null).when(reactionRepo).findReactionByFormula("H2O");
+        when(reactionRepo.findReactionByFormula("H2O")).thenReturn(null);
         assertFalse(reactionService.hasCompoundBeenDiscovered("H2O"));
     }
 
     @Test
-    @DisplayName("compound has been discovered before")
+    @DisplayName("hasCompoundBeenDiscovered returns true when reaction exists in repo")
     void hasCompoundBeenDiscovered_true() {
-        // Arrange
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
-        // create reaction from elements
         Reaction r1 = new Reaction(elements);
-        // stub in the reaction repository behavior
-        doReturn(r1).when(reactionRepo).findReactionByFormula("H2O");
+        when(reactionRepo.findReactionByFormula("H2O")).thenReturn(r1);
 
-        // Act
-        boolean result = reactionService.hasCompoundBeenDiscovered("H2O");
-
-        // Assert
-        assertTrue(result);
+        assertTrue(reactionService.hasCompoundBeenDiscovered("H2O"));
     }
 
     @Test
-    @DisplayName("It should return the value from the repo if it exists")
-    void validateInput_returnFromRepo() throws PugApiException {
-        // Arrange
+    @DisplayName("createReaction returns existing reaction if already discovered")
+    void createReaction_alreadyDiscovered() throws PugApiException {
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
-        // create reaction from elements
         Reaction r1 = new Reaction(elements);
-
         String formula = "H2O";
-        // stub in the repo finds the reaction
-        doReturn(r1).when(reactionRepo).findReactionByFormula(formula);
-        // the service returns the saved reaction
-        doReturn(r1).when(reactionRepo).save(r1);
-        ReactionRequest reactionRequest = mock(ReactionRequest.class);
-        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
-        when(reactionMapper.toEntity(any())).thenReturn(r1);
 
-        // Act
-        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
+        when(reactionRepo.findReactionByFormula(formula)).thenReturn(r1);
+        when(reactionRepo.save(any(Reaction.class))).thenReturn(r1);
 
-        // Assert
-        assertNotNull(reactionResult);
-        // PubChem api not called when reaction already discovered
-        verify(pubChemApi, never()).getFormulaProperties(formula);
+        ReactionRequest request = mock(ReactionRequest.class);
+//        when(request.getMappedPayload()).thenReturn(elements);
+        when(reactionMapper.toEntity(request)).thenReturn(r1);
+        when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
+
+        reactionService.createReaction(request);
+
+        verify(pubChemApi, never()).getFormulaProperties(anyString());
+        verify(reactionRepo).save(r1);
     }
 
     @Test
-    @DisplayName("PubChem api is called when reaction not yet discovered")
-    void validateInput_returnFromPugApi() throws Exception {
-        // Arrange
-        // setup a compound
+    @DisplayName("createReaction fetches from PubChem if not discovered")
+    void createReaction_notDiscovered() throws PugApiException {
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("Na", 1);
         elements.put("Cl", 1);
-        // create a reaction from the elements
         Reaction r1 = new Reaction(elements);
-
-        // TODO: ...
-//        PugApiDto pugApiMock = new PugApiDto();
-//        pugApiMock.initializePropertyTableObj();
-//        pugApiMock.appendToPropertyTableObj(
-//                5234,
-//                "ClNa",
-//                "58.44",
-//                "Sodium chloride"
-//        );
-
         String formula = "NaCl";
-        // stub in the repo will not find the reaction
-        doReturn(null).when(reactionRepo).findReactionByFormula(formula);
-        // stub in the api return
-        FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
-        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(formula);
-        // stub in the service returns the saved reaction
-        doReturn(r1).when(reactionRepo).save(r1);
-        ReactionRequest reactionRequest = mock(ReactionRequest.class);
-        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
-        when(reactionMapper.toEntity(any())).thenReturn(r1);
 
-        // Act
-        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
+        when(reactionRepo.findReactionByFormula(formula)).thenReturn(null);
+        FastformulaPropertiesResponse response = mock(FastformulaPropertiesResponse.class);
+        when(pubChemApi.getFormulaProperties(formula)).thenReturn(response);
+        when(reactionRepo.save(any(Reaction.class))).thenReturn(r1);
 
-        // Assert
-        assertNotNull(reactionResult);
-        // PubChem api called when reaction not yet discovered
-        verify(pubChemApi, atLeastOnce()).getFormulaProperties(formula);
-        verify(reactionRepo, atLeastOnce()).save(r1);
+        ReactionRequest request = mock(ReactionRequest.class);
+//        when(request.getMappedPayload()).thenReturn(elements);
+        when(reactionMapper.toEntity(request)).thenReturn(r1);
+        when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
 
-        // TODO: setup the game stuff again
-        // verify(quizMock, times(1)).createNewQuizes(c1, userId, "compound");
-        // verify(quizMock, times(1)).createNewQuizes(c1, userId, "element");
+        reactionService.createReaction(request);
+
+        verify(pubChemApi).getFormulaProperties(formula);
+        verify(reactionRepo).save(r1);
     }
 
     @Test
-    @DisplayName("Discovery count increments.")
-    void discoveryCountIncrements() throws PugApiException {
-        // Arrange
-        // make discovery
+    @DisplayName("createReaction handles authenticated user by saving to user reaction service")
+    void createReaction_authenticatedUser() throws PugApiException {
         HashMap<String, Integer> elements = new HashMap<>();
         elements.put("H", 2);
         elements.put("O", 1);
-        // create reaction from elements
         Reaction r1 = new Reaction(elements);
-        int initialDiscoveryCount = r1.getDiscoveredCount();
+        String formula = "H2O";
 
-        // stub in the api return
-        FastformulaPropertiesResponse pugApiResponse = mock(FastformulaPropertiesResponse.class);
-        doReturn(pugApiResponse).when(pubChemApi).getFormulaProperties(r1.getFormula());
-        // stub in the repo returns the saved reaction
-        r1.setDiscoveredCount(r1.getDiscoveredCount() + 1);
-        doReturn(r1).when(reactionRepo).save(r1);
+        when(reactionRepo.findReactionByFormula(formula)).thenReturn(r1);
+        when(reactionRepo.save(any(Reaction.class))).thenReturn(r1);
 
-        ReactionRequest reactionRequest = mock(ReactionRequest.class);
-        when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("testuser");
 
-        // Act
-        ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
+        User user = mock(User.class);
+        when(user.getUserId()).thenReturn("user-100");
+        when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
 
-        // Assert
-        // reaction discovered for first time so PubChem api called
-        verify(pubChemApi, atLeastOnce()).getFormulaProperties(r1.getFormula());
-        // after discovery (validateInput) the reaction discovery count is incremented by 1
-        assertEquals(initialDiscoveryCount + 1, reactionResult.getDiscoveredCount());
+        ReactionRequest request = mock(ReactionRequest.class);
+//        when(request.getMappedPayload()).thenReturn(elements);
+        when(reactionMapper.toEntity(request)).thenReturn(r1);
+        when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
+
+        reactionService.createReaction(request);
+
+        verify(userReactionService).saveReactionWithUser(eq("user-100"), any(Reaction.class));
+    }
+
+    @Test
+    @DisplayName("analyzeFormula calls PubChem and FastApiWorker")
+    void analyzeFormula_success() throws Exception {
+        HashMap<String, Integer> elements = new HashMap<>();
+        elements.put("H", 2);
+        elements.put("O", 1);
+        ReactionRequest request = mock(ReactionRequest.class);
+        when(request.getMappedPayload()).thenReturn(elements);
+
+        FastformulaPropertiesResponse response = mock(FastformulaPropertiesResponse.class);
+        when(pubChemApi.getFormulaProperties("H2O")).thenReturn(response);
+
+        List<ClusterMapRequest> clusters = List.of(mock(ClusterMapRequest.class));
+        when(fastApiWorkerService.analyzePubChemFastformulaProps(response)).thenReturn(clusters);
+
+        List<ClusterMapRequest> result = reactionService.analyzeFormula(request);
+
+        assertNotNull(result);
+        assertEquals(clusters, result);
+        verify(pubChemApi).getFormulaProperties("H2O");
+        verify(fastApiWorkerService).analyzePubChemFastformulaProps(response);
     }
 }

@@ -17,7 +17,6 @@ import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,20 +28,25 @@ import java.util.List;
 @Service
 public class DefaultReactionService implements ReactionService {
     private final ReactionRepository reactionRepo;
-    @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private UserReactionService userReactionService;
-    @Autowired
-    private FastApiWorkerService fastApiWorkerService;
-    @Autowired
-    private PubChemApiService pubChemApi;
-
+    private final UserRepository userRepo;
+    private final UserReactionService userReactionService;
+    private final FastApiWorkerService fastApiWorkerService;
+    private final PubChemApiService pubChemApi;
     private final ReactionMapper reactionMapper;
 
-    DefaultReactionService(ReactionRepository reactionRepo, ReactionMapper reactionMapper) {
-        this.reactionMapper = reactionMapper;
+    public DefaultReactionService(
+            ReactionRepository reactionRepo,
+            ReactionMapper reactionMapper,
+            UserRepository userRepo,
+            UserReactionService userReactionService,
+            FastApiWorkerService fastApiWorkerService,
+            PubChemApiService pubChemApi) {
         this.reactionRepo = reactionRepo;
+        this.reactionMapper = reactionMapper;
+        this.userRepo = userRepo;
+        this.userReactionService = userReactionService;
+        this.fastApiWorkerService = fastApiWorkerService;
+        this.pubChemApi = pubChemApi;
     }
 
     /**
@@ -79,7 +83,6 @@ public class DefaultReactionService implements ReactionService {
     @Override
     public ReactionResponse createReaction(ReactionRequest payload) throws PugApiException {
         Reaction reaction = reactionMapper.toEntity(payload);
-//        reaction.setElements(payload.getMappedPayload());
 
         String formula = reaction.getFormula();
         log.trace("Validating: [{}]", formula);
