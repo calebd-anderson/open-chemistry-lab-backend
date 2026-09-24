@@ -13,16 +13,16 @@ import chemlab.infrastructure.fastapiworker.service.FastApiWorkerService;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.pubchem.service.PubChemApiService;
+import chemlab.security.config.SecurityConstants;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -81,16 +81,13 @@ public class DefaultReactionService implements ReactionService {
     }
 
     @Override
-    public ReactionResponse createReaction(ReactionRequest payload) throws PugApiException {
+    public ReactionResponse createReaction(ReactionRequest payload, Optional<String> username) throws PugApiException {
         Reaction reaction = reactionMapper.toEntity(payload);
 
         String formula = reaction.getFormula();
         log.trace("Validating: [{}]", formula);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean authenticated = (authentication != null && authentication.isAuthenticated());
-        String discoveredBy = authenticated ? authentication.getName() : "anonymous";
-
+        String discoveredBy = username.orElse(SecurityConstants.ANONYMOUS_USER);
         // new discovery
         if (!hasCompoundBeenDiscovered(formula)) {
             // try formula with PubChem api
@@ -110,16 +107,17 @@ public class DefaultReactionService implements ReactionService {
         log.trace("Updating reaction with formula: {}", reaction.getFormula());
         reaction = reactionRepo.save(reaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
-        if (authenticated) {
-            // need to lookup user by username until able to add userid to JWT
-            log.trace("Querying the db for user with username: {}", authentication.getName());
-            User user = userRepo.findByUsername(authentication.getName()).orElseThrow();
+        if (username.isPresent()) {
+            String userStr = username.get();
+            log.trace("Querying the db for user with username: {}", userStr);
+
+            User user = userRepo.findByUsername(userStr).orElseThrow();
             log.trace("Saving the {} reaction with the user.", reaction.getFormula());
+
             userReactionService.saveReactionWithUser(user.getUserId(), reaction);
         }
         log.trace("Finished validating input.");
-        ReactionResponse response = reactionMapper.toResponse(reaction);
-        return response;
+        return reactionMapper.toResponse(reaction);
     }
 
 

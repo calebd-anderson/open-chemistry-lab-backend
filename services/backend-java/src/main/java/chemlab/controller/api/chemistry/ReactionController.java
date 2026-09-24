@@ -6,15 +6,18 @@ import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
+import chemlab.security.config.SecurityConstants;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ClusterMapResponse;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/compound")
@@ -29,9 +32,14 @@ public class ReactionController {
     }
 
     @PostMapping(value = "validate")
-    public ReactionResponse validate(@RequestBody ReactionRequest payload) throws PugApiException {
+    public ReactionResponse validate(@RequestBody ReactionRequest payload, Authentication auth) throws PugApiException {
         log.trace("Controller received formula: {}", payload.getElements());
-        return reactionService.createReaction(payload);
+        // Use Optional.ofNullable to wrap the username
+        Optional<String> username = (auth != null && auth.isAuthenticated())
+                ? Optional.of(auth.getName())
+                : Optional.empty();
+
+        return reactionService.createReaction(payload, username);
     }
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")

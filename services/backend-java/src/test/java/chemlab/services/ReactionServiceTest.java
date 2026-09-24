@@ -108,7 +108,7 @@ class ReactionServiceTest {
         when(reactionMapper.toEntity(request)).thenReturn(r1);
         when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
 
-        reactionService.createReaction(request);
+        reactionService.createReaction(request, Optional.empty());
 
         verify(pubChemApi, never()).getFormulaProperties(anyString());
         verify(reactionRepo).save(r1);
@@ -133,7 +133,7 @@ class ReactionServiceTest {
         when(reactionMapper.toEntity(request)).thenReturn(r1);
         when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
 
-        reactionService.createReaction(request);
+        reactionService.createReaction(request, Optional.empty());
 
         verify(pubChemApi).getFormulaProperties(formula);
         verify(reactionRepo).save(r1);
@@ -147,24 +147,21 @@ class ReactionServiceTest {
         elements.put("O", 1);
         Reaction r1 = new Reaction(elements);
         String formula = "H2O";
+        String testUsername = "testuser"; // Define the user here
 
         when(reactionRepo.findReactionByFormula(formula)).thenReturn(r1);
         when(reactionRepo.save(any(Reaction.class))).thenReturn(r1);
 
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getName()).thenReturn("testuser");
-
         User user = mock(User.class);
         when(user.getUserId()).thenReturn("user-100");
-        when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
+        when(userRepo.findByUsername(testUsername)).thenReturn(Optional.of(user));
 
         ReactionRequest request = mock(ReactionRequest.class);
 //        when(request.getMappedPayload()).thenReturn(elements);
         when(reactionMapper.toEntity(request)).thenReturn(r1);
         when(reactionMapper.toResponse(r1)).thenReturn(mock(ReactionResponse.class));
 
-        reactionService.createReaction(request);
+        reactionService.createReaction(request, Optional.of(testUsername));
 
         verify(userReactionService).saveReactionWithUser(eq("user-100"), any(Reaction.class));
     }

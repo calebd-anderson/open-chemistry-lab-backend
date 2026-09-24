@@ -9,12 +9,10 @@ import java.util.HashMap;
 @Data
 public class ReactionRequest {
     private ArrayList<Element> elements;
-    private String userId;
 
     @JsonCreator
-    public ReactionRequest(ArrayList<Element> elements, String userId) {
+    public ReactionRequest(ArrayList<Element> elements) {
         this.elements = elements;
-        this.userId = userId;
     }
 
     public HashMap<String, Integer> getMappedPayload() {

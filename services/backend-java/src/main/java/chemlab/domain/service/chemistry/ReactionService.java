@@ -9,10 +9,11 @@ import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReactionService {
     boolean hasCompoundBeenDiscovered(String formula);
-    ReactionResponse createReaction(ReactionRequest reaction) throws PugApiException;
+    ReactionResponse createReaction(ReactionRequest reaction, Optional<String> username) throws PugApiException;
     List<ClusterMapRequest> analyzeFormula(ReactionRequest reaction) throws PugApiException, JsonProcessingException;
     List<Reaction> findAllDiscoveredReactions();
     List<UserReaction> getCompoundsByUserId(String userId);
