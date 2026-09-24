@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,15 +40,19 @@ public class AuthController extends ExceptionHandling {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    @Autowired
-    private UserProfileService  userProfileService;
-    @Autowired
-    private UserRegistrationService userRegistrationService;
+    private final UserProfileService  userProfileService;
+    private final UserRegistrationService userRegistrationService;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(UserService userService,
+                          AuthenticationManager authenticationManager,
+                          JwtTokenProvider jwtTokenProvider,
+                          UserProfileService profileService,
+                          UserRegistrationService userRegistrationService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userProfileService = profileService;
+        this.userRegistrationService = userRegistrationService;
     }
 
     @PostMapping("/login")

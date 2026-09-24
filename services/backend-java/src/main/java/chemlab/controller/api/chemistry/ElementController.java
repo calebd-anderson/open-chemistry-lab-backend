@@ -1,9 +1,8 @@
 package chemlab.controller.api.chemistry;
 
-import chemlab.domain.service.chemistry.ElementService;
 import chemlab.domain.exceptions.FailedToLoadPTException;
+import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,12 @@ import java.util.List;
 @RequestMapping("/elements")
 public class ElementController {
 
-    @Autowired
-    private ElementService elmService;
+    private final ElementService elmService;
+
+    ElementController(ElementService elmService)
+    {
+        this.elmService = elmService;
+    }
 
     @GetMapping(value = "/list")
     public List<PubChemElement> list() throws FailedToLoadPTException {

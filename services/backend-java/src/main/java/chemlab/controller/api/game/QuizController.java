@@ -1,10 +1,9 @@
 package chemlab.controller.api.game;
 
-import chemlab.domain.service.game.QuizService;
 import chemlab.domain.model.game.UserQuiz;
+import chemlab.domain.service.game.QuizService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +15,17 @@ import java.util.List;
 @RequestMapping("/quiz")
 public class QuizController {
 
+    private final QuizService quizService;
+
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private QuizService quizService;
+    QuizController(QuizService quizService) {
+        this.quizService = quizService;
+    }
 
     @GetMapping("/getbyuserid/{userId}")
     public List<UserQuiz> getByUserId(@PathVariable("userId") String userId) {
+        LOG.info("getByUserId {}", userId);
         return this.quizService.findQuizByUserId(userId);
     }
 }

@@ -4,14 +4,13 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
-import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
+import chemlab.infrastructure.pubchem.exceptions.PugApiException;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ClusterMapResponse;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +20,13 @@ import java.util.List;
 @RequestMapping("/compound")
 @Slf4j
 public class ReactionController {
-    @Autowired
-    private ReactionService reactionService;
-    @Autowired
-    private UnsupervisedClustMap unsupervisedClustMap;
+    private final ReactionService reactionService;
+    private final UnsupervisedClustMap unsupervisedClustMap;
+
+    ReactionController(ReactionService reactionService,  UnsupervisedClustMap unsupervisedClustMap) {
+        this.reactionService = reactionService;
+        this.unsupervisedClustMap = unsupervisedClustMap;
+    }
 
     @PostMapping(value = "validate")
     public ReactionResponse validate(@RequestBody ReactionRequest payload) throws PugApiException {

@@ -6,7 +6,6 @@ import chemlab.domain.service.game.FlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,11 @@ import static org.springframework.http.HttpStatus.OK;
 @Slf4j
 public class FlashcardController {
 
-    @Autowired
-    private FlashcardService flashcardService;
+    private final FlashcardService flashcardService;
+
+    FlashcardController(FlashcardService flashcardService) {
+        this.flashcardService = flashcardService;
+    }
 
     @GetMapping(value = "/userflashcards/{userId}")
     public ResponseEntity<List<Flashcard>> getFlashcardByUserId(@PathVariable("userId") String userId) {

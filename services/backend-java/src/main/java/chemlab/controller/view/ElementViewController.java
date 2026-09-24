@@ -17,7 +17,6 @@ public class ElementViewController {
 
     private final DefaultElementService elmService;
 
-    @Autowired
     public ElementViewController(DefaultElementService service) {
         this.elmService = service;
     }
