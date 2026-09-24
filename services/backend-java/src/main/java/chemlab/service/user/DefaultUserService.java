@@ -4,7 +4,6 @@ import chemlab.domain.model.user.User;
 import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.Optional;
 @Slf4j
 public class DefaultUserService implements UserService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
+
+    DefaultUserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     public List<User> getUsers() {
         log.trace("Fetching all users.");

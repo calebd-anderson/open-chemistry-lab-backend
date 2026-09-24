@@ -9,7 +9,6 @@ import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.infrastructure.storage.ImageStorageService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -29,12 +28,17 @@ import static chemlab.service.user.config.UserImplementationConstant.USERNAME_AL
 @Service
 @Log4j2
 public class DefaultUserProfileService implements UserProfileService {
-    @Autowired
     private UserRepository userRepo;
-    @Autowired
-    private ImageStorageService imageStorageService;
-    @Autowired
-    UserValidator userValidator;
+    private final ImageStorageService imageStorageService;
+    private final UserValidator userValidator;
+
+    DefaultUserProfileService(UserRepository userRepo,
+                              ImageStorageService imageStorageService,
+                              UserValidator userValidator) {
+        this.userRepo = userRepo;
+        this.imageStorageService = imageStorageService;
+        this.userValidator = userValidator;
+    }
 
     @Override
     public User updateProfileImage(String username, MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {

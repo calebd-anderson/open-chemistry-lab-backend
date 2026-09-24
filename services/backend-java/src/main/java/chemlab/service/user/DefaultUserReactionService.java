@@ -5,7 +5,6 @@ import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.repository.UserReactionRepository;
 import chemlab.domain.service.user.UserReactionService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,8 +14,11 @@ import java.util.List;
 @Service
 public class DefaultUserReactionService implements UserReactionService {
 
-    @Autowired
-    UserReactionRepository userReactionRepo;
+    private final UserReactionRepository userReactionRepo;
+
+    DefaultUserReactionService(UserReactionRepository userReactionRepo) {
+        this.userReactionRepo = userReactionRepo;
+    }
 
     @Override
     public void saveReactionWithUser(String userId, Reaction reaction) {

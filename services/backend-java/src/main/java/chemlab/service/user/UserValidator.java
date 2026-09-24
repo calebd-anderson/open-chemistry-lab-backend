@@ -6,7 +6,6 @@ import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,8 +14,11 @@ import static chemlab.service.user.config.UserImplementationConstant.*;
 
 @Component
 public class UserValidator {
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    UserValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User validateNewUsernameAndEmail(String currentUsername, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
         // Only look up by newUsername/newEmail if they are provided to avoid unnecessary DB calls and NPEs

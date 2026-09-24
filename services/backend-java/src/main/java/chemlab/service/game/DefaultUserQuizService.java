@@ -4,11 +4,10 @@ import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.model.user.User;
-import chemlab.domain.repository.UserRepository;
 import chemlab.domain.repository.UserReactionRepository;
+import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.game.QuizService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +16,13 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class DefaultUserQuizService implements QuizService {
+    private final UserReactionRepository userReactionRepo;
+    private final UserRepository userRepo;
 
-    @Autowired
-    UserReactionRepository userReactionRepo;
-
-    @Autowired
-    UserRepository userRepo;
+    DefaultUserQuizService(UserReactionRepository userReactionRepo, UserRepository userRepo) {
+        this.userReactionRepo = userReactionRepo;
+        this.userRepo = userRepo;
+    }
 
     private List<UserQuiz> generateQuizzes(String userId) {
         Optional<User> user = userRepo.findByUserId(userId);

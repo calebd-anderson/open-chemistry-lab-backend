@@ -9,7 +9,6 @@ import chemlab.security.user.Role;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,12 +22,15 @@ import static chemlab.service.user.config.UserImplementationConstant.NO_USER_FOU
 @Service
 @Log4j2
 public class DefaultUserAuthenticationService implements UserAuthenticationService, UserDetailsService {
-    @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private LoginAttemptService loginAttemptService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepo;
+    private final LoginAttemptService loginAttemptService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    DefaultUserAuthenticationService(UserRepository userRepo, LoginAttemptService loginAttemptService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepo = userRepo;
+        this.loginAttemptService = loginAttemptService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     // update 500 instead of user not found ?
     public void validateLoginAttempt(User user) {

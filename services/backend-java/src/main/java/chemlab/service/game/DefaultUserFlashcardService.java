@@ -8,7 +8,6 @@ import chemlab.domain.service.game.FlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +16,11 @@ import java.util.List;
 @Slf4j
 public class DefaultUserFlashcardService implements FlashcardService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
+
+    DefaultUserFlashcardService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     public List<Flashcard> listUserFlashcards(String userId) {
         log.trace("Getting flashcards by userId in service.");
