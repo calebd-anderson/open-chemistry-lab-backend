@@ -5,7 +5,7 @@
 
 ### Core Technology Stack
 - **Framework**: Spring Boot 4.x (Core Backend), FastAPI (Specialized Services)
-- **Language**: Java 21 LTS, Python 3.11+
+- **Language**: Java 25 LTS, Python 3.11+
 - **Database**: MongoDB 7.0.40 (via Docker or local)
 - **Build**: Maven (Java), Poetry/Pip (Python)
 - **Authentication**: JWT (Auth0 library) + BCrypt + Spring Security
