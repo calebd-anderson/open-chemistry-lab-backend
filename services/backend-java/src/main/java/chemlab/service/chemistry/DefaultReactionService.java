@@ -1,6 +1,7 @@
 package chemlab.service.chemistry;
 
 import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.model.chemistry.ReactionMapper;
 import chemlab.domain.model.chemistry.UserReaction;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.ReactionRepository;
@@ -16,7 +17,6 @@ import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,23 +24,26 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 public class DefaultReactionService implements ReactionService {
-
-    @Autowired
-    private ReactionRepository reactionRepo;
+    private final ReactionRepository reactionRepo;
     @Autowired
     private UserRepository userRepo;
     @Autowired
     private UserReactionService userReactionService;
     @Autowired
     private FastApiWorkerService fastApiWorkerService;
-
     @Autowired
     private PubChemApiService pubChemApi;
+
+    private final ReactionMapper reactionMapper;
+
+    DefaultReactionService(ReactionRepository reactionRepo, ReactionMapper reactionMapper) {
+        this.reactionMapper = reactionMapper;
+        this.reactionRepo = reactionRepo;
+    }
 
     /**
      * TODO:
@@ -73,8 +76,10 @@ public class DefaultReactionService implements ReactionService {
         return reactionRepo.findAll();
     }
 
+    @Override
     public ReactionResponse createReaction(ReactionRequest payload) throws PugApiException {
-        Reaction reaction = new Reaction(payload.getMappedPayload());
+        Reaction reaction = reactionMapper.toEntity(payload);
+//        reaction.setElements(payload.getMappedPayload());
 
         String formula = reaction.getFormula();
         log.trace("Validating: [{}]", formula);
@@ -105,13 +110,12 @@ public class DefaultReactionService implements ReactionService {
         if (authenticated) {
             // need to lookup user by username until able to add userid to JWT
             log.trace("Querying the db for user with username: {}", authentication.getName());
-            Optional<User> user = userRepo.findByUsername(authentication.getName());
+            User user = userRepo.findByUsername(authentication.getName()).orElseThrow();
             log.trace("Saving the {} reaction with the user.", reaction.getFormula());
-            userReactionService.saveReactionWithUser(user.get().getUserId(), reaction);
+            userReactionService.saveReactionWithUser(user.getUserId(), reaction);
         }
         log.trace("Finished validating input.");
-        ModelMapper modelMapper = new ModelMapper();
-        ReactionResponse response = modelMapper.map(reaction, ReactionResponse.class);
+        ReactionResponse response = reactionMapper.toResponse(reaction);
         return response;
     }
 

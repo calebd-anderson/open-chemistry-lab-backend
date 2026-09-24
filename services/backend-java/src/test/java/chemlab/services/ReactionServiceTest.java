@@ -1,6 +1,7 @@
 package chemlab.services;
 
 import chemlab.domain.model.chemistry.Reaction;
+import chemlab.domain.model.chemistry.ReactionMapper;
 import chemlab.domain.repository.ReactionRepository;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.infrastructure.pubchem.PugApiResponse.FastformulaPropertiesResponse;
@@ -26,12 +27,13 @@ class ReactionServiceTest {
 
     @Mock
     private ReactionRepository reactionRepo;
-
     @Mock
     private PubChemApiService pubChemApi;
+    @Mock
+    private ReactionMapper reactionMapper;
 
     @InjectMocks
-    private ReactionService reactionService = new DefaultReactionService();
+    private DefaultReactionService reactionService;
 
     @Test
     @DisplayName("compound not yet discovered")
@@ -76,6 +78,7 @@ class ReactionServiceTest {
         doReturn(r1).when(reactionRepo).save(r1);
         ReactionRequest reactionRequest = mock(ReactionRequest.class);
         when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
+        when(reactionMapper.toEntity(any())).thenReturn(r1);
 
         // Act
         ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);
@@ -117,6 +120,7 @@ class ReactionServiceTest {
         doReturn(r1).when(reactionRepo).save(r1);
         ReactionRequest reactionRequest = mock(ReactionRequest.class);
         when(reactionRequest.getMappedPayload()).thenReturn(r1.getElements());
+        when(reactionMapper.toEntity(any())).thenReturn(r1);
 
         // Act
         ReactionResponse reactionResult = reactionService.createReaction(reactionRequest);

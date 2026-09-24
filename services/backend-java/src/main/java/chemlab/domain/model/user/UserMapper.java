@@ -39,7 +39,6 @@ public abstract class UserMapper {
     @Mapping(target = "userFlashcards", ignore = true)
     public abstract void updateUserFromDto(UpdateUserRequest dto, @MappingTarget User entity);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "password", ignore = true)
