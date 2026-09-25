@@ -116,7 +116,9 @@ class ReactionServiceTest {
         elements.put("H", 2);
         elements.put("O", 1);
         ReactionRequest request = mock(ReactionRequest.class);
-        when(request.getMappedPayload()).thenReturn(elements);
+
+        Reaction reaction = new Reaction(elements);
+        when(reactionMapper.toEntity(request)).thenReturn(reaction);
 
         FastformulaPropertiesResponse response = mock(FastformulaPropertiesResponse.class);
         when(pubChemApi.getFormulaProperties("H2O")).thenReturn(response);
