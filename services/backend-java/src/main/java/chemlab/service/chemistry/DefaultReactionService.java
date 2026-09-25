@@ -88,22 +88,15 @@ public class DefaultReactionService implements ReactionService {
         log.trace("Validating: [{}]", formula);
 
         String discoveredBy = username.orElse(SecurityConstants.ANONYMOUS_USER);
-        // new discovery
+
         if (!hasCompoundBeenDiscovered(formula)) {
-            // try formula with PubChem api
             FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(formula);
-            reaction.setTitle(pugApiResponse.getFirstPropertyTitle());
-            reaction.setFirstDiscoveredWhen(Instant.now());
-            log.trace("Setting reaction discovered by: {}", discoveredBy);
-            reaction.setFirstDiscoveredBy(discoveredBy);
+            reaction.recordDiscovery(discoveredBy, Optional.of(pugApiResponse.getFirstPropertyTitle()), Instant.now());
         } else {
-            // reaction already discovered
             reaction = retrieveCompoundFromRepo(formula);
+            reaction.recordDiscovery(discoveredBy, Optional.empty(), Instant.now());
         }
-        reaction.setLastDiscoveredWhen(Instant.now());
-        reaction.setDiscoveredCount(reaction.getDiscoveredCount() + 1);
-        // set last discovered by
-        reaction.setLastDiscoveredBy(discoveredBy);
+
         log.trace("Updating reaction with formula: {}", reaction.getFormula());
         reaction = reactionRepo.save(reaction);
         // if user is logged in; create game data and save reaction from discovered reaction with the user
@@ -120,7 +113,7 @@ public class DefaultReactionService implements ReactionService {
         return reactionMapper.toResponse(reaction);
     }
 
-
+    @Override
     public List<ClusterMapRequest>  analyzeFormula(ReactionRequest payload) throws PugApiException, JsonProcessingException {
         log.trace("Analyzing formula in default reaction service.");
         Reaction reaction = new Reaction(payload.getMappedPayload());

@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Document(collection = "reactions")
 @Data
@@ -51,6 +52,34 @@ public class Reaction {
             }
         }
         return formula.toString();
+    }
+
+    /**
+     * Handles a discovery event. If it's the first time, it initializes the
+     * permanent discovery metadata. Always updates the 'last discovered' metadata.
+     */
+    public void recordDiscovery(String discoverer, Optional<String> title, Instant discoveryTime) {
+        // 1. Always update the 'last discovery' metadata
+        this.lastDiscoveredBy = discoverer;
+        this.lastDiscoveredWhen = discoveryTime;
+        this.discoveredCount++;
+
+        // 2. If a title is provided, this is a 'First Discovery'
+        title.ifPresent(newTitle -> {
+            this.title = newTitle;
+            this.firstDiscoveredBy = discoverer;
+            this.firstDiscoveredWhen = discoveryTime;
+        });
+    }
+
+    public void updateDiscovery(String discoverer, Instant discoveryTime) {
+        this.lastDiscoveredBy = discoverer;
+        this.lastDiscoveredWhen = discoveryTime;
+        this.discoveredCount++;
+    }
+
+    public void incrementDiscoveredCount() {
+        this.discoveredCount++;
     }
 
     @Override
