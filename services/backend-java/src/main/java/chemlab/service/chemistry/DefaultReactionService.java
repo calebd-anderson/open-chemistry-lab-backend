@@ -81,8 +81,8 @@ public class DefaultReactionService implements ReactionService {
     }
 
     @Override
-    public ReactionResponse createReaction(ReactionRequest payload, Optional<String> username) throws PugApiException {
-        Reaction reaction = reactionMapper.toEntity(payload);
+    public ReactionResponse createReaction(ReactionRequest reactionRequest, Optional<String> username) throws PugApiException {
+        Reaction reaction = reactionMapper.toEntity(reactionRequest);
 
         String formula = reaction.getFormula();
         log.trace("Validating: [{}]", formula);
@@ -114,9 +114,9 @@ public class DefaultReactionService implements ReactionService {
     }
 
     @Override
-    public List<ClusterMapRequest>  analyzeFormula(ReactionRequest payload) throws PugApiException, JsonProcessingException {
+    public List<ClusterMapRequest>  analyzeFormula(ReactionRequest reactionRequest) throws PugApiException, JsonProcessingException {
         log.trace("Analyzing formula in default reaction service.");
-        Reaction reaction = new Reaction(payload.getMappedPayload());
+        Reaction reaction = reactionMapper.toEntity(reactionRequest);
         FastformulaPropertiesResponse pugApiResponse = pubChemApi.getFormulaProperties(reaction.getFormula());
         return fastApiWorkerService.analyzePubChemFastformulaProps(pugApiResponse);
     }

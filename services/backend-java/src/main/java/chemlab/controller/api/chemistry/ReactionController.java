@@ -6,7 +6,6 @@ import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.infrastructure.fastapiworker.ClusterMapRequest;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
-import chemlab.security.config.SecurityConstants;
 import chemlab.shared.requests.ReactionRequest;
 import chemlab.shared.responses.ClusterMapResponse;
 import chemlab.shared.responses.ReactionResponse;
@@ -54,11 +53,10 @@ public class ReactionController {
     }
 
     @PostMapping(value = "analyze")
-    public ClusterMapResponse analyzeReaction(@RequestBody ReactionRequest payload) throws PugApiException, JsonProcessingException {
-        log.trace("Analyzing received formula: {}, with Python worker.", payload.getElements());
-        List<ClusterMapRequest> data = reactionService.analyzeFormula(payload);
+    public ClusterMapResponse analyzeReaction(@RequestBody ReactionRequest reactionRequest) throws PugApiException, JsonProcessingException {
+        log.trace("Analyzing received formula: {}, with Python worker.", reactionRequest.getElements());
+        List<ClusterMapRequest> data = reactionService.analyzeFormula(reactionRequest);
         log.trace("Sending FastAPI data to unsupervised learning.");
-        ClusterMapResponse response = unsupervisedClustMap.testMl(data);
-        return response;
+        return unsupervisedClustMap.testMl(data);
     }
 }
