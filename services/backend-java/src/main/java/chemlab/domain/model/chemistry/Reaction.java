@@ -31,7 +31,12 @@ public class Reaction {
 
     public Reaction(HashMap<String, Integer> elements) {
         this.elements = elements;
-        this.formula = createFormula();
+        this.formula = (elements != null) ? createFormula() : null;
+    }
+
+    public void setElements(HashMap<String, Integer> elements) {
+        this.elements = elements;
+        this.formula = (elements != null) ? createFormula() : null;
     }
 
     private String createFormula() {
