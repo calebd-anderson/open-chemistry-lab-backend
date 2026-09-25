@@ -1,10 +1,13 @@
 package chemlab.domain.model.user;
 
+import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
+import chemlab.shared.responses.ReactionResponse;
+import chemlab.shared.responses.UserResponseDTO;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.*;
@@ -100,4 +103,7 @@ public abstract class UserMapper {
             throw new RuntimeException("Failed to process profile image during user creation", e);
         }
     }
+
+    // For Outgoing Responses (Entity $\to$ DTO)
+    public abstract UserResponseDTO toResponse(User entity);
 }

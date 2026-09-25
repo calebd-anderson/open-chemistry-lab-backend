@@ -6,6 +6,7 @@ import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
+import chemlab.domain.model.user.UserMapper;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
@@ -33,24 +34,23 @@ public class UserController extends ExceptionHandling {
     private final RoboHashService roboHashService;
     private final UserRegistrationService userRegistrationService;
     private final UserProfileService userProfileService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService, RoboHashService roboHashService, UserRegistrationService  userRegistrationService, UserProfileService  userProfileService) {
+    public UserController(UserService userService, RoboHashService roboHashService, UserRegistrationService  userRegistrationService, UserProfileService  userProfileService, UserMapper userMapper) {
         this.userService = userService;
         this.roboHashService = roboHashService;
         this.userRegistrationService = userRegistrationService;
         this.userProfileService = userProfileService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<chemlab.shared.responses.UserResponseDTO>> getAllUsers() {
+        List<chemlab.shared.responses.UserResponseDTO> users = userService.getUsers().stream()
+                .map(userMapper::toResponse)
+                .toList();
         return new ResponseEntity<>(users, OK);
-//		return ResponseEntity.ok().body(userService
-//				.getUsers()
-//				.stream()
-//				.map(mapper::toDao)
-//				.collect(Collectors.toList()));
     }
 
 
