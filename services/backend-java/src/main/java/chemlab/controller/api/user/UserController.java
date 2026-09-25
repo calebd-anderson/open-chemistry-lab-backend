@@ -13,6 +13,7 @@ import chemlab.domain.service.user.UserService;
 import chemlab.infrastructure.robohash.RoboHashService;
 import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
+import chemlab.shared.responses.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,8 +47,8 @@ public class UserController extends ExceptionHandling {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<List<chemlab.shared.responses.UserResponseDTO>> getAllUsers() {
-        List<chemlab.shared.responses.UserResponseDTO> users = userService.getUsers().stream()
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.getUsers().stream()
                 .map(userMapper::toResponse)
                 .toList();
         return new ResponseEntity<>(users, OK);
@@ -55,13 +56,13 @@ public class UserController extends ExceptionHandling {
 
 
     @GetMapping("/{username}")
-    public ResponseEntity<User> getUser(@PathVariable("username") String username) {
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("username") String username) {
         User user = userService.findUserByUsername(username).orElseThrow();
-        return new ResponseEntity<>(user, OK);
+        return new ResponseEntity<>(userMapper.toResponse(user), OK);
     }
 
     @PostMapping
-    public ResponseEntity<User> addNewUser(@Valid CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+    public ResponseEntity<UserResponseDTO> addNewUser(@Valid CreateUserRequest createUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         if (createUserRequest.getProfileImg() != null) {
             validateMultipartFile("profileImg", createUserRequest.getProfileImg());
             if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(createUserRequest.getProfileImg().getContentType())) {
@@ -69,11 +70,11 @@ public class UserController extends ExceptionHandling {
             }
         }
         User newUser = userRegistrationService.addNewUser(createUserRequest);
-        return new ResponseEntity<>(newUser, OK);
+        return new ResponseEntity<>(userMapper.toResponse(newUser), OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<User> update(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
+    public ResponseEntity<UserResponseDTO> update(UpdateUserRequest updateUserRequest) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         if (updateUserRequest.profileImg != null) {
             validateMultipartFile("profileImg", updateUserRequest.profileImg);
             if (!Arrays.asList(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE, "image/webp").contains(updateUserRequest.profileImg.getContentType())) {
@@ -81,7 +82,7 @@ public class UserController extends ExceptionHandling {
             }
         }
         User updatedUser = userRegistrationService.updateUser(updateUserRequest);
-        return new ResponseEntity<>(updatedUser, OK);
+        return new ResponseEntity<>(userMapper.toResponse(updatedUser), OK);
     }
 
     @DeleteMapping("/{username}")
@@ -102,7 +103,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/updateprofileimg")
-    public ResponseEntity<User> update(@RequestParam("username") String username,
+    public ResponseEntity<UserResponseDTO> update(@RequestParam("username") String username,
                                        @RequestParam(value = "profileImg") MultipartFile profileImg) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException {
         validateMultipartFile("profileImg", profileImg);
         // Check file size (max 5MB)
@@ -114,7 +115,7 @@ public class UserController extends ExceptionHandling {
             throw new NotAnImageFileException("Invalid content type for profile image.");
         }
         User user = userProfileService.updateProfileImage(username, profileImg);
-        return new ResponseEntity<>(user, OK);
+        return new ResponseEntity<>(userMapper.toResponse(user), OK);
     }
 
     private void validateMultipartFile(String parameterName, MultipartFile file) throws NotAnImageFileException {
