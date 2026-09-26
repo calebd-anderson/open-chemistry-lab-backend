@@ -1,7 +1,7 @@
 # AGENTS.md - Chemlab Backend Development Guide
 
 ## Project Overview
-**Chemlab** is an interactive periodic table and chemistry education platform built with **Spring Boot 4.x** (for the core backend) and **FastAPI** (for specialized services), **Java 21**, and **MongoDB**. It enables users to explore elements, conduct experiments, create flashcards, and take auto-generated quizzes.
+**Chemlab** is an interactive periodic table and chemistry education platform built with **Spring Boot 4.x** (for the core backend) and **FastAPI** (for specialized services), **Java 25**, and **MongoDB**. It enables users to explore elements, conduct experiments, create flashcards, and take auto-generated quizzes.
 
 ### Core Technology Stack
 - **Framework**: Spring Boot 4.x (Core Backend), FastAPI (Specialized Services)
@@ -68,6 +68,60 @@ services/
 - **Game (Spring)**: Quiz service, Flashcard management
 - **User (Spring)**: Authentication, Account management, File uploads
 - **Specialized (FastAPI)**: Computational chemistry, AI integration, Data heavy lifting
+
+---
+
+## Git Commit Policy
+
+Never create a Git commit automatically.
+
+A commit may be created only if the user explicitly says to commit the current changes in the same conversation. A general request such as “finish this feature” or “prepare the changes” is not permission to commit.
+
+Before any permitted commit:
+
+1. Show the proposed commit message.
+2. Show the staged diff.
+3. Ask for confirmation.
+4. Commit only the changes covered by that confirmation.
+
+Never amend existing commits, force-push, rebase, reset, or push without separate explicit permission.
+
+## Change-Scope Rules
+- Modify only files necessary to complete the request.
+- Do not discard, overwrite, or revert pre-existing user changes.
+- Before editing, inspect the current working tree.
+- At the end, report the files changed and the validation commands run.
+
+## Validation
+Run the relevant tests, linters, and formatters after making changes.
+Do not use validation commands that modify Git history or publish changes.
+
+### Spring Boot Validation
+- `./mvnw clean compile`
+
+## File-Editing Rules
+
+Before editing an existing file, always read the relevant current content from disk in the same turn. Do not construct replacement text from memory, an earlier tool result, or assumed formatting.
+
+When making an edit:
+
+- Preserve existing indentation, whitespace, line endings, and formatting.
+- Use a short, unique match for exact-text replacements.
+- Make the smallest change necessary.
+- Re-read the file after editing and verify the intended change.
+- Do not overwrite unrelated user changes.
+
+### Recovery from Failed Edits
+
+If an exact-text replacement fails with an error such as
+`String to replace not found in file.`:
+
+1. Stop and do not retry the stale replacement.
+2. Re-read the target file from disk.
+3. Locate the exact current text, including whitespace and indentation.
+4. Make the smallest possible edit.
+5. Re-read and verify the file afterward.
+6. After two failed attempts, stop and report the problem.
 
 ---
 
