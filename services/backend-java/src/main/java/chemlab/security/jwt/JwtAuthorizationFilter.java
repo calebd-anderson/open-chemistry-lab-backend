@@ -66,15 +66,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.clearContext();
                     }
                 } catch (TokenExpiredException e) {
-                    log.warn("Authorization expired: {}.", e.getMessage());
+                    log.warn("Authorization expired: {}", e.getMessage());
                     SecurityContextHolder.clearContext();
                 }
                 catch (JWTVerificationException e) {
-                    log.warn("Authorization invalid: {}.", e.getMessage());
+                    log.warn("Authorization invalid: {}", e.getMessage());
                     SecurityContextHolder.clearContext();
                 }
                 catch (Exception e) {
-                    log.error("Unexpected error occurred: {}.", e.getMessage());
+                    log.error("Unexpected error occurred: {}", e.getMessage());
                     SecurityContextHolder.clearContext();
                     throw e;
                 }

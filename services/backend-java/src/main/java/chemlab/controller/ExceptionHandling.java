@@ -1,15 +1,16 @@
 package chemlab.controller;
 
-import chemlab.security.http.HttpResponse;
 import chemlab.domain.exceptions.*;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import chemlab.infrastructure.pubchem.exceptions.PugApiException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +24,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
@@ -31,150 +33,139 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionHandling implements ErrorController {
-    private static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration";
-    private static final String METHOD_IS_NOT_ALLOWED = "This request method is not allowed on this endpoint. Please send a '%s' request.";
-    private static final String INTERNAL_SERVER_ERROR_MSG = "An error occurred while processing the request";
-    private static final String INCORRECT_CREDENTIALS = "Username / password incorrect. Please try again";
-    private static final String ACCOUNT_DISABLED = "Your account has been disabled. If this is an error, please contact administration.";
-    private static final String ERROR_PROCESSING_FILE = "Error occurred while processing file.";
-    private static final String NOT_ENOUGH_PERMISSION = "You do not have enough permission.";
-    private static final String NOT_FOUND_ERROR_MSG = "The requested resource was not found.";
+    public static final String INCORRECT_CREDENTIALS = "Username / password incorrect. Please try again";
     public static final String ERROR_PATH = "/error";
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<HttpResponse> accountDisabledException() {
-        return createHttpResponse(HttpStatus.BAD_REQUEST, ACCOUNT_DISABLED);
+    public ResponseEntity<ProblemDetail> accountDisabledException() {
+        return createProblemDetailResponseEntity(FORBIDDEN, "Your pre-existing account has been disabled. If this is an error, please contact administration.", null);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<HttpResponse> badCredentialsException() {
-        return createHttpResponse(BAD_REQUEST, INCORRECT_CREDENTIALS);
+    public ResponseEntity<ProblemDetail> badCredentialsException() {
+        return createProblemDetailResponseEntity(UNAUTHORIZED, INCORRECT_CREDENTIALS, null);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<HttpResponse> accessDeniedException() {
-        return createHttpResponse(FORBIDDEN, NOT_ENOUGH_PERMISSION);
+    public ResponseEntity<ProblemDetail> accessDeniedException() {
+        return createProblemDetailResponseEntity(FORBIDDEN, "You do not have enough permission.", null);
     }
-
-//    @ExceptionHandler(ServletException.class)
-//    public ResponseEntity<HttpResponse> unauthorized(ServletException ex) {
-//        return createHttpResponse(UNAUTHORIZED, ex.getMessage());
-//    }
 
     @ExceptionHandler(LockedException.class)
-    public ResponseEntity<HttpResponse> lockedException() {
-        return createHttpResponse(UNAUTHORIZED, ACCOUNT_LOCKED);
+    public ResponseEntity<ProblemDetail> lockedException() {
+        return createProblemDetailResponseEntity(FORBIDDEN, "Your account has been locked. Please contact administration", null);
     }
 
-    // never caught
-    // https://stackoverflow.com/questions/19767267/handle-spring-security-authentication-exceptions-with-exceptionhandler
     @ExceptionHandler(TokenExpiredException.class)
-    public ResponseEntity<HttpResponse> tokenExpiredException(TokenExpiredException exception) {
-        return createHttpResponse(UNAUTHORIZED, exception.getMessage());
+    public ResponseEntity<ProblemDetail> tokenExpiredException(TokenExpiredException exception) {
+        return createProblemDetailResponseEntity(UNAUTHORIZED, null, exception);
     }
 
     @ExceptionHandler(EmailExistException.class)
-    public ResponseEntity<HttpResponse> emailExistException(EmailExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    public ResponseEntity<ProblemDetail> emailExistException(EmailExistException exception) {
+        return createProblemDetailResponseEntity(CONFLICT, null, exception);
     }
 
     @ExceptionHandler(UsernameExistException.class)
-    public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    public ResponseEntity<ProblemDetail> usernameExistException(UsernameExistException exception) {
+        return createProblemDetailResponseEntity(CONFLICT, null, exception);
     }
 
     @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    public ResponseEntity<ProblemDetail> emailNotFoundException(EmailNotFoundException exception) {
+        return createProblemDetailResponseEntity(NOT_FOUND, null, exception);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    public ResponseEntity<ProblemDetail> userNotFoundException(UserNotFoundException exception) {
+        return createProblemDetailResponseEntity(NOT_FOUND, null, exception);
     }
 
-//    @ExceptionHandler(NoHandlerFoundException.class)
-//    public ResponseEntity<HttpResponse> noHandlerFoundException(NoHandlerFoundException e) {
-//        return createHttpResponse(BAD_REQUEST, "There is no mapping for this URL");
-//    }
-
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<HttpResponse> methodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity<ProblemDetail> methodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
         HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
-        return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
+        return createProblemDetailResponseEntity(METHOD_NOT_ALLOWED, String.format("This request method is not allowed on this endpoint. Please send a '%s' request.", supportedMethod), exception);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<HttpResponse> notFoundErrorException(Exception exception) {
+    public ResponseEntity<ProblemDetail> notFoundErrorException(Exception exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(NOT_FOUND, NOT_FOUND_ERROR_MSG);
+        return createProblemDetailResponseEntity(NOT_FOUND, "The requested resource was not found.", exception);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception) {
+    public ResponseEntity<ProblemDetail> internalServerErrorException(Exception exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
+        return createProblemDetailResponseEntity(INTERNAL_SERVER_ERROR, "An error occurred while processing the request", exception);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        Map<String, List<String>> body = new HashMap<>();
-
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-
-        body.put("errors", errors);
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    protected ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        return createProblemDetailResponseEntity(BAD_REQUEST, "Validation failed", ex);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
+    public ResponseEntity<ProblemDetail> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        return createProblemDetailResponseEntity(BAD_REQUEST, "Constraint violation", ex);
+    }
 
-        ex.getConstraintViolations().forEach(cv -> errors.add(cv.getMessage()));
-
-        Map<String, List<String>> result = new HashMap<>();
-
-        result.put("errors", errors);
-
-        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NoFlashcardsCreatedException.class)
+    public ResponseEntity<ProblemDetail> noFlashcardsCreatedException(NoFlashcardsCreatedException ex) {
+        return createProblemDetailResponseEntity(BAD_REQUEST, null, ex);
     }
 
     @ExceptionHandler(NotAnImageFileException.class)
-    public ResponseEntity<HttpResponse> notAnImageFileException(NotAnImageFileException exception) {
+    public ResponseEntity<ProblemDetail> notAnImageFileException(NotAnImageFileException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createProblemDetailResponseEntity(BAD_REQUEST, null, exception);
     }
 
     @ExceptionHandler(NoResultException.class)
-    public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
+    public ResponseEntity<ProblemDetail> notFoundException(NoResultException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(NOT_FOUND, exception.getMessage());
+        return createProblemDetailResponseEntity(NOT_FOUND, null, exception);
     }
 
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<HttpResponse> iOException(IOException exception) {
+    public ResponseEntity<ProblemDetail> iOException(IOException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR_PROCESSING_FILE);
+        return createProblemDetailResponseEntity(INTERNAL_SERVER_ERROR, "Error occurred while processing file.", exception);
     }
 
     @ExceptionHandler(PugApiException.class)
-    public ResponseEntity<HttpResponse> pugApiException(PugApiException exception) {
+    public ResponseEntity<ProblemDetail> pugApiException(PugApiException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(NOT_FOUND, exception.getMessage());
+        return createProblemDetailResponseEntity(NOT_FOUND, null, exception);
     }
 
-    private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
-        return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase()), httpStatus);
+    private ResponseEntity<ProblemDetail> createProblemDetailResponseEntity(HttpStatus httpStatus, String detail, Exception ex) {
+        String finalDetail = (detail != null) ? detail : (ex != null ? ex.getMessage() : httpStatus.getReasonPhrase());
+        ProblemDetail problemDetail = createProblemDetail(httpStatus, finalDetail);
+
+        if (ex != null) {
+            enrichProblemDetail(problemDetail, ex);
+        }
+
+        return ResponseEntity.status(httpStatus).body(problemDetail);
     }
 
-//    @RequestMapping(ERROR_PATH)
-//    public ResponseEntity<HttpResponse> notFound404() {
-//        return createHttpResponse(NOT_FOUND, "There is no mapping for this URL");
-//    }
+    private void enrichProblemDetail(ProblemDetail problemDetail, Exception ex) {
+        if (ex instanceof MethodArgumentNotValidException mev) {
+            List<String> errors = mev.getBindingResult().getFieldErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            problemDetail.setProperty("errors", errors);
+        } else if (ex instanceof ConstraintViolationException cve) {
+            List<String> errors = cve.getConstraintViolations().stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.toList());
+            problemDetail.setProperty("errors", errors);
+        }
+    }
 
-//    @Override
-//    public String getErrorPath() {
-//        return ERROR_PATH;
-//    }
+    private ProblemDetail createProblemDetail(HttpStatus httpStatus, String detail) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, detail);
+        problemDetail.setTitle(httpStatus.getReasonPhrase());
+        return problemDetail;
+    }
 }

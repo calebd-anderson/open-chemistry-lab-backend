@@ -1,5 +1,6 @@
 package chemlab.controller.api.game;
 
+import chemlab.domain.exceptions.NoFlashcardsCreatedException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.service.game.FlashcardService;
@@ -36,12 +37,11 @@ public class FlashcardController {
     @PostMapping("/add")
     public ResponseEntity<List<Flashcard>> create(@Valid @RequestBody CreateFlashcardRequest createFlashcardRequest) throws Exception {
         List<Flashcard> userFlashcards = flashcardService.create(createFlashcardRequest);
-        if (userFlashcards != null && !userFlashcards.isEmpty()) {
-            URI location = URI.create(String.format("/api/flashcards/userflashcards/%s", createFlashcardRequest.getUserId()));
-            return ResponseEntity.created(location).body(userFlashcards);
-        } else {
-            return ResponseEntity.badRequest().build();
+        if (userFlashcards == null || userFlashcards.isEmpty()) {
+            throw new NoFlashcardsCreatedException("No flashcards were created.");
         }
+        URI location = URI.create(String.format("/api/flashcards/userFlashcards/%s", createFlashcardRequest.getUserId()));
+        return ResponseEntity.created(location).body(userFlashcards);
     }
 
     @DeleteMapping("/delete")

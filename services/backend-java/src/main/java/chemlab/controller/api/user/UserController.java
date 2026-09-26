@@ -15,6 +15,7 @@ import chemlab.shared.requests.CreateUserRequest;
 import chemlab.shared.requests.UpdateUserRequest;
 import chemlab.shared.responses.UserResponseDTO;
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/users")
+@Log4j2
 public class UserController extends ExceptionHandling {
 
     private final UserService userService;
@@ -54,10 +56,11 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(users, OK);
     }
 
-
     @GetMapping("/{username}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("username") String username) {
-        User user = userService.findUserByUsername(username).orElseThrow();
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable("username") String username) throws UserNotFoundException {
+        log.trace("Getting single user by username {}", username);
+        User user = userService.findUserByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + username));
         return new ResponseEntity<>(userMapper.toResponse(user), OK);
     }
 

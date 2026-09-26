@@ -1,5 +1,6 @@
 package chemlab.controller.api.auth;
 
+
 import chemlab.controller.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.EmailNotFoundException;
@@ -9,7 +10,9 @@ import chemlab.domain.model.user.User;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
-import chemlab.security.http.HttpResponse;
+import chemlab.controller.ExceptionHandling;
+import org.springframework.security.authentication.BadCredentialsException;
+import chemlab.security.config.SecurityConstants;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.shared.requests.RegisterUserRequest;
@@ -20,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,11 +35,12 @@ import java.util.Date;
 
 import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
+import static chemlab.controller.ExceptionHandling.INCORRECT_CREDENTIALS;
 
 @Log4j2
 @RestController
 @RequestMapping("/auth")
-public class AuthController extends ExceptionHandling {
+public class AuthController  {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -68,8 +73,9 @@ public class AuthController extends ExceptionHandling {
                     .toUriString();
             HttpHeaders jwtHeader = getJwtHeader(userPrincipal, issuer);
             return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            throw new BadCredentialsException(INCORRECT_CREDENTIALS);
+        }
     }
 
     @PostMapping("/register")
@@ -80,7 +86,7 @@ public class AuthController extends ExceptionHandling {
     }
 
     @GetMapping("/resetpassword/{email}")
-    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email) throws EmailNotFoundException {
+    public ResponseEntity<org.springframework.http.ProblemDetail> resetPassword(@PathVariable("email") String email) throws EmailNotFoundException {
         throw new NotImplementedException();
 //        userService.resetPassword(email);
 //        log.info("Email with new password sent to: {}", email);
