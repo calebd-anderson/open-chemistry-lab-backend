@@ -1,7 +1,6 @@
 package chemlab.controller.api.auth;
 
 
-import chemlab.controller.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
@@ -10,9 +9,6 @@ import chemlab.domain.model.user.User;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
-import chemlab.controller.ExceptionHandling;
-import org.springframework.security.authentication.BadCredentialsException;
-import chemlab.security.config.SecurityConstants;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.shared.requests.RegisterUserRequest;
@@ -23,9 +19,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +29,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 
+import static chemlab.controller.ExceptionHandling.INCORRECT_CREDENTIALS;
 import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
-import static chemlab.controller.ExceptionHandling.INCORRECT_CREDENTIALS;
 
 @Log4j2
 @RestController
@@ -61,7 +57,7 @@ public class AuthController  {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Valid @RequestBody UserLoginRequest user, HttpServletRequest req) {
+    public ResponseEntity<User> login(@Valid @RequestBody UserLoginRequest user, HttpServletRequest req) throws UserNotFoundException {
         Authentication auth = authenticate(user.getUsername(), user.getPassword());
         if (auth.isAuthenticated()) {
             userProfileService.saveLastLogin(new Date(), user.getUsername());
@@ -97,7 +93,7 @@ public class AuthController  {
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 
-    private HttpHeaders getJwtHeader(RegisteredUserPrincipal userPrincipal, String issuer) {
+    private HttpHeaders getJwtHeader(RegisteredUserPrincipal userPrincipal, String issuer) throws UserNotFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal, issuer));
         return headers;

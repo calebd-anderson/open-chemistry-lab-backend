@@ -1,5 +1,6 @@
 package chemlab.security.jwt;
 
+import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.user.User;
 import chemlab.domain.service.user.UserService;
 import chemlab.security.user.RegisteredUserPrincipal;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static chemlab.security.config.SecurityConstants.AUTHORITIES;
@@ -37,16 +37,17 @@ public class JwtTokenProvider {
     UserService userService;
 
     // generate the token
-    public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) {
+    public String generateJwtToken(RegisteredUserPrincipal userPrincipal, String issuer) throws UserNotFoundException {
         String[] claims = getClaimsFromUser(userPrincipal);
         String userRole = getRoleFromUser(userPrincipal);
-        Optional<User> user = userService.findUserByUsername(userPrincipal.getUsername());
+        String username = userPrincipal.getUsername();
+        User user = userService.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found: " + username));
         return JWT.create().withIssuer(issuer)
                 .withAudience(audience)
-                .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
+                .withIssuedAt(new Date()).withSubject(username)
                 .withArrayClaim(AUTHORITIES, claims)
                 .withClaim("role", userRole)
-                .withClaim("userId", user.get().getUserId())
+                .withClaim("userId", user.getUserId())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
