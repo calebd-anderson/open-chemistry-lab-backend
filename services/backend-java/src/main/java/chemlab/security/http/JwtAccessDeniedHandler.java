@@ -19,9 +19,11 @@ import java.time.format.DateTimeFormatter;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(@NonNull HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, accessDeniedException.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Access denied");
         problemDetail.setTitle("Forbidden");
+        problemDetail.setType(java.net.URI.create("https://api.chemlab.com/errors/forbidden"));
         problemDetail.setProperty("timestamp", DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now()));
+        problemDetail.setProperty("instance", request.getRequestURI());
         problemDetail.setProperty("reason", "Access denied");
 
         response.setContentType("application/json");

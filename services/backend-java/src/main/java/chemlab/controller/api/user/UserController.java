@@ -1,6 +1,5 @@
 package chemlab.controller.api.user;
 
-import chemlab.controller.ExceptionHandling;
 import chemlab.domain.exceptions.EmailExistException;
 import chemlab.domain.exceptions.NotAnImageFileException;
 import chemlab.domain.exceptions.UserNotFoundException;
@@ -31,7 +30,7 @@ import static org.springframework.http.MediaType.*;
 @RestController
 @RequestMapping("/users")
 @Log4j2
-public class UserController extends ExceptionHandling {
+public class UserController {
 
     private final UserService userService;
     private final RoboHashService roboHashService;

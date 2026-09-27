@@ -18,9 +18,11 @@ import java.time.format.DateTimeFormatter;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(@NonNull HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Authentication failed");
         problemDetail.setTitle("Unauthorized");
+        problemDetail.setType(java.net.URI.create("https://api.chemlab.com/errors/unauthorized"));
         problemDetail.setProperty("timestamp", DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now()));
+        problemDetail.setProperty("instance", request.getRequestURI());
         problemDetail.setProperty("reason", "Authentication failed");
 
         response.setContentType("application/json");

@@ -29,7 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Date;
 
-import static chemlab.controller.ExceptionHandling.INCORRECT_CREDENTIALS;
+import static chemlab.controller.GlobalExceptionHandler.INCORRECT_CREDENTIALS;
 import static chemlab.security.config.SecurityConstants.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.CREATED;
 
