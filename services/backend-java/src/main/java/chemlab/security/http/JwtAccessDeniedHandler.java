@@ -22,12 +22,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Autowired
     private ProblemDetailFactory problemDetailFactory;
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
-    public void handle(@NonNull HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(@NonNull HttpServletRequest request, HttpServletResponse response, @NonNull AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.debug("JWT Access denied handler triggered");
         // Use the factory to create consistent error responses
         var problemDetail = problemDetailFactory.createProblemDetail(request, HttpStatus.FORBIDDEN, "Access denied", "Forbidden", accessDeniedException);
@@ -35,6 +34,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType("application/json");
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.addHeader("WWW-Authenticate", "Bearer error=\"insufficient_scope\"");
 
         // Write using the factory-provided ProblemDetail as JSON
         response.getWriter().write(objectMapper.writeValueAsString(problemDetail));

@@ -21,12 +21,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Autowired
     private ProblemDetailFactory problemDetailFactory;
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
-    public void commence(@NonNull HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+    public void commence(@NonNull HttpServletRequest request, HttpServletResponse response, @NonNull AuthenticationException exception) throws IOException {
         log.debug("JWT Authentication entry point triggered");
         // Use the factory to create consistent error responses
         var problemDetail = problemDetailFactory.createProblemDetail(request, HttpStatus.UNAUTHORIZED, "Authentication failed", "Unauthorized", exception);
@@ -34,6 +33,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.addHeader("WWW-Authenticate", "Bearer error=\"invalid_token\"");
 
         // Write using the factory-provided ProblemDetail directly
         response.getWriter().write(objectMapper.writeValueAsString(problemDetail));
