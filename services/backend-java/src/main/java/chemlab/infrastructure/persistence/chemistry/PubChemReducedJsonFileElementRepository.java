@@ -6,6 +6,7 @@ import chemlab.infrastructure.pubchem.PubChemElement;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -16,14 +17,16 @@ import java.util.List;
 @Slf4j
 public class PubChemReducedJsonFileElementRepository implements ElementRepository {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private final String PERIODIC_TABLE_PATH = "static/data/all_elements.json";
 
     @Override
     public List<PubChemElement> findAll() throws FailedToLoadPTException {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = PubChemElement.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            return mapper.readValue(pTableData, new TypeReference<>() {});
+            return objectMapper.readValue(pTableData, new TypeReference<>() {});
         } catch (IOException e) {
             throw new FailedToLoadPTException(PERIODIC_TABLE_PATH + " not found.");
         } catch (Exception e) {
@@ -33,10 +36,9 @@ public class PubChemReducedJsonFileElementRepository implements ElementRepositor
 
     @Override
     public PubChemElement findElementBySymbol(String symbol) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             InputStream pTableData = PubChemReducedJsonFileElementRepository.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
-            List<PubChemElement> pt = mapper.readValue(pTableData, new TypeReference<>() {
+            List<PubChemElement> pt = objectMapper.readValue(pTableData, new TypeReference<>() {
             });
             // lame efficiency search
             for (PubChemElement pubChemElement : pt) {

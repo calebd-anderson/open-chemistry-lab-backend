@@ -1,5 +1,6 @@
 package chemlab.controller.api;
 
+import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.service.game.QuizService;
@@ -28,6 +29,8 @@ public class QuizControllerTests {
     private QuizService quizService;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
+    @MockitoBean
+    private ProblemDetailFactory problemDetailFactory;
 
 
     @Test

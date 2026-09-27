@@ -1,5 +1,6 @@
 package chemlab.controller.api;
 
+import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.controller.api.chemistry.ElementController;
 import chemlab.domain.service.chemistry.ElementService;
@@ -29,6 +30,8 @@ class ElementApiControllerTest {
     private ElementService elmServiceMock;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
+    @MockitoBean
+    private ProblemDetailFactory problemDetailFactory;
 
     @Test
     public void testList() throws Exception {

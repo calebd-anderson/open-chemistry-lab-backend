@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,15 +37,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
         // if http options method return ok
         if (req.getMethod().equalsIgnoreCase(SecurityConstants.OPTIONS_HTTP_METHOD)) {
-            res.setStatus(HttpStatus.OK.value());
+            chain.doFilter(req, res);
         } else {
             String authorizationHeader = req.getHeader(HttpHeaders.AUTHORIZATION);
             // if null or not starts with "Bearer "
             if (authorizationHeader == null || authorizationHeader.equals("Bearer null") || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
                 log.debug("Authorization header is null or invalid.");
-                // if the user is not authenticated, clear the security context
-                // TODO: This is a temporary fix for the test scenarios which do not provide a valid token to prevent the security context from being cleared when the authorization header is invalid.
-                // SecurityContextHolder.clearContext();
+                // Let the GlobalExceptionHandler handle this case
+                chain.doFilter(req, res);
+                return;
             } else {
                 try {
                     // https://huongdanjava.com/get-base-url-in-controller-in-spring-mvc-and-spring-boot.html
@@ -67,11 +67,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     }
                 } catch (TokenExpiredException e) {
                     log.warn("Authorization expired: {}", e.getMessage());
-                    SecurityContextHolder.clearContext();
+                    // Let the GlobalExceptionHandler handle token expiration
+                    throw new BadCredentialsException("Token has expired");
                 }
                 catch (JWTVerificationException e) {
                     log.warn("Authorization invalid: {}", e.getMessage());
-                    SecurityContextHolder.clearContext();
+                    // Let the GlobalExceptionHandler handle invalid tokens
+                    throw new BadCredentialsException("Invalid token");
                 }
                 catch (Exception e) {
                     log.error("Unexpected error occurred: {}", e.getMessage());

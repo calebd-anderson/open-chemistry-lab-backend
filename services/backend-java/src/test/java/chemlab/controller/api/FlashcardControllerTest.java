@@ -1,5 +1,6 @@
 package chemlab.controller.api;
 
+import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.controller.api.game.FlashcardController;
 import chemlab.domain.service.game.FlashcardService;
@@ -7,6 +8,7 @@ import chemlab.domain.model.game.Flashcard;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -28,6 +30,8 @@ class FlashcardControllerTest {
     private FlashcardService flashcardService;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
+    @MockitoBean
+    private ProblemDetailFactory  problemDetailFactory;
 
     @Test
     @DisplayName("It should add the flashcard to the list of user flashcards")

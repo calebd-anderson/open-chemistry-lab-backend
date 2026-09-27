@@ -4,6 +4,7 @@ import chemlab.controller.api.chemistry.ReactionController;
 import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
+import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.shared.requests.Element;
 import chemlab.shared.requests.ReactionRequest;
@@ -38,6 +39,8 @@ public class ReactionControllerTest {
     UnsupervisedClustMap unsupervisedClustMap;
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
+    @MockitoBean
+    private ProblemDetailFactory problemDetailFactory;
 
     @Test
     @DisplayName("It should submit the reaction to PubChem and respond with the validated reaction")
