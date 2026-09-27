@@ -42,7 +42,7 @@ class ElementApiControllerTest {
                 .thenReturn(List.of(new PubChemElement()));
 
         // Act & Assert
-        mockMvc.perform(get("/api/elements/list")
+        mockMvc.perform(get("/api/elements")
 //                        .header("Authorization", "Bearer null")
 //                        .header("Access-Control-Request-Method", "GET")
 //                        .header("Origin", "http://localhost:4200/")

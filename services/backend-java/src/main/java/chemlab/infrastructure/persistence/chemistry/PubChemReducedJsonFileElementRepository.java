@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -35,7 +36,7 @@ public class PubChemReducedJsonFileElementRepository implements ElementRepositor
     }
 
     @Override
-    public PubChemElement findElementBySymbol(String symbol) {
+    public Optional<PubChemElement> findElementBySymbol(String symbol) {
         try {
             InputStream pTableData = PubChemReducedJsonFileElementRepository.class.getClassLoader().getResourceAsStream(PERIODIC_TABLE_PATH);
             List<PubChemElement> pt = objectMapper.readValue(pTableData, new TypeReference<>() {
@@ -43,12 +44,12 @@ public class PubChemReducedJsonFileElementRepository implements ElementRepositor
             // lame efficiency search
             for (PubChemElement pubChemElement : pt) {
                 if (pubChemElement.getSymbol().equalsIgnoreCase(symbol)) {
-                    return pubChemElement;
+                    return Optional.of(pubChemElement);
                 }
             }
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-        return null;
+        return Optional.empty();
     }
 }

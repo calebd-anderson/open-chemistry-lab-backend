@@ -34,7 +34,7 @@ public class GlobalExceptionHandler implements ErrorController {
     @Autowired
     private ProblemDetailFactory problemDetailFactory;
 
-    public static final String INCORRECT_CREDENTIALS = "Username / password incorrect. Please try again";
+    public static final String INCORRECT_CREDENTIALS = "Username/password incorrect. Please try again.";
     public static final String ERROR_PATH = "/error";
 
     @ExceptionHandler(DisabledException.class)
@@ -87,6 +87,12 @@ public class GlobalExceptionHandler implements ErrorController {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ProblemDetail> userNotFoundException(HttpServletRequest request, UserNotFoundException exception) {
+        ProblemDetail problemDetail = problemDetailFactory.createProblemDetail(request, NOT_FOUND, null, "Not Found", exception);
+        return ResponseEntity.status(NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> resourceNotFoundException(HttpServletRequest request, ResourceNotFoundException exception) {
         ProblemDetail problemDetail = problemDetailFactory.createProblemDetail(request, NOT_FOUND, null, "Not Found", exception);
         return ResponseEntity.status(NOT_FOUND).body(problemDetail);
     }

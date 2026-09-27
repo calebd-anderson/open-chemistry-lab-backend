@@ -1,6 +1,7 @@
 package chemlab.controller.api.chemistry;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
+import chemlab.domain.exceptions.ResourceNotFoundException;
 import chemlab.domain.service.chemistry.ElementService;
 import chemlab.infrastructure.pubchem.PubChemElement;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,13 @@ public class ElementController {
         this.elmService = elmService;
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping
     public List<PubChemElement> list() throws FailedToLoadPTException {
         return elmService.getAllElements();
     }
 
     @GetMapping("/symbol/{symbol}")
-    public PubChemElement findElementBySymbol(@PathVariable("symbol") String symbol) {
-        return elmService.getElementBySymbol(symbol);
+    public PubChemElement findElementBySymbol(@PathVariable("symbol") String symbol) throws ResourceNotFoundException {
+        return elmService.getElementBySymbol(symbol).orElseThrow(() -> new ResourceNotFoundException("Element not found"));
     }
 }

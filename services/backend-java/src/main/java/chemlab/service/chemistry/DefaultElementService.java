@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -20,12 +21,12 @@ public class DefaultElementService implements ElementService {
     }
 
     public List<PubChemElement> getAllElements() throws FailedToLoadPTException {
-        log.trace("populating periodic table");
+        log.trace("Finding all elements.");
         return elmRepo.findAll();
     }
 
     // 2. Get item by symbol
-    public PubChemElement getElementBySymbol(String symbol) {
+    public Optional<PubChemElement> getElementBySymbol(String symbol) {
         return elmRepo.findElementBySymbol(symbol);
     }
 }

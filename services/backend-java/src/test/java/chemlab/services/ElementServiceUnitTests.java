@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -53,9 +54,9 @@ class ElementServiceUnitTests {
         // Arrange
         PubChemElement testElm = new PubChemElement();
         testElm.setSymbol("H");
-        when(elmRepo.findElementBySymbol("H")).thenReturn(testElm);
+        when(elmRepo.findElementBySymbol("H")).thenReturn(Optional.of(testElm));
         // Act
-        PubChemElement actualElm = elmService.getElementBySymbol("H");
+        PubChemElement actualElm = elmService.getElementBySymbol("H").orElseThrow();
         // Assert
         assertEquals(testElm.getSymbol(), actualElm.getSymbol());
         verify(elmRepo).findElementBySymbol("H");

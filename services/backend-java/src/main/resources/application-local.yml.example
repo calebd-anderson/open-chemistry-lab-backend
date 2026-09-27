@@ -88,3 +88,7 @@
 #     # Absolute or project-root-relative path. If omitted, default is
 #     # "storage/uploads" and no configuration is required.
 #     path: "C:/Users/you/my-uploads"   # or "storage/uploads" (relative)
+
+# ---- Example 10: public urls override (optional) ----
+#constants:
+#  public-urls: /**
