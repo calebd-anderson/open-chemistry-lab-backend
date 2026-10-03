@@ -24,13 +24,7 @@
 - Data visualization with [D3.js](https://d3js.org/).
 - Animation with [GSAP](https://gsap.com/).
 
-## Credits
-- The [PubChem API](https://pubchem.ncbi.nlm.nih.gov/), public chemistry data service.
-- Thanks to the online tutorial from [Get Arrays](https://www.getarrays.io/).
-- [RoboHash](https://robohash.org/), temporary profile image generator.
-- [Some chemistry icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/chemistry).
-
-## Run the complete backend environment
+## Run the complete backend environment with Docker
 ```sh
 # build the Spring Boot BFF
 pushd services/backend-java && ./mvnw clean package -DskipTests && popd
@@ -42,3 +36,9 @@ docker compose logs -f python-worker
 # inspect the container db
 mongosh --port 27018
 ```
+
+## Credits
+- The [PubChem API](https://pubchem.ncbi.nlm.nih.gov/), public chemistry data service.
+- Thanks to the online tutorial from [Get Arrays](https://www.getarrays.io/).
+- [RoboHash](https://robohash.org/), temporary profile image generator.
+- [Some chemistry icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/chemistry).
