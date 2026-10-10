@@ -8,7 +8,7 @@ import chemlab.domain.model.user.User;
 import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.infrastructure.storage.ImageStorageService;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -26,9 +26,9 @@ import static chemlab.service.user.config.UserImplementationConstant.EMAIL_ALREA
 import static chemlab.service.user.config.UserImplementationConstant.USERNAME_ALREADY_EXISTS;
 
 @Service
-@Log4j2
+@Slf4j
 public class DefaultUserProfileService implements UserProfileService {
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
     private final ImageStorageService imageStorageService;
     private final UserValidator userValidator;
 

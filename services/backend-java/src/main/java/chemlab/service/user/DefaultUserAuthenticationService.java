@@ -6,7 +6,7 @@ import chemlab.domain.service.user.UserAuthenticationService;
 import chemlab.security.user.LoginAttemptService;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.security.user.Role;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static chemlab.service.user.config.UserImplementationConstant.NO_USER_FOUND_BY_USERNAME;
 
 @Service
-@Log4j2
+@Slf4j
 public class DefaultUserAuthenticationService implements UserAuthenticationService, UserDetailsService {
     private final UserRepository userRepo;
     private final LoginAttemptService loginAttemptService;
