@@ -1,6 +1,7 @@
 package chemlab.services;
 
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.game.FlashcardMapper;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.UserRepository;
 import chemlab.service.game.DefaultUserFlashcardService;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.when;
 class FlashcardServiceTests {
     @Mock
     UserRepository userRepo;
+    @Mock
+    FlashcardMapper flashcardMapper;
     @InjectMocks
     private DefaultUserFlashcardService flashcardService;
 

@@ -2,12 +2,12 @@ package chemlab.service.game;
 
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.model.game.FlashcardMapper;
 import chemlab.domain.model.user.User;
 import chemlab.domain.repository.UserRepository;
 import chemlab.domain.service.game.FlashcardService;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +17,11 @@ import java.util.List;
 public class DefaultUserFlashcardService implements FlashcardService {
 
     private final UserRepository userRepo;
+    private final FlashcardMapper flashcardMapper;
 
-    DefaultUserFlashcardService(UserRepository userRepo) {
+    DefaultUserFlashcardService(UserRepository userRepo, FlashcardMapper flashcardMapper) {
         this.userRepo = userRepo;
+        this.flashcardMapper = flashcardMapper;
     }
 
     public List<Flashcard> listUserFlashcards(String userId) {
@@ -30,8 +32,7 @@ public class DefaultUserFlashcardService implements FlashcardService {
 
     public List<Flashcard> create(CreateFlashcardRequest flashcard) throws Exception {
         // map dto to actual
-        ModelMapper modelMapper = new ModelMapper();
-        Flashcard newFlashcard = modelMapper.map(flashcard, Flashcard.class);
+        Flashcard newFlashcard = flashcardMapper.toEntity(flashcard);
 
         User user = userRepo.findByUserId(flashcard.getUserId()).orElseThrow();
 

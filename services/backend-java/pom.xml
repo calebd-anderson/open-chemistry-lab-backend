@@ -38,12 +38,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <!-- Source: https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>3.2.6</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -213,7 +207,7 @@
                     <!--
                       Disable Class Data Sharing (CDS) when launching the test JVM.
                       Without this option the JVM may print a warning like:
-                      "Sharing is only supported for boot loader classes because bootstrap classpath has been appended"
+                      "Sharing is only supported for bootloader classes because bootstrap classpath has been appended"
                       This happens when a javaagent appends to the bootstrap classpath; disabling CDS suppresses the
                     warning.
                     -->

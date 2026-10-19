@@ -1,7 +1,6 @@
 package chemlab.controller.api;
 
 import chemlab.controller.api.chemistry.ReactionController;
-import chemlab.domain.model.chemistry.Reaction;
 import chemlab.domain.service.chemistry.ReactionService;
 import chemlab.domain.service.ml.UnsupervisedClustMap;
 import chemlab.infrastructure.error.ProblemDetailFactory;
@@ -12,7 +11,6 @@ import chemlab.shared.responses.ReactionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -52,10 +50,7 @@ public class ReactionControllerTest {
         }};
 
         ReactionRequest reactionRequest = new ReactionRequest(elementList);
-        Reaction reaction = new Reaction(reactionRequest.getMappedPayload());
-
-        ModelMapper modelMapper = new ModelMapper();
-        ReactionResponse response = modelMapper.map(reaction, ReactionResponse.class);
+        ReactionResponse response = reactionResponse();
 
         when(reactionService.createReaction(any(ReactionRequest.class), any()))
                 .thenReturn(response);
@@ -83,10 +78,7 @@ public class ReactionControllerTest {
             add(new Element("O", 1));
         }};
         ReactionRequest reactionRequest = new ReactionRequest(elementList);
-        Reaction reaction = new Reaction(reactionRequest.getMappedPayload());
-
-        ModelMapper modelMapper = new ModelMapper();
-        ReactionResponse response = modelMapper.map(reaction, ReactionResponse.class);
+        ReactionResponse response = reactionResponse();
 
         // Match the new signature: (Request, Optional<String>)
         when(reactionService.createReaction(any(ReactionRequest.class), any()))
@@ -105,5 +97,11 @@ public class ReactionControllerTest {
 
         // Verify that the service was called (the 'user' helper handles the String -> Optional conversion)
         verify(reactionService).createReaction(any(ReactionRequest.class), any());
+    }
+
+    private ReactionResponse reactionResponse() {
+        ReactionResponse response = new ReactionResponse();
+        response.setFormula("H2O");
+        return response;
     }
 }
