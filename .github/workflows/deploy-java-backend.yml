@@ -62,8 +62,8 @@ jobs:
         uses: azure/docker-login@v2
         with:
           login-server: ${{ secrets.registry }}.azurecr.io
-          username: ${{ secrets.service_principal }}
-          password: ${{ secrets.service_principal_password }}
+          username: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+          password: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
       - run: |
           docker tag chemlab:0.0.1-SNAPSHOT ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
           docker push ${{ secrets.registry }}.azurecr.io/${{ secrets.repository }}:${{ github.sha }}
