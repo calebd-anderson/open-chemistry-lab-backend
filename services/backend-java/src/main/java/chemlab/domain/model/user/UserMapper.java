@@ -76,7 +76,7 @@ public abstract class UserMapper {
         entity.setActive(true);
         entity.setNotLocked(true);
         entity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-
+        entity.setProfileImgUrl(userProfileService.getTemporaryProfileImageUrl(entity.getUsername()));
         String roleName = ROLE_USER.name();
         entity.setRole(roleName);
         entity.setAuthorities(ROLE_USER.getAuthorities());
