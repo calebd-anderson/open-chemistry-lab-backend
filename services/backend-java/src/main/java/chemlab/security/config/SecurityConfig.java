@@ -44,6 +44,7 @@ public class SecurityConfig {
 //                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
 //                .requestMatchers("/api/user/list").hasAnyRole("ADMIN", "SUPER_ADMIN")
 //                    .hasAnyAuthority("user:update")
+                    .requestMatchers("/api/auth/me").authenticated()
                     .requestMatchers(publicUrls).permitAll()
                     .anyRequest().authenticated()
             ).anonymous(AbstractHttpConfigurer::disable)

@@ -6,6 +6,7 @@ import chemlab.domain.exceptions.EmailNotFoundException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.exceptions.UsernameExistException;
 import chemlab.domain.model.user.User;
+import chemlab.domain.model.user.UserMapper;
 import chemlab.domain.service.user.UserProfileService;
 import chemlab.domain.service.user.UserRegistrationService;
 import chemlab.domain.service.user.UserService;
@@ -13,6 +14,7 @@ import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.security.user.RegisteredUserPrincipal;
 import chemlab.shared.requests.RegisterUserRequest;
 import chemlab.shared.requests.UserLoginRequest;
+import chemlab.shared.responses.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -43,17 +45,19 @@ public class AuthController  {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserProfileService  userProfileService;
     private final UserRegistrationService userRegistrationService;
+    private final UserMapper userMapper;
 
     public AuthController(UserService userService,
                           AuthenticationManager authenticationManager,
                           JwtTokenProvider jwtTokenProvider,
                           UserProfileService profileService,
-                          UserRegistrationService userRegistrationService) {
+                          UserRegistrationService userRegistrationService, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userProfileService = profileService;
         this.userRegistrationService = userRegistrationService;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/login")
@@ -79,6 +83,14 @@ public class AuthController  {
         // might want validation
         User newUser = userRegistrationService.register(user);
         return new ResponseEntity<>(newUser, CREATED);
+    }
+
+    @GetMapping("/me")
+    public UserResponseDTO me(Authentication auth) throws UserNotFoundException {
+        String username = auth.getName();
+        User user = userService.findUserByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("Current user not found"));
+        return userMapper.toResponse(user);
     }
 
     @GetMapping("/resetpassword/{email}")
