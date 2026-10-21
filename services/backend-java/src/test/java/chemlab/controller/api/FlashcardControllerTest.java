@@ -1,19 +1,28 @@
 package chemlab.controller.api;
 
+import chemlab.controller.api.game.FlashcardController;
+import chemlab.domain.model.game.Flashcard;
+import chemlab.domain.service.game.FlashcardService;
 import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
-import chemlab.controller.api.game.FlashcardController;
-import chemlab.domain.service.game.FlashcardService;
-import chemlab.domain.model.game.Flashcard;
+import chemlab.security.jwt.JwtUserPrincipal;
 import chemlab.shared.requests.CreateFlashcardRequest;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -23,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = FlashcardController.class)
+@Import(FlashcardControllerTest.SecurityPrincipalTestConfiguration.class)
 class FlashcardControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -62,10 +72,21 @@ class FlashcardControllerTest {
     @Test
     @DisplayName("It should return a list of user flashcards when the userId is valid")
     void getUserFlashcards() throws Exception {
+        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        Claim userIdClaim = mock(Claim.class);
+        when(jwtTokenProvider.verifyToken(eq("test-token"), anyString())).thenReturn(decodedJWT);
+        when(decodedJWT.getSubject()).thenReturn("test-user");
+        when(decodedJWT.getClaim("userId")).thenReturn(userIdClaim);
+        when(userIdClaim.asString()).thenReturn("12345");
+        when(jwtTokenProvider.getAuthorities(decodedJWT))
+                .thenReturn(List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        doCallRealMethod().when(jwtTokenProvider).getAuthentication(
+                any(JwtUserPrincipal.class), anyList(), any(HttpServletRequest.class));
+
         when(flashcardService.listUserFlashcards("12345"))
                 .thenReturn(List.of(new Flashcard("Make me unique?", "yes")));
 
-        mockMvc.perform(get("/api/flashcards/userflashcards/12345"))
+        mockMvc.perform(get("/api/flashcards").header("Authorization", "Bearer test-token"))
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .contentType(MediaType.APPLICATION_JSON))
@@ -88,5 +109,13 @@ class FlashcardControllerTest {
                 """
                 )).andExpect(status().isBadRequest());
         verifyNoInteractions(flashcardService);
+    }
+
+    @TestConfiguration
+    static class SecurityPrincipalTestConfiguration implements WebMvcConfigurer {
+        @Override
+        public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+            resolvers.add(new AuthenticationPrincipalArgumentResolver());
+        }
     }
 }

@@ -4,11 +4,13 @@ import chemlab.domain.exceptions.NoFlashcardsCreatedException;
 import chemlab.domain.exceptions.UserNotFoundException;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.service.game.FlashcardService;
+import chemlab.security.jwt.JwtUserPrincipal;
 import chemlab.shared.requests.CreateFlashcardRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -27,8 +29,10 @@ public class FlashcardController {
         this.flashcardService = flashcardService;
     }
 
-    @GetMapping(value = "/userflashcards/{userId}")
-    public ResponseEntity<List<Flashcard>> getFlashcardByUserId(@PathVariable("userId") String userId) {
+    @GetMapping
+    public ResponseEntity<List<Flashcard>> getFlashcardByUserId(
+            @AuthenticationPrincipal JwtUserPrincipal principal) {
+        String userId = principal.userId();
         log.trace("Returning flashcards by userId: {} in controller.", userId);
         List<Flashcard> flashcards = flashcardService.listUserFlashcards(userId);
         return new ResponseEntity<>(flashcards, OK);

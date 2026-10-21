@@ -57,11 +57,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     String token = authorizationHeader.substring(TOKEN_PREFIX.length());
                     // this verifies the token and throws JWTVerificationException, TokenExpiredException
                     DecodedJWT decodedJWT = jwtTokenProvider.verifyToken(token, issuer);
+                    String userId = decodedJWT.getClaim("userId").asString();
+                    var principal = new JwtUserPrincipal(decodedJWT.getSubject(), userId);
                     log.trace("Authorization header is valid, token subject: {}.", decodedJWT.getSubject());
                     // if the user is not authenticated, set the authentication in the security context
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(decodedJWT);
-                        Authentication authentication = jwtTokenProvider.getAuthentication(decodedJWT.getSubject(), authorities, req);
+                        Authentication authentication = jwtTokenProvider.getAuthentication(principal, authorities, req);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
                         SecurityContextHolder.clearContext();

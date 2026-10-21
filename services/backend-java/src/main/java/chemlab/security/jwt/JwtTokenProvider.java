@@ -54,9 +54,9 @@ public class JwtTokenProvider {
 
     // get authentication of user
     // once token verified, set authentication in spring security context
-    public Authentication getAuthentication(String username, List<GrantedAuthority> authorities, HttpServletRequest request) {
+    public Authentication getAuthentication(JwtUserPrincipal principal, List<GrantedAuthority> authorities, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new
-                UsernamePasswordAuthenticationToken(username, null, authorities);
+                UsernamePasswordAuthenticationToken(principal, null, authorities);
         usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         return usernamePasswordAuthToken;
     }
