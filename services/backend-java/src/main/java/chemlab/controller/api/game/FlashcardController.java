@@ -44,7 +44,7 @@ public class FlashcardController {
         if (userFlashcards == null || userFlashcards.isEmpty()) {
             throw new NoFlashcardsCreatedException("No flashcards were created.");
         }
-        URI location = URI.create(String.format("/api/flashcards/userFlashcards/%s", createFlashcardRequest.getUserId()));
+        URI location = URI.create("/api/flashcards");
         return ResponseEntity.created(location).body(userFlashcards);
     }
 
