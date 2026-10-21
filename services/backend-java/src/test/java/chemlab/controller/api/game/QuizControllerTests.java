@@ -1,10 +1,9 @@
-package chemlab.controller.api;
+package chemlab.controller.api.game;
 
 import chemlab.infrastructure.error.ProblemDetailFactory;
 import chemlab.security.jwt.JwtTokenProvider;
 import chemlab.domain.model.game.UserQuiz;
 import chemlab.domain.service.game.QuizService;
-import chemlab.controller.api.game.QuizController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

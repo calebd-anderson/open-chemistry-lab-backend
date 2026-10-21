@@ -1,4 +1,4 @@
-package chemlab.services.integration;
+package chemlab.services;
 
 import chemlab.domain.exceptions.FailedToLoadPTException;
 import chemlab.domain.service.chemistry.ElementService;
@@ -14,10 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class ElementServiceIntegrationTests {

@@ -1,6 +1,5 @@
-package chemlab.controller.api;
+package chemlab.controller.api.game;
 
-import chemlab.controller.api.game.FlashcardController;
 import chemlab.domain.model.game.Flashcard;
 import chemlab.domain.service.game.FlashcardService;
 import chemlab.infrastructure.error.ProblemDetailFactory;
