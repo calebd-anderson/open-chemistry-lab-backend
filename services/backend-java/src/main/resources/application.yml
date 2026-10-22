@@ -61,3 +61,10 @@ management:
     web:
       exposure:
         include: "health,info"
+
+# OpenAPI / Swagger configuration (disabled by default and for production)
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

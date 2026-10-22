@@ -14,6 +14,9 @@
 jwt:
   secret: "${JWT_SECRET:dev-secret-key-unsafe-only-for-dev}"
 
+constants:
+  public-urls: /,/elements,/styles/**,/api/auth/**,/api/elements/**,/api/compound/validate/**,/api/compound/analyze/**,/swagger-ui.html,/swagger-ui/**,/v3/api-docs/**
+
 spring:
   mongodb:
     # Default local MongoDB for development
@@ -77,6 +80,13 @@ management:
   endpoint:
     health:
       show-details: always
+
+# OpenAPI / Swagger configuration (Enabled for development)
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
 
 # storage:
 #   local:

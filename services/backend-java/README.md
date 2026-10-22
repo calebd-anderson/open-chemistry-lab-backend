@@ -28,7 +28,8 @@
 # override default dev,local profiles
 ./mvnw spring-boot:run -Dapp.profiles=test
 ```
-
+### SwaggerUI
+http://localhost:8080/swagger-ui/index.html
 ### Docker Compose
 The easiest way to get the backend environment running is with [Docker Compose](https://docs.docker.com/compose/).
 https://spring.io/guides/gs/spring-boot-docker
