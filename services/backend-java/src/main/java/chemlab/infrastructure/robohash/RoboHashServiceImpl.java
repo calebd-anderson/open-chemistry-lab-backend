@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 
 @Service
 public class RoboHashServiceImpl implements RoboHashService {
 
     public byte[] getProfileImage(String username) throws IOException {
-        URL url = new URL("https://robohash.org/" + username);
+        URL url = URI.create("https://robohash.org/" + username).toURL();
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             try (InputStream inputStream = url.openStream()) {
                 int bytesRead;
