@@ -30,17 +30,6 @@ public class ReactionController {
         this.unsupervisedClustMap = unsupervisedClustMap;
     }
 
-    @PostMapping(value = "validate")
-    public ReactionResponse validate(@RequestBody ReactionRequest payload, Authentication auth) throws PugApiException {
-        log.trace("Controller received formula: {}", payload.getElements());
-        // Use Optional.ofNullable to wrap the username
-        Optional<String> username = (auth != null && auth.isAuthenticated())
-                ? Optional.of(auth.getName())
-                : Optional.empty();
-
-        return reactionService.createReaction(payload, username);
-    }
-
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping(value = "getAllDiscoveries")
     public List<Reaction> getAllDiscoveredReactions() {
@@ -50,6 +39,16 @@ public class ReactionController {
     @GetMapping(value = "getByUserId")
     public List<UserReaction> getByUserId(@RequestParam String userId) {
         return reactionService.getCompoundsByUserId(userId);
+    }
+
+    @PostMapping(value = "validate")
+    public ReactionResponse validate(@RequestBody ReactionRequest payload, Authentication auth) throws PugApiException {
+        log.trace("Controller received formula: {}", payload.getElements());
+        // Use Optional.ofNullable to wrap the username
+        Optional<String> username = (auth != null && auth.isAuthenticated())
+                ? Optional.of(auth.getName())
+                : Optional.empty();
+        return reactionService.createReaction(payload, username);
     }
 
     @PostMapping(value = "analyze")

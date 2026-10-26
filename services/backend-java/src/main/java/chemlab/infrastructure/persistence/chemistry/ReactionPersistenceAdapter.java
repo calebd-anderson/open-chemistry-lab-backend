@@ -12,8 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReactionPersistenceAdapter implements ReactionRepository {
 
-    @Autowired
-    SpringDataReactionRepository mongoRepository;
+    private final SpringDataReactionRepository mongoRepository;
 
     @Override
     public Reaction findReactionByFormula(String formula) {
