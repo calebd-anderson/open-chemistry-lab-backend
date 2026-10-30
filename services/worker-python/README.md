@@ -30,7 +30,7 @@ uv export --format requirements-txt --no-dev --no-emit-project --output-file req
 #### Manually build the image:
 ```sh
 docker build -t worker .
-# run the container based on the imate
+# run the container based on the image
 docker run -d --name fastapi-worker -p 80:80 worker
 ```
 ```sh
