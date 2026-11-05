@@ -65,7 +65,7 @@ Repository layer tests leverage MongoDB [Testcontainers](https://testcontainers.
   - [age](https://github.com/FiloSottile/age?tab=readme-ov-file#installation)
 #### decrypt prod secrets
 ```
-$ sops -d src/main/resources/application-prod.enc.yml > src/main/resources/application-prod.yml
+sops -d src/main/resources/application-prod.enc.yml > src/main/resources/application-prod.yml
 ```
 #### add recipient
 1. generate an age key pair: `age-keygen -o key.txt`
