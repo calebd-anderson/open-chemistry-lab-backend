@@ -48,9 +48,10 @@ docker build -t chemlab .
 # finally run the container
 docker run -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -t chemlab
 ```
-### Deploy a local MongoDB 7 instance 
-Download, install [MongoDB](https://www.mongodb.com/docs/v7.0/installation/).
-#### MongoDB w/ Docker (Recommended):
+### Deploy a local MongoDB 7 instance
+- [MongoDB Compass](https://www.mongodb.com/docs/compass/)
+- Local [MongoDB](https://www.mongodb.com/docs/v7.0/installation/)
+- MongoDB w/ Docker (Recommended):
 ```sh
 docker pull mongo:7.0.40-jammy
 docker run --name mongodb -p 27017:27017 -d mongo:7.0.40-jammy
